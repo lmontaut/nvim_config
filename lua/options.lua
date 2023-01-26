@@ -32,6 +32,9 @@ vim.cmd [[colorscheme onedark]]
 -- Don't wrap please
 vim.o.wrap = false
 
+-- Relative line numbers
+vim.o.relativenumber = true
+
 -- Set completeopt to have a better completion experience
 vim.o.completeopt = 'menuone,noselect'
 

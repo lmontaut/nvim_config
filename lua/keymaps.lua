@@ -36,6 +36,10 @@ vim.keymap.set("n", "<C-Right>", "<cmd>vertical resize +10<CR>", opts)
 vim.keymap.set("n", ">" , ">>", opts)
 vim.keymap.set("n", "<" , "<<", opts)
 
+-- Quicklist navigation
+vim.keymap.set("n", "<leader>qn", ":cn<CR>", { noremap = true, silent = true, desc = "Quicklist next" })
+vim.keymap.set("n", "<leader>qp", ":cp<CR>", { noremap = true, silent = true, desc = "Quicklist prev" })
+
 -- Launch terminal command
 vim.keymap.set("n", "<leader>r", ":split | terminal <C-DOWN>", { noremap = true, silent = true, desc = "Launch terminal command" })
 

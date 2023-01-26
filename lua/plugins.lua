@@ -70,6 +70,9 @@ require('packer').startup(function(use)
   -- File browser
   use { "ms-jpq/chadtree" }
 
+  -- Project manager
+  use { "ahmedkhalf/project.nvim" }
+
   -- Add custom plugins to packer from ~/.config/nvim/lua/custom/plugins.lua
   local has_plugins, plugins = pcall(require, 'custom.plugins')
   if has_plugins then

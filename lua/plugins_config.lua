@@ -11,6 +11,8 @@ require('lualine').setup {
 
 -- [[ Configure Comment.nvim ]]
 require('Comment').setup()
+vim.keymap.set("n", "\\", require('Comment.api').toggle.linewise.current, { desc = "Comment" })
+vim.keymap.set("v", "\\", "<ESC><CMD>lua require(\"Comment.api\").toggle.linewise(vim.fn.visualmode())<CR>", { desc = "Comment" })
 
 -- [[ Configure `lukas-reineke/indent-blankline.nvim` ]]
 -- See `:help indent_blankline.txt`
@@ -60,6 +62,12 @@ require('telescope').setup {
       },
     },
   },
+  find_files = {
+    find_command = { "fd", "--files", "--hidden", },
+  },
+  git_files = {
+    find_command = { "fd", "--files", "--hidden", },
+  },
 }
 
 -- Enable telescope fzf native, if installed
@@ -68,7 +76,8 @@ pcall(require('telescope').load_extension, 'fzf')
 -- See `:help telescope.builtin`
 vim.keymap.set('n', '<leader>?', require('telescope.builtin').oldfiles, { desc = 'Find recently opened files' })
 vim.keymap.set('n', '<leader>,', require('telescope.builtin').buffers, { desc = 'Find buffer' })
-vim.keymap.set('n', '<leader><space>', require('telescope.builtin').git_files, { desc = 'Find file' })
+vim.keymap.set('n', '<leader><space>', require('telescope.builtin').git_files, { desc = 'Find git file' })
+vim.keymap.set('n', '<leader>sf', require('telescope.builtin').find_files, { desc = 'Find files' })
 vim.keymap.set('n', '<leader>/', function()
   -- You can pass additional configuration to telescope to change theme, layout, etc.
   require('telescope.builtin').current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
@@ -138,23 +147,23 @@ require('nvim-treesitter.configs').setup {
         ['[]'] = '@class.outer',
       },
     },
-    swap = {
-      enable = true,
-      swap_next = {
-        ['<leader>a'] = '@parameter.inner',
-      },
-      swap_previous = {
-        ['<leader>A'] = '@parameter.inner',
-      },
-    },
+    -- swap = {
+    --   enable = false,
+    --   swap_next = {
+    --     ['<leader>a'] = '@parameter.inner',
+    --   },
+    --   swap_previous = {
+    --     ['<leader>A'] = '@parameter.inner',
+    --   },
+    -- },
   },
 }
 
 -- Diagnostic keymaps
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next)
--- vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float)
-vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist)
+vim.keymap.set('n', 'gl', vim.diagnostic.open_float)
+-- vim.keymap.set('n', '<leader>qq', vim.diagnostic.setloclist)
 
 -- [[ LSP settings ]]
 --  This function gets run when an LSP connects to a particular buffer.
@@ -173,15 +182,16 @@ local on_attach = function(_, bufnr)
     vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
   end
 
-  nmap('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
-  nmap('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
+  nmap('<leader>lr', vim.lsp.buf.rename, 'Rename')
+  nmap('<leader>lc', vim.lsp.buf.code_action, 'Code action')
 
   nmap('gd', vim.lsp.buf.definition, '[G]oto [D]efinition')
   nmap('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
   nmap('gI', vim.lsp.buf.implementation, '[G]oto [I]mplementation')
-  nmap('<leader>D', vim.lsp.buf.type_definition, 'Type [D]efinition')
-  nmap('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
-  nmap('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
+  -- nmap('<leader>D', vim.lsp.buf.type_definition, 'Type [D]efinition')
+  nmap('<leader>ls', require('telescope.builtin').lsp_document_symbols, 'Document symbols')
+  nmap('<leader>lS', require('telescope.builtin').lsp_dynamic_workspace_symbols, 'Workspace symbols')
+  nmap('<leader>ld', require('telescope.builtin').diagnostics, 'Diagnostics')
 
   -- See `:help K` for why this keymap
   nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
@@ -189,11 +199,11 @@ local on_attach = function(_, bufnr)
 
   -- Lesser used LSP functionality
   nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
-  nmap('<leader>wa', vim.lsp.buf.add_workspace_folder, '[W]orkspace [A]dd Folder')
-  nmap('<leader>wr', vim.lsp.buf.remove_workspace_folder, '[W]orkspace [R]emove Folder')
-  nmap('<leader>wl', function()
-    print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-  end, '[W]orkspace [L]ist Folders')
+  -- nmap('<leader>wa', vim.lsp.buf.add_workspace_folder, '[W]orkspace [A]dd Folder')
+  -- nmap('<leader>wr', vim.lsp.buf.remove_workspace_folder, '[W]orkspace [R]emove Folder')
+  -- nmap('<leader>wl', function()
+    -- print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+  -- end, '[W]orkspace [L]ist Folders')
 
   -- Create a command `:Format` local to the LSP buffer
   vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
@@ -207,9 +217,9 @@ end
 --  Add any additional override configuration in the following tables. They will be passed to
 --  the `settings` field of the server config. You must look up that documentation yourself.
 local servers = {
-  -- clangd = {},
+  clangd = {},
   -- gopls = {},
-  -- pyright = {},
+  pyright = {},
   -- rust_analyzer = {},
   -- tsserver = {},
 
@@ -297,11 +307,55 @@ cmp.setup {
   },
 }
 
+-- [[ Configure Project ]]
+require("project_nvim").setup {
+  -- Manual mode doesn't automatically change your root directory, so you have
+  -- the option to manually do so using `:ProjectRoot` command.
+  manual_mode = false,
+
+  -- Methods of detecting the root directory. **"lsp"** uses the native neovim
+  -- lsp, while **"pattern"** uses vim-rooter like glob pattern matching. Here
+  -- order matters: if one is not detected, the other is used as fallback. You
+  -- can also delete or rearangne the detection methods.
+  -- detection_methods = { "lsp", "pattern" },
+  detection_methods = { "pattern" },
+
+  -- All the patterns used to detect root dir, when **"pattern"** is in
+  -- detection_methods
+  -- patterns = { ".git", "_darcs", ".hg", ".bzr", ".svn", "Makefile", "package.json" },
+  patterns = { ".git" },
+
+  -- Table of lsp clients to ignore by name
+  -- eg: { "efm", ... }
+  -- ignore_lsp = {},
+
+  -- Don't calculate root dir on specific directories
+  -- Ex: { "~/.cargo/*", ... }
+  -- exclude_dirs = {},
+
+  -- Show hidden files in telescope
+  show_hidden = true,
+
+  -- When set to false, you will get a message when project.nvim changes your
+  -- directory.
+  silent_chdir = true,
+}
+
+-- Telescope integration
+require('telescope').load_extension('projects')
+
 -- [[ Configure Which-key ]]
 require('which-key').setup()
 local wk = require("which-key")
 wk.register({
-  c = {
-    name = "Des choses"
+  s = {
+    name = "Search"
+  },
+  q = {
+    name = "Quicklist"
+  },
+  l = {
+    name = "LSP"
   }
 }, { prefix = "<leader>" })
+
