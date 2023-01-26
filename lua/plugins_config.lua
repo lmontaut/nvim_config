@@ -344,6 +344,11 @@ require("project_nvim").setup {
 -- Telescope integration
 require('telescope').load_extension('projects')
 
+-- [[ Configure bufferline ]]
+require('bufferline').setup()
+vim.keymap.set('n', '<S-l>', "<CMD>BufferLineCycleNext<CR>", { desc = 'Next buffer' })
+vim.keymap.set('n', '<S-h>', "<CMD>BufferLineCyclePrev<CR>", { desc = 'Previous buffer' })
+
 -- [[ Configure Which-key ]]
 require('which-key').setup()
 local wk = require("which-key")
@@ -358,4 +363,3 @@ wk.register({
     name = "LSP"
   }
 }, { prefix = "<leader>" })
-

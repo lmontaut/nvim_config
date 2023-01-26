@@ -73,6 +73,9 @@ require('packer').startup(function(use)
   -- Project manager
   use { "ahmedkhalf/project.nvim" }
 
+  -- Buffer line
+  use { "akinsho/bufferline.nvim" }
+
   -- Add custom plugins to packer from ~/.config/nvim/lua/custom/plugins.lua
   local has_plugins, plugins = pcall(require, 'custom.plugins')
   if has_plugins then
