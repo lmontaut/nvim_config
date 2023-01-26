@@ -165,7 +165,7 @@ vim.keymap.set('n', ']d', vim.diagnostic.goto_next)
 vim.keymap.set('n', 'gl', vim.diagnostic.open_float)
 -- vim.keymap.set('n', '<leader>qq', vim.diagnostic.setloclist)
 
--- [[ LSP settings ]]
+-- [[ Condifure LSP ]]
 --  This function gets run when an LSP connects to a particular buffer.
 local on_attach = function(_, bufnr)
   -- NOTE: Remember that lua is a real programming language, and as such it is possible
@@ -216,10 +216,18 @@ end
 --
 --  Add any additional override configuration in the following tables. They will be passed to
 --  the `settings` field of the server config. You must look up that documentation yourself.
+local pythonpath = os.getenv("CONDA_PREFIX") .. "/bin/python"
 local servers = {
   clangd = {},
   -- gopls = {},
-  pyright = {},
+  pyright = {
+    python = {
+      pythonPath = pythonpath,
+      analysis = {
+        typeCheckingMode = "off",
+      }
+    }
+  },
   -- rust_analyzer = {},
   -- tsserver = {},
 
@@ -304,6 +312,10 @@ cmp.setup {
   sources = {
     { name = 'nvim_lsp' },
     { name = 'luasnip' },
+  },
+  window = {
+    completion = cmp.config.window.bordered(),
+    documentation = cmp.config.window.bordered(),
   },
 }
 
