@@ -5,13 +5,44 @@
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
+local opts = { noremap = true, silent = true }
+
 -- Keymaps for better default experience
 -- See `:help vim.keymap.set()`
 vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
 
+-- -- INSERT MODE -- --
+-- Escape from INSERT mode
+vim.keymap.set('i', "jk", "<ESC>", { noremap = true, silent = true, desc = "Escape INSERT mode" })
+
+-- -- NORMAL MODE -- --
 -- Remap for dealing with word wrap
 vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
 vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
 
--- Escape from INSERT mode
-vim.keymap.set('i', "jk", "<ESC>", { noremap = true, silent = true, desc = "Escape INSERT mode" })
+-- Better window navigation
+vim.keymap.set("n", "<C-h>", "<C-w>h", opts)
+vim.keymap.set("n", "<C-j>", "<C-w>j", opts)
+vim.keymap.set("n", "<C-k>", "<C-w>k", opts)
+vim.keymap.set("n", "<C-l>", "<C-w>l", opts)
+
+-- Resize with arrows
+vim.keymap.set("n", "<C-Up>", "<cmd>resize +10<CR>", opts)
+vim.keymap.set("n", "<C-Down>", "<cmd>resize -10<CR>", opts)
+vim.keymap.set("n", "<C-Left>", "<cmd>vertical resize -10<CR>", opts)
+vim.keymap.set("n", "<C-Right>", "<cmd>vertical resize +10<CR>", opts)
+
+-- Better tabbing
+vim.keymap.set("n", ">" , ">>", opts)
+vim.keymap.set("n", "<" , "<<", opts)
+
+-- Launch terminal command
+vim.keymap.set("n", "<leader>r", ":split | terminal <C-DOWN>", { noremap = true, silent = true, desc = "Launch terminal command" })
+
+-- Last buffer
+vim.keymap.set("n", "<leader>1", "<CMD>b#<CR>", { noremap = true, silent = true, desc = "Last buffer" })
+
+-- -- VISUAL MODE -- --
+-- -- Stay in indent mode
+vim.keymap.set("v", "<", "<gv", opts)
+vim.keymap.set("v", ">", ">gv", opts)
