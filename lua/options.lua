@@ -25,12 +25,19 @@ vim.o.updatetime = 250
 vim.o.timeoutlen = 300
 vim.wo.signcolumn = 'yes'
 
+-- Where to split
+vim.o.splitbelow = true
+vim.o.splitright = true
+
 -- Set colorscheme
 vim.o.termguicolors = true
 vim.cmd [[colorscheme onedark]]
 
 -- Don't wrap please
 vim.o.wrap = false
+
+-- Unable persistent undo
+vim.o.undofile = true
 
 -- Relative line numbers
 vim.o.relativenumber = true

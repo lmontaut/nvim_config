@@ -76,6 +76,9 @@ require('packer').startup(function(use)
   -- Buffer line
   use { "akinsho/bufferline.nvim" }
 
+  -- symbol outline
+  use { "simrat39/symbols-outline.nvim" }
+
   -- Add custom plugins to packer from ~/.config/nvim/lua/custom/plugins.lua
   local has_plugins, plugins = pcall(require, 'custom.plugins')
   if has_plugins then
