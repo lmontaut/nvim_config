@@ -1,4 +1,10 @@
--- [[ Set lualine as statusline ]]
+-- [[ Configure Packer ]]
+vim.keymap.set("n", "<leader>pc", "<CMD>PackerCompile<CR>", { desc = "Packer compile" })
+vim.keymap.set("n", "<leader>pi", "<CMD>PackerInstall<CR>", { desc = "Packer install" })
+vim.keymap.set("n", "<leader>pd", "<CMD>PackerClean<CR>", { desc = "Packer clean" })
+vim.keymap.set("n", "<leader>ps", "<CMD>source %<CR>", { desc = "Source current file" })
+
+-- [[ Configure lualine as statusline ]]
 -- See `:help lualine.txt`
 require('lualine').setup {
   options = {
@@ -532,6 +538,24 @@ require('lualine').setup({
 	extensions = {},
 })
 
+-- [[ Configure symbols outline ]]
+require("symbols-outline").setup()
+vim.keymap.set('n', '<leader>i', "<CMD>SymbolsOutline<CR>", { desc = 'Symbols outline' })
+
+-- [[ Configure fugitive ]]
+vim.keymap.set('n', '<leader>gg', '<CMD>vertical Git<CR>', { desc = 'Git status' })
+vim.keymap.set('n', '<leader>gt', '<CMD>tabnew<CR><cmd>0G<CR><cmd>norm gUk>gsk>gg<CR>', { desc = 'Git status tab' })
+vim.keymap.set('n', '<leader>gj', '<CMD>Gitsigns next_hunk<CR>', { desc = 'Next hunk' })
+vim.keymap.set('n', '<leader>gk', '<CMD>Gitsigns prev_hunk<CR>', { desc = 'Previous hunk' })
+vim.keymap.set('n', '<leader>gc', '<CMD>Git commit -v -q<CR>', { desc = 'Git commit' })
+vim.keymap.set('n', '<leader>gf', '<CMD>Git fetch<CR>', { desc = 'Git fetch' })
+vim.keymap.set('n', '<leader>gp', '<CMD>Git pull<CR>', { desc = 'Git pull' })
+vim.keymap.set('n', '<leader>gP', '<CMD>Git push<CR>', { desc = 'Git push' })
+vim.keymap.set('n', '<leader>gsf', '<CMD>Git add %<CR>', { desc = 'Git stage file' })
+vim.keymap.set('n', '<leader>gsh', '<CMD>Gitsigns stage_hunk<CR>', { desc = 'Git stage hunk' })
+vim.keymap.set('n', '<leader>guf', '<CMD>Git reset %<CR>', { desc = 'Git unstage file' })
+vim.keymap.set('n', '<leader>guh', '<CMD>Gitsigns undo_stage_hunk<CR>', { desc = 'Git unstage hunk' })
+
 -- [[ Configure Which-key ]]
 require('which-key').setup()
 local wk = require("which-key")
@@ -541,6 +565,15 @@ wk.register({
   },
   q = {
     name = "Quicklist"
+  },
+  g = {
+    name = "Git",
+    s = {
+      name = "Stage"
+    },
+    u = {
+      name = "Unstage"
+    }
   },
   l = {
     name = "LSP"
