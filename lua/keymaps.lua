@@ -46,6 +46,13 @@ vim.keymap.set("n", "<leader>r", ":split | terminal <C-DOWN>", { noremap = true,
 -- Last buffer
 vim.keymap.set("n", "<leader>1", "<CMD>b#<CR>", { noremap = true, silent = true, desc = "Last buffer" })
 
+-- Quit
+vim.keymap.set("n", "<C-c>", "<CMD>q<CR>", { noremap = true, silent = true, desc = "Quit window" })
+
+vim.keymap.set("n", "<C-w>o", "<CMD>only<CR>", { noremap = true, silent = true, desc = "Quit other windows" })
+
+vim.keymap.set("n", "<C-f>", ":<C-f>", { noremap = true, silent = true, desc = "Command history" })
+
 -- -- VISUAL MODE -- --
 -- -- Stay in indent mode
 vim.keymap.set("v", "<", "<gv", opts)
