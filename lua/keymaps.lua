@@ -53,6 +53,9 @@ vim.keymap.set("n", "<C-w>o", "<CMD>only<CR>", { noremap = true, silent = true, 
 
 vim.keymap.set("n", "<C-f>", ":<C-f>", { noremap = true, silent = true, desc = "Command history" })
 
+-- Buffer close
+vim.keymap.set("n", "<leader>bc", "<CMD>bd!<CR>", { noremap = true, silent = true, desc = "Close buffer" })
+
 -- -- VISUAL MODE -- --
 -- -- Stay in indent mode
 vim.keymap.set("v", "<", "<gv", opts)

@@ -577,5 +577,8 @@ wk.register({
   },
   l = {
     name = "LSP"
+  },
+  b = {
+    name = "Buffers"
   }
 }, { prefix = "<leader>" })
