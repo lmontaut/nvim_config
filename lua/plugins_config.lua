@@ -318,6 +318,32 @@ require('fidget').setup()
 local cmp = require 'cmp'
 local luasnip = require 'luasnip'
 
+local cmp_toggle = function()
+      if cmp.visible() then
+        cmp.close()
+      else
+        cmp.complete()
+      end
+end
+
+local ELLIPSIS_CHAR = '…'
+local MAX_LABEL_WIDTH = 50
+
+local get_ws = function (max, len)
+  return (" "):rep(max - len)
+end
+
+local format = function(_, item)
+  local content = item.abbr
+  if #content > MAX_LABEL_WIDTH then
+    item.abbr = vim.fn.strcharpart(content, 0, MAX_LABEL_WIDTH) .. ELLIPSIS_CHAR
+  else
+    item.abbr = content .. get_ws(MAX_LABEL_WIDTH, #content)
+  end
+
+  return item
+end
+
 cmp.setup {
   snippet = {
     expand = function(args)
@@ -327,7 +353,7 @@ cmp.setup {
   mapping = cmp.mapping.preset.insert {
     ['<C-d>'] = cmp.mapping.scroll_docs(-4),
     ['<C-f>'] = cmp.mapping.scroll_docs(4),
-    ['<C-Space>'] = cmp.mapping.complete(),
+    ['<C-Space>'] = cmp.mapping(cmp_toggle, {"i", "s", "c"}),
     ['<CR>'] = cmp.mapping.confirm {
       behavior = cmp.ConfirmBehavior.Replace,
       select = true,
@@ -351,6 +377,9 @@ cmp.setup {
       end
     end, { 'i', 's' }),
   },
+  formatting = {
+    format = format,
+  },
   sources = {
     { name = 'nvim_lsp' },
     { name = 'luasnip' },
@@ -362,6 +391,23 @@ cmp.setup {
     documentation = cmp.config.window.bordered(),
   },
 }
+
+cmp.setup.cmdline({ '/', '?' }, {
+  mapping = cmp.mapping.preset.cmdline(),
+  sources = {
+    { name = 'buffer' }
+  }
+})
+
+-- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
+cmp.setup.cmdline(':', {
+  mapping = cmp.mapping.preset.cmdline(),
+  sources = cmp.config.sources({
+    { name = 'path' }
+  }, {
+    { name = 'cmdline' }
+  })
+})
 
 -- [[ Configure Project ]]
 require("project_nvim").setup {
