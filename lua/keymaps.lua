@@ -60,3 +60,12 @@ vim.keymap.set("n", "<leader>bc", "<CMD>bd!<CR>", { noremap = true, silent = tru
 -- -- Stay in indent mode
 vim.keymap.set("v", "<", "<gv", opts)
 vim.keymap.set("v", ">", ">gv", opts)
+
+-- -- TERMINAL MODE -- --
+local topts = { silent = true }
+vim.keymap.set("t", "<ESC>", "<C-\\><C-n>", topts)
+vim.keymap.set("t", "jk", "<C-\\><C-n>", topts)
+vim.keymap.set("t", "<C-h>", "<C-\\><C-n><C-w>h", topts)
+vim.keymap.set("t", "<C-j>", "<C-\\><C-n><C-w>j", topts)
+vim.keymap.set("t", "<C-k>", "<C-\\><C-n><C-w>k", topts)
+vim.keymap.set("t", "<C-l>", "<C-\\><C-n><C-w>l", topts)
