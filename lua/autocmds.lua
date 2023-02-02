@@ -8,3 +8,8 @@ vim.cmd[[
   autocmd FileType help nnoremap <buffer> q :bd<CR>
   autocmd FileType dap-float nnoremap <buffer> q :bd<CR>
 ]]
+
+-- Stop from continuing comments when going to line with "o"
+vim.cmd[[
+  autocmd BufEnter * set formatoptions-=cro
+]]
