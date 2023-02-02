@@ -33,8 +33,8 @@ vim.keymap.set("n", "<C-Left>", "<cmd>vertical resize -10<CR>", opts)
 vim.keymap.set("n", "<C-Right>", "<cmd>vertical resize +10<CR>", opts)
 
 -- Better tabbing
-vim.keymap.set("n", ">" , ">>", opts)
-vim.keymap.set("n", "<" , "<<", opts)
+vim.keymap.set("n", "<TAB>" , ">>_", opts)
+vim.keymap.set("n", "<S-TAB>" , "<<_", opts)
 
 -- Quicklist navigation
 vim.keymap.set("n", "<leader>qn", ":cn<CR>", { noremap = true, silent = true, desc = "Quicklist next" })
