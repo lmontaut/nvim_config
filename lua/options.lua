@@ -47,3 +47,8 @@ vim.o.completeopt = 'menuone,noselect'
 
 -- Allow vim to access the system clipboard
 vim.o.clipboard = "unnamedplus"
+
+-- Indent default
+vim.o.expandtab = true
+vim.o.tabstop = 2
+vim.o.shiftwidth = 2
