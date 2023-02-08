@@ -58,8 +58,10 @@ vim.keymap.set("n", "<leader>bc", "<CMD>bd!<CR>", { noremap = true, silent = tru
 
 -- -- VISUAL MODE -- --
 -- -- Stay in indent mode
-vim.keymap.set("v", "<", "<gv", opts)
 vim.keymap.set("v", ">", ">gv", opts)
+vim.keymap.set("v", "<", "<gv", opts)
+vim.keymap.set("v", "<TAB>", ">gv", opts)
+vim.keymap.set("v", "<S-TAB>", "<gv", opts)
 
 -- -- TERMINAL MODE -- --
 local topts = { silent = true }
