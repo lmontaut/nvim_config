@@ -39,6 +39,8 @@ vim.keymap.set("n", "<C-Right>", "<cmd>vertical resize +10<CR>", opts)
 
 -- Quicklist navigation
 -- Even if the quicklist is not open, you can navigate with :cn and :cp
+vim.keymap.set("n", "<C-n>", ":cn<CR>", { noremap = true, silent = true, desc = "Quicklist next" })
+vim.keymap.set("n", "<C-p>", ":cp<CR>", { noremap = true, silent = true, desc = "Quicklist prev" })
 vim.keymap.set("n", "<leader>qn", ":cn<CR>", { noremap = true, silent = true, desc = "Quicklist next" })
 vim.keymap.set("n", "<leader>qp", ":cp<CR>", { noremap = true, silent = true, desc = "Quicklist prev" })
 vim.keymap.set("n", "<leader>qo", ":copen<CR>", { noremap = true, silent = true, desc = "Quicklist open" })
