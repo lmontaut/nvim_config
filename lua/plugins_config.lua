@@ -456,7 +456,7 @@ require("project_nvim").setup {
 -- Telescope integration
 require('telescope').load_extension('projects')
 vim.keymap.set('n', '<leader>p', "<CMD>Telescope projects<CR>", { desc = 'Open project...' })
-vim.keymap.set('n', '<leader>t', "<CMD>Telescope resume<CR>", { desc = 'Telescope resume' })
+vim.keymap.set('n', '<leader>r', "<CMD>Telescope resume<CR>", { desc = 'Telescope resume' })
 
 -- [[ Configure bufferline ]]
 require('bufferline').setup()
@@ -656,6 +656,9 @@ vim.keymap.set('n', '<leader>guh', '<CMD>Gitsigns undo_stage_hunk<CR>', { desc =
 require('which-key').setup()
 local wk = require("which-key")
 wk.register({
+  m = {
+    name = "Make"
+  },
   P = {
     name = "Packer"
   },

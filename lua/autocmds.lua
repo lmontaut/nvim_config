@@ -12,6 +12,12 @@ vim.cmd[[
 -- Stop from continuing comments when going to line with "o"
 vim.cmd[[
   autocmd BufEnter * set formatoptions-=cro
+  " Not the best to impose the compiler -> one project may have multiple filetypes
+  " However, if none of the compilers change 'makeprg', the user can set it as they want
+  autocmd BufEnter *.hpp compiler clang
+  autocmd BufEnter *.cpp compiler clang
+  autocmd BufEnter *.rs compiler rust
+  autocmd BufEnter *.py compiler python
 ]]
 
 vim.cmd [[

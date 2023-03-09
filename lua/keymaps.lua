@@ -41,11 +41,37 @@ vim.keymap.set("n", "<C-Right>", "<cmd>vertical resize +10<CR>", opts)
 -- Even if the quicklist is not open, you can navigate with :cn and :cp
 vim.keymap.set("n", "<leader>qn", ":cn<CR>", { noremap = true, silent = true, desc = "Quicklist next" })
 vim.keymap.set("n", "<leader>qp", ":cp<CR>", { noremap = true, silent = true, desc = "Quicklist prev" })
+vim.keymap.set("n", "<leader>qo", ":copen<CR>", { noremap = true, silent = true, desc = "Quicklist open" })
+vim.keymap.set("n", "<leader>qO", ":Copen<CR>", { noremap = true, silent = true, desc = "Quicklist open (dispatched)" })
 vim.keymap.set("n", "<leader>qc", ":cclose<CR>", { noremap = true, silent = true, desc = "Quicklist close" })
+vim.keymap.set("n", "<leader>qq", ":cc<CR>", { noremap = true, silent = true, desc = "Quicklist show current" })
+vim.keymap.set("n", "<leader>qN", ":cfirst<CR>", { noremap = true, silent = true, desc = "Quicklist first" })
+vim.keymap.set("n", "<leader>qP", ":clast<CR>", { noremap = true, silent = true, desc = "Quicklist last" })
+vim.keymap.set("n", "<leader>qo", ":copen<CR>", { noremap = true, silent = true, desc = "Quicklist open" })
+vim.keymap.set("n", "<leader>qo", ":copen<CR>", { noremap = true, silent = true, desc = "Quicklist open" })
 vim.keymap.set("n", "<leader>qo", ":copen<CR>", { noremap = true, silent = true, desc = "Quicklist open" })
 
+-- Make
+-- vim.keymap.set("n", "<leader>mm", function() return ":make<Space>" end, { noremap = true, silent = false, desc = "make", expr = true })
+vim.keymap.set("n", "<leader>mm", ":Make<Space>", { noremap = true, silent = false, desc = "Make" })
+vim.keymap.set("n", "<leader>mm", ":make<Space>", { noremap = true, silent = false, desc = "make" })
+vim.keymap.set("n", "<leader>m<CR>", ":make<CR>", { noremap = true, silent = true, desc = "make<CR>" })
+vim.keymap.set("n", "<leader>mM", ":Make<Space>", { noremap = true, silent = false, desc = "Make" })
+vim.keymap.set("n", "<leader>m!", ":Make!<Space>", { noremap = true, silent = false, desc = "Make!" })
+vim.keymap.set("n", "<leader>ms", ":setlocal<Space>makeprg=", { noremap = true, silent = false, desc = "Set makeprg localy" })
+vim.keymap.set("n", "<leader>mS", ":setlocal<Space>makeprg=", { noremap = true, silent = false, desc = "Set makeprg globaly" })
+-- Example: `:setlocal makeprg=python \%` or `:setlocal makeprg=make` or `:setlocal makeprg=clang++ \-Wall \-Wextra % -o %<`
+vim.keymap.set("n", "<leader>ml", ":let<Space>&makeprg='", { noremap = true, silent = false, desc = "Let makeprg" })
+vim.keymap.set("n", "<leader>mc", ":setlocal<Space>makeprg=clang++\\ -Wall\\ -Wextra\\ %\\ -o\\ %<", { noremap = true, silent = false, desc = "Set makeprg clang" })
+vim.keymap.set("n", "<leader>mt", ":Make!<Space>test", { noremap = true, silent = false, desc = "Make! test" })
+
+-- File exploration
+vim.keymap.set("n", "<leader>2", ":Explore<CR>", { noremap = true, silent = true, desc = "Explore" })
+vim.keymap.set("n", "<leader>3", ":Rexplore<CR>", { noremap = true, silent = true, desc = "Rexplore" })
+
 -- Launch terminal command
-vim.keymap.set("n", "<leader>r", ":split | terminal <C-DOWN>", { noremap = true, silent = true, desc = "Launch terminal command" })
+vim.keymap.set("n", "<leader>t", ":split | terminal<Space>", { noremap = true, silent = false, desc = "Launch terminal horizontal" })
+vim.keymap.set("n", "<leader>T", ":split | terminal<Space>", { noremap = true, silent = false, desc = "Launch terminal vertical" })
 
 -- Last buffer
 vim.keymap.set("n", "<leader>1", "<CMD>b#<CR>", { noremap = true, silent = true, desc = "Last buffer" })
@@ -59,6 +85,9 @@ vim.keymap.set("n", "<C-f>", ":<C-f>", { noremap = true, silent = true, desc = "
 
 -- Buffer close
 vim.keymap.set("n", "<leader>bc", "<CMD>bd!<CR>", { noremap = true, silent = true, desc = "Close buffer" })
+
+-- Kill other window
+vim.keymap.set("n", "<leader>o", ":only<CR>", { noremap = true, silent = true, desc = "Close other windows" })
 
 -- -- VISUAL MODE -- --
 -- -- Stay in indent mode
