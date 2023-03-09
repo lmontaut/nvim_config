@@ -14,6 +14,7 @@ vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
 -- -- INSERT MODE -- --
 -- Escape from INSERT mode
 vim.keymap.set('i', "jk", "<ESC>", { noremap = true, silent = true, desc = "Escape INSERT mode" })
+vim.keymap.set('i', "<S-TAB>", "<C-d>", { noremap = true, silent = true, desc = "Unindent INSERT mode" })
 
 -- -- NORMAL MODE -- --
 -- Remap for dealing with word wrap
@@ -33,12 +34,15 @@ vim.keymap.set("n", "<C-Left>", "<cmd>vertical resize -10<CR>", opts)
 vim.keymap.set("n", "<C-Right>", "<cmd>vertical resize +10<CR>", opts)
 
 -- Better tabbing
-vim.keymap.set("n", "<TAB>" , ">>_", opts)
-vim.keymap.set("n", "<S-TAB>" , "<<_", opts)
+-- vim.keymap.set("n", ">" , ">>", opts)
+-- vim.keymap.set("n", "<" , "<<", opts)
 
 -- Quicklist navigation
+-- Even if the quicklist is not open, you can navigate with :cn and :cp
 vim.keymap.set("n", "<leader>qn", ":cn<CR>", { noremap = true, silent = true, desc = "Quicklist next" })
 vim.keymap.set("n", "<leader>qp", ":cp<CR>", { noremap = true, silent = true, desc = "Quicklist prev" })
+vim.keymap.set("n", "<leader>qc", ":cclose<CR>", { noremap = true, silent = true, desc = "Quicklist close" })
+vim.keymap.set("n", "<leader>qo", ":copen<CR>", { noremap = true, silent = true, desc = "Quicklist open" })
 
 -- Launch terminal command
 vim.keymap.set("n", "<leader>r", ":split | terminal <C-DOWN>", { noremap = true, silent = true, desc = "Launch terminal command" })
@@ -60,8 +64,6 @@ vim.keymap.set("n", "<leader>bc", "<CMD>bd!<CR>", { noremap = true, silent = tru
 -- -- Stay in indent mode
 vim.keymap.set("v", ">", ">gv", opts)
 vim.keymap.set("v", "<", "<gv", opts)
-vim.keymap.set("v", "<TAB>", ">gv", opts)
-vim.keymap.set("v", "<S-TAB>", "<gv", opts)
 
 -- -- TERMINAL MODE -- --
 local topts = { silent = true }

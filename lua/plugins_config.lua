@@ -1,8 +1,8 @@
 -- [[ Configure Packer ]]
-vim.keymap.set("n", "<leader>pc", "<CMD>PackerCompile<CR>", { desc = "Packer compile" })
-vim.keymap.set("n", "<leader>pi", "<CMD>PackerInstall<CR>", { desc = "Packer install" })
-vim.keymap.set("n", "<leader>pd", "<CMD>PackerClean<CR>", { desc = "Packer clean" })
-vim.keymap.set("n", "<leader>ps", "<CMD>source %<CR>", { desc = "Source current file" })
+vim.keymap.set("n", "<leader>Pc", "<CMD>PackerCompile<CR>", { desc = "Packer compile" })
+vim.keymap.set("n", "<leader>Pi", "<CMD>PackerInstall<CR>", { desc = "Packer install" })
+vim.keymap.set("n", "<leader>Pd", "<CMD>PackerClean<CR>", { desc = "Packer clean" })
+vim.keymap.set("n", "<leader>Ps", "<CMD>source %<CR>", { desc = "Source current file" })
 
 -- [[ Configure lualine as statusline ]]
 -- See `:help lualine.txt`
@@ -69,10 +69,10 @@ require('telescope').setup {
     },
   },
   find_files = {
-    find_command = { "fd", "--files", "--hidden", },
+    find_command = { "rg", "--files", "--hidden", },
   },
   git_files = {
-    find_command = { "fd", "--files", "--hidden", },
+    find_command = { "rg", "--files", "--hidden", },
   },
 }
 
@@ -98,6 +98,7 @@ vim.keymap.set('n', '<leader>sh', require('telescope.builtin').help_tags, { desc
 vim.keymap.set('n', '<leader>sw', require('telescope.builtin').grep_string, { desc = '[S]earch current [W]ord' })
 vim.keymap.set('n', '<leader>sg', require('telescope.builtin').live_grep, { desc = '[S]earch by [G]rep' })
 vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = '[S]earch [D]iagnostics' })
+vim.keymap.set('n', '<leader>ss', require('telescope.builtin').grep_string, { desc = '[S]earch [S]string' })
 
 -- [[ Configure Chadtree ]]
 vim.keymap.set('n', '<leader>e', '<CMD>CHADopen<CR>', { desc = 'File browser' })
@@ -188,6 +189,14 @@ local on_attach = function(_, bufnr)
     vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
   end
 
+  local imap = function(keys, func, desc)
+    if desc then
+      desc = 'LSP: ' .. desc
+    end
+
+    vim.keymap.set('i', keys, func, { buffer = bufnr, desc = desc })
+  end
+
   nmap('<leader>lr', vim.lsp.buf.rename, 'Rename')
   nmap('<leader>lc', vim.lsp.buf.code_action, 'Code action')
 
@@ -201,7 +210,8 @@ local on_attach = function(_, bufnr)
 
   -- See `:help K` for why this keymap
   nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
-  nmap('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
+  nmap('<C-x>', vim.lsp.buf.signature_help, 'Signature Documentation')
+  imap('<C-x>', vim.lsp.buf.signature_help, 'Signature Documentation')
 
   -- Lesser used LSP functionality
   nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
@@ -226,6 +236,7 @@ local pythonpath = os.getenv("CONDA_PREFIX") .. "/bin/python"
 local servers = {
   clangd = {},
   cmake = {},
+  rust_analyzer = {},
   -- gopls = {},
   pyright = {
     python = {
@@ -235,7 +246,6 @@ local servers = {
       }
     }
   },
-  -- rust_analyzer = {},
   -- tsserver = {},
 
   sumneko_lua = {
@@ -445,6 +455,8 @@ require("project_nvim").setup {
 
 -- Telescope integration
 require('telescope').load_extension('projects')
+vim.keymap.set('n', '<leader>p', "<CMD>Telescope projects<CR>", { desc = 'Open project...' })
+vim.keymap.set('n', '<leader>t', "<CMD>Telescope resume<CR>", { desc = 'Telescope resume' })
 
 -- [[ Configure bufferline ]]
 require('bufferline').setup()
@@ -644,6 +656,12 @@ vim.keymap.set('n', '<leader>guh', '<CMD>Gitsigns undo_stage_hunk<CR>', { desc =
 require('which-key').setup()
 local wk = require("which-key")
 wk.register({
+  P = {
+    name = "Packer"
+  },
+  p = {
+    name = "Projects"
+  },
   s = {
     name = "Search"
   },

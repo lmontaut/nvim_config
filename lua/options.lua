@@ -20,10 +20,16 @@ vim.o.undofile = true
 vim.o.ignorecase = true
 vim.o.smartcase = true
 
+-- We're big boys and big girls now
+vim.o.showmode = false
+vim.o.cursorline = true
+
 -- Decrease update time
-vim.o.updatetime = 250
+vim.o.updatetime = 300
 vim.o.timeoutlen = 300
+vim.o.smartindent = true
 vim.wo.signcolumn = 'yes'
+vim.o.showbreak = ">>"
 
 -- Where to split
 vim.o.splitbelow = true
