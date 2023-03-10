@@ -61,7 +61,8 @@ vim.keymap.set("n", "<leader>m<CR>", ":make<CR>", { noremap = true, silent = tru
 vim.keymap.set("n", "<leader>mM", ":Make<Space>", { noremap = true, silent = false, desc = "Make" })
 vim.keymap.set("n", "<leader>m!", ":Make!<Space>", { noremap = true, silent = false, desc = "Make!" })
 vim.keymap.set("n", "<leader>ms", ":setlocal<Space>makeprg=", { noremap = true, silent = false, desc = "Set makeprg localy" })
-vim.keymap.set("n", "<leader>mS", ":setlocal<Space>makeprg=", { noremap = true, silent = false, desc = "Set makeprg globaly" })
+vim.keymap.set("n", "<leader>mS", ":set<Space>makeprg=", { noremap = true, silent = false, desc = "Set makeprg globaly" })
+vim.keymap.set("n", "<leader>mb", ":set<Space>makeprg=make\\ -C\\ build\\ -j10", { noremap = true, silent = false, desc = "Set makeprg to make -C build" })
 -- Example: `:setlocal makeprg=python \%` or `:setlocal makeprg=make` or `:setlocal makeprg=clang++ \-Wall \-Wextra % -o %<`
 vim.keymap.set("n", "<leader>ml", ":let<Space>&makeprg='", { noremap = true, silent = false, desc = "Let makeprg" })
 vim.keymap.set("n", "<leader>mc", ":setlocal<Space>makeprg=clang++\\ -Wall\\ -Wextra\\ %\\ -o\\ %<", { noremap = true, silent = false, desc = "Set makeprg clang" })
@@ -87,9 +88,6 @@ vim.keymap.set("n", "<C-f>", ":<C-f>", { noremap = true, silent = true, desc = "
 
 -- Buffer close
 vim.keymap.set("n", "<leader>bc", "<CMD>bd!<CR>", { noremap = true, silent = true, desc = "Close buffer" })
-
--- Kill other window
-vim.keymap.set("n", "<leader>o", ":only<CR>", { noremap = true, silent = true, desc = "Close other windows" })
 
 -- -- VISUAL MODE -- --
 -- -- Stay in indent mode
