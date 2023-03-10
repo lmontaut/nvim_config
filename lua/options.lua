@@ -25,11 +25,19 @@ vim.o.showmode = false
 vim.o.cursorline = true
 
 -- Decrease update time
-vim.o.updatetime = 300
+vim.o.updatetime = 500
 vim.o.timeoutlen = 500
 vim.o.smartindent = true
 vim.wo.signcolumn = 'yes'
 vim.o.showbreak = ">>"
+
+-- Modify jumplist behavior -> much better
+vim.cmd [[
+  autocmd InsertLeave * normal! m'
+  autocmd TextYankPost * normal! m'
+  autocmd BufWrite * normal! m'
+]]
+vim.o.jumpoptions=""
 
 -- Where to split
 vim.o.splitbelow = true
@@ -41,9 +49,6 @@ vim.cmd [[colorscheme onedark]]
 
 -- Don't wrap please
 vim.o.wrap = false
-
--- Unable persistent undo
-vim.o.undofile = true
 
 -- Relative line numbers
 vim.o.relativenumber = true

@@ -652,6 +652,12 @@ vim.keymap.set('n', '<leader>gsh', '<CMD>Gitsigns stage_hunk<CR>', { desc = 'Git
 vim.keymap.set('n', '<leader>guf', '<CMD>Git reset %<CR>', { desc = 'Git unstage file' })
 vim.keymap.set('n', '<leader>guh', '<CMD>Gitsigns undo_stage_hunk<CR>', { desc = 'Git unstage hunk' })
 
+-- [[ Configure vim-sneak ]]
+vim.cmd [[
+  nmap f <Plug>Sneak_s
+  nmap F <Plug>Sneak_S
+]]
+
 -- [[ Configure Which-key ]]
 require('which-key').setup()
 local wk = require("which-key")

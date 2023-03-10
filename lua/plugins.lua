@@ -74,6 +74,9 @@ require('packer').startup(function(use)
   -- File browser
   use { "ms-jpq/chadtree" }
 
+  -- Navigation
+  use { "justinmk/vim-sneak" }
+
   -- Project manager
   use { "ahmedkhalf/project.nvim" }
 
