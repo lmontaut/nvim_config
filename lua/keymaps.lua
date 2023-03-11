@@ -94,6 +94,9 @@ vim.keymap.set("n", "<leader>bc", "<CMD>bd!<CR>", { noremap = true, silent = tru
 vim.keymap.set("v", ">", ">gv", opts)
 vim.keymap.set("v", "<", "<gv", opts)
 
+-- Keep what is in register when pasting in visual mode
+-- vim.keymap.set("v", "p", '"_dP', opts)
+
 -- -- TERMINAL MODE -- --
 local topts = { silent = true }
 vim.keymap.set("t", "<ESC>", "<C-\\><C-n>", topts)
