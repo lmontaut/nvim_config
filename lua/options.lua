@@ -39,9 +39,10 @@ vim.cmd [[
 ]]
 vim.o.jumpoptions=""
 
--- Where to split
-vim.o.splitbelow = true
-vim.o.splitright = true
+-- Where to split -> I want the cursor to remain in the top left window
+-- Then ctrl w + o to close other windows
+vim.o.splitbelow = false
+vim.o.splitright = false
 
 -- Set colorscheme
 vim.o.termguicolors = true

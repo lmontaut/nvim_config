@@ -639,7 +639,7 @@ require("symbols-outline").setup()
 vim.keymap.set('n', '<leader>i', "<CMD>SymbolsOutline<CR>", { desc = 'Symbols outline' })
 
 -- [[ Configure fugitive ]]
-vim.keymap.set('n', '<leader>gg', '<CMD>vertical Git<CR>', { desc = 'Git status' })
+vim.keymap.set('n', '<leader>gg', '<CMD>vertical rightbelow Git<CR>', { desc = 'Git status' })
 vim.keymap.set('n', '<leader>gt', '<CMD>tabnew<CR><cmd>0G<CR><cmd>norm gUk>gsk>gg<CR>', { desc = 'Git status tab' })
 vim.keymap.set('n', '<leader>gj', '<CMD>Gitsigns next_hunk<CR>', { desc = 'Next hunk' })
 vim.keymap.set('n', '<leader>gk', '<CMD>Gitsigns prev_hunk<CR>', { desc = 'Previous hunk' })
@@ -651,6 +651,9 @@ vim.keymap.set('n', '<leader>gsf', '<CMD>Git add %<CR>', { desc = 'Git stage fil
 vim.keymap.set('n', '<leader>gsh', '<CMD>Gitsigns stage_hunk<CR>', { desc = 'Git stage hunk' })
 vim.keymap.set('n', '<leader>guf', '<CMD>Git reset %<CR>', { desc = 'Git unstage file' })
 vim.keymap.set('n', '<leader>guh', '<CMD>Gitsigns undo_stage_hunk<CR>', { desc = 'Git unstage hunk' })
+vim.keymap.set('n', '<leader>gd', '<CMD>Gitsigns preview_hunk_inline<CR>', { desc = 'Git hunk diff' })
+vim.keymap.set('n', '<leader>gD', '<CMD>Git diff<CR>', { desc = 'Git file diff' })
+vim.keymap.set('n', '<leader>gr', '<CMD>Gitsigns reset_hunk<CR>', { desc = 'Git reset hunk' })
 
 -- [[ Configure vim-sneak ]]
 vim.cmd [[
