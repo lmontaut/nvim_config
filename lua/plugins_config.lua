@@ -654,8 +654,9 @@ vim.keymap.set('n', '<leader>guh', '<CMD>Gitsigns undo_stage_hunk<CR>', { desc =
 
 -- [[ Configure vim-sneak ]]
 vim.cmd [[
-  nmap f <Plug>Sneak_s
-  nmap F <Plug>Sneak_S
+  nmap f <Plug>Sneak_f
+  nmap F <Plug>Sneak_F
+  let g:sneak#use_ic_scs = 1
 ]]
 
 -- [[ Configure Which-key ]]
