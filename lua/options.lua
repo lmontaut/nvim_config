@@ -7,6 +7,9 @@ vim.o.hlsearch = false
 -- Make line numbers default
 vim.wo.number = true
 
+-- The cursor always has room above and below
+vim.o.scrolloff = 8
+
 -- Enable mouse mode
 vim.o.mouse = 'a'
 

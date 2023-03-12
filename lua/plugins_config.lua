@@ -265,39 +265,39 @@ local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
 -- Looks of the LSP
-  local signs = {
-    { name = "DiagnosticSignError", text = "" },
-    { name = "DiagnosticSignWarn", text = "" },
-    { name = "DiagnosticSignHint", text = "" },
-    { name = "DiagnosticSignInfo", text = "" },
-  }
+local signs = {
+  { name = "DiagnosticSignError", text = "" },
+  { name = "DiagnosticSignWarn", text = "" },
+  { name = "DiagnosticSignHint", text = "" },
+  { name = "DiagnosticSignInfo", text = "" },
+}
 
-  for _, sign in ipairs(signs) do
-    vim.fn.sign_define(sign.name, { texthl = sign.name, text = sign.text, numhl = "" })
-  end
+for _, sign in ipairs(signs) do
+  vim.fn.sign_define(sign.name, { texthl = sign.name, text = sign.text, numhl = "" })
+end
 
-  local config = {
-    -- disable virtual text
-    virtual_text = false,
-    -- show signs
-    signs = {
-      active = signs,
-    },
-    update_in_insert = false,
-    underline = false,
-    severity_sort = true,
-    float = {
-      focusable = false,
-      style = "minimal",
-      border = "rounded",
-      source = "always",
-      header = "",
-      prefix = "",
-    },
-  }
+local config = {
+  -- disable virtual text
+  virtual_text = false,
+  -- show signs
+  signs = {
+    active = signs,
+  },
+  update_in_insert = false,
+  underline = false,
+  severity_sort = true,
+  float = {
+    focusable = false,
+    style = "minimal",
+    border = "rounded",
+    source = "always",
+    header = "",
+    prefix = "",
+  },
+}
 
-  vim.diagnostic.config(config)
-  vim.lsp.diagnostics_config = config
+vim.diagnostic.config(config)
+vim.lsp.diagnostics_config = config
 
 -- [[ Configure Mason ]]
 -- Setup mason so it can manage external tooling
@@ -519,9 +519,9 @@ vim.keymap.set('n', '<leader>p', "<CMD>Telescope projects<CR>", { desc = 'Open p
 vim.keymap.set('n', '<leader>r', "<CMD>Telescope resume<CR>", { desc = 'Telescope resume' })
 
 -- [[ Configure bufferline ]]
-require('bufferline').setup()
-vim.keymap.set('n', '<C-]>', "<CMD>BufferLineCycleNext<CR>", { desc = 'Next buffer' })
-vim.keymap.set('n', '<C-[>', "<CMD>BufferLineCyclePrev<CR>", { desc = 'Previous buffer' })
+-- require('bufferline').setup()
+-- vim.keymap.set('n', '<C-]>', "<CMD>BufferLineCycleNext<CR>", { desc = 'Next buffer' })
+-- vim.keymap.set('n', '<C-[>', "<CMD>BufferLineCyclePrev<CR>", { desc = 'Previous buffer' })
 
 -- [[ Configure lualine ]]
 local mode = {
@@ -720,6 +720,12 @@ vim.cmd [[
   nmap f <Plug>Sneak_f
   nmap F <Plug>Sneak_F
   let g:sneak#use_ic_scs = 1
+]]
+
+-- [[ Configure netrw ]]
+vim.cmd[[
+  let g:netrw_keepdir = 0
+  let g:netrw_localcopydircmd = 'cp -r'
 ]]
 
 -- [[ Configure Which-key ]]

@@ -11,6 +11,14 @@ local opts = { noremap = true, silent = true }
 -- See `:help vim.keymap.set()`
 vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
 
+-- Keep cursor middle screen when scrolling
+vim.keymap.set("n", "<C-d>", "<C-d>zz", opts)
+vim.keymap.set("n", "<C-u>", "<C-u>zz", opts)
+vim.keymap.set("n", "n", "nzzzv", opts)
+vim.keymap.set("n", "N", "Nzzzv", opts)
+vim.keymap.set("n", "J", "mzJ`z", opts)
+vim.keymap.set("n", "Q", "<nop>", opts)
+
 -- -- INSERT MODE -- --
 -- Escape from INSERT mode
 vim.keymap.set('i', "jk", "<ESC>", { noremap = true, silent = true, desc = "Escape INSERT mode" })
@@ -33,24 +41,18 @@ vim.keymap.set("n", "<C-Down>", "<cmd>resize -10<CR>", opts)
 vim.keymap.set("n", "<C-Left>", "<cmd>vertical resize -10<CR>", opts)
 vim.keymap.set("n", "<C-Right>", "<cmd>vertical resize +10<CR>", opts)
 
--- Better tabbing
--- vim.keymap.set("n", ">" , ">>", opts)
--- vim.keymap.set("n", "<" , "<<", opts)
-
 -- Quicklist navigation
 -- Even if the quicklist is not open, you can navigate with :cn and :cp
-vim.keymap.set("n", "<C-n>", ":cn<CR>", { noremap = true, silent = true, desc = "Quicklist next" })
-vim.keymap.set("n", "<C-p>", ":cp<CR>", { noremap = true, silent = true, desc = "Quicklist prev" })
-vim.keymap.set("n", "<leader>qn", ":cn<CR>", { noremap = true, silent = true, desc = "Quicklist next" })
-vim.keymap.set("n", "<leader>qp", ":cp<CR>", { noremap = true, silent = true, desc = "Quicklist prev" })
+vim.keymap.set("n", "<C-n>", ":cn<CR>zz", { noremap = true, silent = true, desc = "Quicklist next" })
+vim.keymap.set("n", "<C-p>", ":cp<CR>zz", { noremap = true, silent = true, desc = "Quicklist prev" })
+vim.keymap.set("n", "<leader>qn", ":cn<CR>zz", { noremap = true, silent = true, desc = "Quicklist next" })
+vim.keymap.set("n", "<leader>qp", ":cp<CR>zz", { noremap = true, silent = true, desc = "Quicklist prev" })
 vim.keymap.set("n", "<leader>qo", ":copen<CR>", { noremap = true, silent = true, desc = "Quicklist open" })
 vim.keymap.set("n", "<leader>qO", ":Copen<CR>", { noremap = true, silent = true, desc = "Quicklist open (dispatched)" })
 vim.keymap.set("n", "<leader>qc", ":cclose<CR>", { noremap = true, silent = true, desc = "Quicklist close" })
-vim.keymap.set("n", "<leader>qq", ":cc<CR>", { noremap = true, silent = true, desc = "Quicklist show current" })
+vim.keymap.set("n", "<leader>qq", ":cc<CR>zz", { noremap = true, silent = true, desc = "Quicklist show current" })
 vim.keymap.set("n", "<leader>qN", ":cfirst<CR>", { noremap = true, silent = true, desc = "Quicklist first" })
 vim.keymap.set("n", "<leader>qP", ":clast<CR>", { noremap = true, silent = true, desc = "Quicklist last" })
-vim.keymap.set("n", "<leader>qo", ":copen<CR>", { noremap = true, silent = true, desc = "Quicklist open" })
-vim.keymap.set("n", "<leader>qo", ":copen<CR>", { noremap = true, silent = true, desc = "Quicklist open" })
 vim.keymap.set("n", "<leader>qo", ":copen<CR>", { noremap = true, silent = true, desc = "Quicklist open" })
 
 -- Make
@@ -100,6 +102,10 @@ vim.keymap.set("v", ">", ">gv", opts)
 vim.keymap.set("v", "<", "<gv", opts)
 vim.keymap.set("v", "L", ">gv", opts)
 vim.keymap.set("v", "H", "<gv", opts)
+
+-- Move lines around
+vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", opts)
+vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", opts)
 
 -- Keep what is in register when pasting in visual mode
 -- vim.keymap.set("v", "p", '"_dP', opts)
