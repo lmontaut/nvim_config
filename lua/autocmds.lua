@@ -35,3 +35,10 @@ vim.cmd [[
   autocmd Filetype hxx setlocal expandtab tabstop=2 shiftwidth=2
   autocmd FileType python setlocal expandtab shiftwidth=4 softtabstop=4
 ]]
+
+vim.cmd [[
+  augroup InitNetrw
+    autocmd!
+    autocmd VimEnter * :silent! Explore
+  augroup END
+]]
