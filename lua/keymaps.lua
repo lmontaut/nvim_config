@@ -11,9 +11,11 @@ local opts = { noremap = true, silent = true }
 -- See `:help vim.keymap.set()`
 vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
 
--- Keep cursor middle screen when scrolling
+-- Keep cursor middle screen when scrolling and jumping around
 vim.keymap.set("n", "<C-d>", "<C-d>zz", opts)
 vim.keymap.set("n", "<C-u>", "<C-u>zz", opts)
+vim.keymap.set("n", "<C-o>", "<C-o>zz", opts)
+vim.keymap.set("n", "<C-i>", "<C-i>zz", opts)
 vim.keymap.set("n", "n", "nzzzv", opts)
 vim.keymap.set("n", "N", "Nzzzv", opts)
 vim.keymap.set("n", "J", "mzJ`z", opts)
@@ -75,8 +77,11 @@ vim.keymap.set("n", "<leader>2", ":Explore<CR>", { noremap = true, silent = true
 vim.keymap.set("n", "<leader>3", ":Rexplore<CR>", { noremap = true, silent = true, desc = "Rexplore" })
 
 -- Launch terminal command
-vim.keymap.set("n", "<leader>t", ":split | terminal<Space>", { noremap = true, silent = false, desc = "Launch terminal horizontal" })
-vim.keymap.set("n", "<leader>T", ":split | terminal<Space>", { noremap = true, silent = false, desc = "Launch terminal vertical" })
+vim.keymap.set("n", "<leader>t", ":below split | terminal<Space>", { noremap = true, silent = false, desc = "Launch terminal horizontal" })
+vim.keymap.set("n", "<leader>T", ":rightbelow vsplit | terminal<Space>", { noremap = true, silent = false, desc = "Launch terminal vertical" })
+
+-- help
+vim.keymap.set("n", "<leader>h", ":vertical rightbelow help<Space>", { noremap = true, silent = false, desc = "Vim help" })
 
 -- Last buffer
 vim.keymap.set("n", "<leader>1", "<CMD>b#<CR>", { noremap = true, silent = true, desc = "Last buffer" })

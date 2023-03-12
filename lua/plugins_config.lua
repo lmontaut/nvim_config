@@ -68,11 +68,39 @@ require('telescope').setup {
       },
     },
   },
-  find_files = {
-    find_command = { "rg", "--files", "--hidden", },
-  },
-  git_files = {
-    find_command = { "rg", "--files", "--hidden", },
+  pickers = {
+    buffers = {
+      theme = "ivy",
+    },
+    live_grep = {
+      theme = "ivy",
+    },
+    grep_string = {
+      theme = "ivy",
+    },
+    quickfix = {
+      theme = "ivy",
+    },
+    lsp_references = {
+      theme = "ivy",
+    },
+    lsp_document_symbols = {
+      theme = "ivy",
+    },
+    lsp_workspace_symbols = {
+      theme = "ivy",
+    },
+    diagnostics = {
+      theme = "ivy",
+    },
+    find_files = {
+      -- find_command = { "rg", "--files", "--hidden", },
+      theme = "ivy",
+    },
+    git_files = {
+      -- find_command = { "rg", "--files", "--hidden", },
+      theme = "ivy",
+    },
   },
 }
 
@@ -84,6 +112,7 @@ vim.keymap.set('n', '<leader>?', require('telescope.builtin').oldfiles, { desc =
 vim.keymap.set('n', '<leader>,', require('telescope.builtin').buffers, { desc = 'Find buffer' })
 vim.keymap.set('n', '<leader><space>', require('telescope.builtin').git_files, { desc = 'Find git file' })
 vim.keymap.set('n', '<leader>sc', require('telescope.builtin').command_history, { desc = 'Command history' })
+vim.keymap.set('n', '<leader>sq', require('telescope.builtin').quickfix, { desc = 'Quickfix list' })
 vim.keymap.set('n', '<leader>sf', require('telescope.builtin').find_files, { desc = 'Find files' })
 vim.keymap.set('n', '<leader>/', function()
   -- You can pass additional configuration to telescope to change theme, layout, etc.
@@ -325,7 +354,6 @@ mason_lspconfig.setup_handlers {
 require('fidget').setup()
 
 -- [[ Configure nvim-cmp ]]
--- nvim-cmp setup
 local cmp = require 'cmp'
 local luasnip = require 'luasnip'
 
@@ -339,10 +367,12 @@ local cmp_toggle = function()
   end
 end
 
-local cmp_abort = function()
+local cmp_abort = function(fallback)
   if cmp.visible() then
     cmp.abort()
     cmp.setup({ enabled = false })
+  else
+    fallback()
   end
 end
 
@@ -437,6 +467,7 @@ cmp.setup({
     ['<C-d>'] = cmp.mapping.scroll_docs(-4),
     ['<C-u>'] = cmp.mapping.scroll_docs(4),
     ['<C-e>'] = cmp.mapping(cmp_abort, { 'i', 's', 'c' }),
+    ['<Esc>'] = cmp.mapping(cmp_abort, { 'i', 's', 'c' }),
     ['<C-Space>'] = cmp.mapping(cmp_toggle, { 'i', 's', 'c' }),
     ['<CR>'] = cmp.mapping({ i=cmp_confirm, s=cmp_confirm, c=cmp_confirm }),
     ['<Tab>'] = cmp.mapping({ i=cmp_tab, s=cmp_tab, c=cmp_tab }),
@@ -450,7 +481,7 @@ cmp.setup({
   sources = {
     { name = 'nvim_lsp' },
     { name = 'luasnip' },
-    { name = 'buffer' },
+    -- { name = 'buffer' },
     { name = 'path' },
   },
   -- window = {
@@ -480,38 +511,32 @@ cmp.setup.cmdline(':', {
 })
 
 -- [[ Configure Project ]]
-require("project_nvim").setup {
-  -- Manual mode doesn't automatically change your root directory, so you have
-  -- the option to manually do so using `:ProjectRoot` command.
-  manual_mode = false,
-
-  -- Methods of detecting the root directory. **"lsp"** uses the native neovim
-  -- lsp, while **"pattern"** uses vim-rooter like glob pattern matching. Here
-  -- order matters: if one is not detected, the other is used as fallback. You
-  -- can also delete or rearangne the detection methods.
-  -- detection_methods = { "lsp", "pattern" },
-  detection_methods = { "pattern" },
-
-  -- All the patterns used to detect root dir, when **"pattern"** is in
-  -- detection_methods
-  -- patterns = { ".git", "_darcs", ".hg", ".bzr", ".svn", "Makefile", "package.json" },
-  patterns = { ".git" },
-
-  -- Table of lsp clients to ignore by name
-  -- eg: { "efm", ... }
-  -- ignore_lsp = {},
-
-  -- Don't calculate root dir on specific directories
-  -- Ex: { "~/.cargo/*", ... }
-  -- exclude_dirs = {},
-
-  -- Show hidden files in telescope
-  show_hidden = true,
-
-  -- When set to false, you will get a message when project.nvim changes your
-  -- directory.
-  silent_chdir = true,
-}
+-- require("project_nvim").setup {
+--   -- Manual mode doesn't automatically change your root directory, so you have
+--   -- the option to manually do so using `:ProjectRoot` command.
+--   manual_mode = true,
+--   -- Methods of detecting the root directory. **"lsp"** uses the native neovim
+--   -- lsp, while **"pattern"** uses vim-rooter like glob pattern matching. Here
+--   -- order matters: if one is not detected, the other is used as fallback. You
+--   -- can also delete or rearangne the detection methods.
+--   -- detection_methods = { "lsp", "pattern" },
+--   detection_methods = { "pattern" },
+--   -- All the patterns used to detect root dir, when **"pattern"** is in
+--   -- detection_methods
+--   -- patterns = { ".git", "_darcs", ".hg", ".bzr", ".svn", "Makefile", "package.json" },
+--   patterns = { ".git" },
+--   -- Table of lsp clients to ignore by name
+--   -- eg: { "efm", ... }
+--   -- ignore_lsp = {},
+--   -- Don't calculate root dir on specific directories
+--   -- Ex: { "~/.cargo/*", ... }
+--   -- exclude_dirs = {},
+--   -- Show hidden files in telescope
+--   show_hidden = true,
+--   -- When set to false, you will get a message when project.nvim changes your
+--   -- directory.
+--   silent_chdir = true,
+-- }
 
 -- Telescope integration
 require('telescope').load_extension('projects')
