@@ -90,9 +90,21 @@ vim.keymap.set("n", "<C-f>", ":<C-f>", { noremap = true, silent = true, desc = "
 -- Buffer close
 vim.keymap.set("n", "<leader>bc", "<CMD>bd!<CR>", { noremap = true, silent = true, desc = "Close buffer" })
 
--- Better indentation
+-- Better indentation insert mode
 vim.keymap.set("i", "<C-l>", "<C-t>", opts)
 vim.keymap.set("i", "<C-h>", "<C-d>", opts)
+
+-- Delete in front of cursor in insert mode
+vim.keymap.set("i", "<C-u>", "<space><Esc>ce", opts)
+
+-- Automatic bracket closing
+vim.keymap.set("i", '"', '""<left>', opts)
+vim.keymap.set("i", "'", "''<left>", opts)
+vim.keymap.set("i", "(", "()<left>", opts)
+vim.keymap.set("i", "[", "[]<left>", opts)
+vim.keymap.set("i", "{", "{}<left>", opts)
+vim.keymap.set("i", "{<CR>", "{<CR>}<Esc>O", opts)
+vim.keymap.set("i", "{;<CR>", "{<CR>};<Esc>O", opts)
 
 -- Replace under cursor
 vim.keymap.set("n", "<leader>S", ":%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>", { noremap = true, silent = false })
