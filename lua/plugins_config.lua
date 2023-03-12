@@ -72,6 +72,9 @@ require('telescope').setup {
     buffers = {
       theme = "ivy",
     },
+    command_history = {
+      theme = "ivy",
+    },
     live_grep = {
       theme = "ivy",
     },
