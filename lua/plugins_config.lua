@@ -46,7 +46,6 @@ require('telescope').setup {
   defaults = {
     mappings = {
       i = {
-        -- ["jk"] = ,
         ["<C-n>"] = actions.cycle_history_next,
         ["<C-p>"] = actions.cycle_history_prev,
 
@@ -109,17 +108,17 @@ vim.keymap.set('n', '<leader>e', '<CMD>CHADopen<CR>', { desc = 'File browser' })
 -- See `:help nvim-treesitter`
 require('nvim-treesitter.configs').setup {
   -- Add languages to be installed here that you want installed for treesitter
-  ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'typescript', 'help', 'vim' },
+  ensure_installed = { 'c', 'cpp', 'cmake', 'lua', 'python', 'rust', 'help', 'vim' },
 
   highlight = { enable = true },
   indent = { enable = true, disable = { 'python' } },
   incremental_selection = {
     enable = true,
     keymaps = {
-      init_selection = '<c-space>',
-      node_incremental = '<c-space>',
-      scope_incremental = '<c-s>',
-      node_decremental = '<c-backspace>',
+      init_selection = '<CR>',
+      node_incremental = '<CR>',
+      scope_incremental = '<TAB>',
+      node_decremental = '<S-TAB>',
     },
   },
   textobjects = {
@@ -202,9 +201,9 @@ local on_attach = function(_, bufnr)
   nmap('<leader>lr', vim.lsp.buf.rename, 'Rename')
   nmap('<leader>lc', vim.lsp.buf.code_action, 'Code action')
 
-  nmap('gd', vim.lsp.buf.definition, '[G]oto [D]efinition')
-  nmap('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
-  nmap('gI', vim.lsp.buf.implementation, '[G]oto [I]mplementation')
+  nmap('gd', vim.lsp.buf.definition, 'Goto Definition')
+  nmap('gr', require('telescope.builtin').lsp_references, 'Goto References')
+  nmap('gI', vim.lsp.buf.implementation, 'Goto Implementation')
   -- nmap('<leader>D', vim.lsp.buf.type_definition, 'Type [D]efinition')
   nmap('<leader>ls', require('telescope.builtin').lsp_document_symbols, 'Document symbols')
   nmap('<leader>lS', require('telescope.builtin').lsp_dynamic_workspace_symbols, 'Workspace symbols')
@@ -216,7 +215,7 @@ local on_attach = function(_, bufnr)
   imap('<C-x>', vim.lsp.buf.signature_help, 'Signature Documentation')
 
   -- Lesser used LSP functionality
-  nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
+  nmap('gD', vim.lsp.buf.declaration, 'Goto Declaration')
   -- nmap('<leader>wa', vim.lsp.buf.add_workspace_folder, '[W]orkspace [A]dd Folder')
   -- nmap('<leader>wr', vim.lsp.buf.remove_workspace_folder, '[W]orkspace [R]emove Folder')
   -- nmap('<leader>wl', function()
@@ -284,8 +283,8 @@ capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
     signs = {
       active = signs,
     },
-    update_in_insert = true,
-    underline = true,
+    update_in_insert = false,
+    underline = false,
     severity_sort = true,
     float = {
       focusable = false,
@@ -331,15 +330,80 @@ local cmp = require 'cmp'
 local luasnip = require 'luasnip'
 
 local cmp_toggle = function()
-      if cmp.visible() then
-        cmp.close()
-      else
-        cmp.complete()
-      end
+  if cmp.visible() then
+    cmp.close()
+    cmp.setup({ enabled = false })
+  else
+    cmp.setup({ enabled = true })
+    cmp.complete()
+  end
+end
+
+local cmp_abort = function()
+  if cmp.visible() then
+    cmp.abort()
+    cmp.setup({ enabled = false })
+  end
+end
+
+local cmp_confirm = function(fallback)
+  if cmp.visible() then
+    cmp.confirm({
+        behavior = cmp.ConfirmBehavior.Replace,
+        select = true,
+      })
+    cmp.setup({ enabled = false })
+  else
+    fallback()
+  end
+end
+
+-- local cmp_confirm_command = function(fallback)
+--     if cmp.visible() then
+--       cmp.confirm({
+--           behavior = cmp.ConfirmBehavior.Replace,
+--           select = true,
+--         })
+--       cmp.complete()
+--   else
+--     cmp.setup({ enabled = false })
+--     fallback()
+--   end
+-- end
+
+local cmp_tab = function()
+  if cmp.visible() then
+    cmp.select_next_item()
+  elseif luasnip.expand_or_jumpable() then
+    luasnip.expand_or_jump()
+  else
+    cmp_toggle()
+  end
+end
+
+-- local cmp_tab_command = function()
+--   if cmp.visible() then
+--     cmp.select_next_item()
+--   elseif luasnip.expand_or_jumpable() then
+--     luasnip.expand_or_jump()
+--   else
+--     cmp_toggle()
+--     cmp.select_next_item()
+--   end
+-- end
+
+local cmp_s_tab = function()
+  if cmp.visible() then
+    cmp.select_prev_item()
+  elseif luasnip.jumpable(-1) then
+    luasnip.jump(-1)
+  else
+    cmp_toggle()
+  end
 end
 
 local ELLIPSIS_CHAR = '…'
-local MAX_LABEL_WIDTH = 50
+local MAX_LABEL_WIDTH = 30
 
 local get_ws = function (max, len)
   return (" "):rep(max - len)
@@ -356,38 +420,29 @@ local format = function(_, item)
   return item
 end
 
-cmp.setup {
+vim.cmd[[
+  highlight GhostText gui=bold guifg=#282c34 guibg=#98c379
+]]
+
+cmp.setup({
+  completion = {
+    autocomplete = false -- autocomplete will only appear when I ask it to
+  },
   snippet = {
     expand = function(args)
       luasnip.lsp_expand(args.body)
     end,
   },
-  mapping = cmp.mapping.preset.insert {
+  mapping = {
     ['<C-d>'] = cmp.mapping.scroll_docs(-4),
-    ['<C-f>'] = cmp.mapping.scroll_docs(4),
-    ['<C-Space>'] = cmp.mapping(cmp_toggle, {"i", "s", "c"}),
-    ['<CR>'] = cmp.mapping.confirm {
-      behavior = cmp.ConfirmBehavior.Replace,
-      select = true,
-    },
-    ['<Tab>'] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_next_item()
-      elseif luasnip.expand_or_jumpable() then
-        luasnip.expand_or_jump()
-      else
-        fallback()
-      end
-    end, { 'i', 's' }),
-    ['<S-Tab>'] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_prev_item()
-      elseif luasnip.jumpable(-1) then
-        luasnip.jump(-1)
-      else
-        fallback()
-      end
-    end, { 'i', 's' }),
+    ['<C-u>'] = cmp.mapping.scroll_docs(4),
+    ['<C-e>'] = cmp.mapping(cmp_abort, { 'i', 's', 'c' }),
+    ['<C-Space>'] = cmp.mapping(cmp_toggle, { 'i', 's', 'c' }),
+    ['<CR>'] = cmp.mapping({ i=cmp_confirm, s=cmp_confirm, c=cmp_confirm }),
+    ['<Tab>'] = cmp.mapping({ i=cmp_tab, s=cmp_tab, c=cmp_tab }),
+    ['<S-Tab>'] = cmp.mapping(cmp_s_tab, { 'i', 's', 'c' }),
+    ['<C-n>'] = cmp.mapping(cmp_tab, { 'i', 's', 'c' }),
+    ['<C-p>'] = cmp.mapping(cmp_s_tab, { 'i', 's', 'c' }),
   },
   formatting = {
     format = format,
@@ -398,14 +453,17 @@ cmp.setup {
     { name = 'buffer' },
     { name = 'path' },
   },
-  window = {
-    completion = cmp.config.window.bordered(),
-    documentation = cmp.config.window.bordered(),
-  },
-}
+  -- window = {
+    -- completion = cmp.config.window.bordered(),
+    -- documentation = cmp.config.window.bordered(),
+  -- },
+  experimental = {
+    ghost_text = { hl_group = 'GhostText' }
+  }
+})
 
 cmp.setup.cmdline({ '/', '?' }, {
-  mapping = cmp.mapping.preset.cmdline(),
+  -- mapping = cmp.mapping.preset.cmdline(),
   sources = {
     { name = 'buffer' }
   }
@@ -413,7 +471,7 @@ cmp.setup.cmdline({ '/', '?' }, {
 
 -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
 cmp.setup.cmdline(':', {
-  mapping = cmp.mapping.preset.cmdline(),
+  -- mapping = cmp.mapping.preset.cmdline(),
   sources = cmp.config.sources({
     { name = 'path' }
   }, {
@@ -462,8 +520,8 @@ vim.keymap.set('n', '<leader>r', "<CMD>Telescope resume<CR>", { desc = 'Telescop
 
 -- [[ Configure bufferline ]]
 require('bufferline').setup()
-vim.keymap.set('n', '<S-l>', "<CMD>BufferLineCycleNext<CR>", { desc = 'Next buffer' })
-vim.keymap.set('n', '<S-h>', "<CMD>BufferLineCyclePrev<CR>", { desc = 'Previous buffer' })
+vim.keymap.set('n', '<C-]>', "<CMD>BufferLineCycleNext<CR>", { desc = 'Next buffer' })
+vim.keymap.set('n', '<C-[>', "<CMD>BufferLineCyclePrev<CR>", { desc = 'Previous buffer' })
 
 -- [[ Configure lualine ]]
 local mode = {

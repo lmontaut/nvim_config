@@ -89,10 +89,17 @@ vim.keymap.set("n", "<C-f>", ":<C-f>", { noremap = true, silent = true, desc = "
 -- Buffer close
 vim.keymap.set("n", "<leader>bc", "<CMD>bd!<CR>", { noremap = true, silent = true, desc = "Close buffer" })
 
+-- Better indentation
+vim.keymap.set("n", "L", ">>", { noremap = true, silent = true })
+vim.keymap.set("n", "H", "<<", { noremap = true, silent = true })
+
+
 -- -- VISUAL MODE -- --
 -- -- Stay in indent mode
 vim.keymap.set("v", ">", ">gv", opts)
 vim.keymap.set("v", "<", "<gv", opts)
+vim.keymap.set("v", "L", ">gv", opts)
+vim.keymap.set("v", "H", "<gv", opts)
 
 -- Keep what is in register when pasting in visual mode
 -- vim.keymap.set("v", "p", '"_dP', opts)

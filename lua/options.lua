@@ -55,10 +55,13 @@ vim.o.wrap = false
 vim.o.relativenumber = true
 
 -- Set completeopt to have a better completion experience
-vim.o.completeopt = 'menuone,noselect'
+vim.o.completeopt = 'menu,menuone,noselect'
 
 -- Allow vim to access the system clipboard
 vim.o.clipboard = "unnamedplus"
+
+-- Maximum height of the completion window
+vim.o.pumheight = 15
 
 -- Indent default
 vim.o.expandtab = true
