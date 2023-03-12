@@ -38,8 +38,8 @@ vim.cmd [[
 
 vim.cmd [[
   augroup InitNetrw
-    autocmd!
-    autocmd VimEnter * :silent! Explore
+      autocmd!
+      autocmd VimEnter * if argc() == 0 | Explore! | endif
   augroup END
 ]]
 
