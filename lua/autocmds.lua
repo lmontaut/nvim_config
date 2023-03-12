@@ -42,3 +42,8 @@ vim.cmd [[
     autocmd VimEnter * :silent! Explore
   augroup END
 ]]
+
+-- No smart indent in python please
+vim.cmd [[
+  au! BufEnter *.py setl nosmartindent
+]]
