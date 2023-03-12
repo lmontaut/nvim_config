@@ -411,6 +411,22 @@ local cmp_tab = function()
   end
 end
 
+local cmp_scroll = function(fallback)
+  if cmp.visible() then
+    cmp.scroll_docs(4)
+  else
+    fallback()
+  end
+end
+
+local cmp_scroll_back = function(fallback)
+  if cmp.visible() then
+    cmp.scroll_docs(-4)
+  else
+    fallback()
+  end
+end
+
 -- local cmp_tab_command = function()
 --   if cmp.visible() then
 --     cmp.select_next_item()
@@ -464,8 +480,8 @@ cmp.setup({
     end,
   },
   mapping = {
-    ['<C-d>'] = cmp.mapping.scroll_docs(-4),
-    ['<C-u>'] = cmp.mapping.scroll_docs(4),
+    ['<C-d>'] = cmp.mapping({ i = cmp_scroll }),
+    ['<C-u>'] = cmp.mapping({ i = cmp_scroll_back }),
     ['<C-e>'] = cmp.mapping(cmp_abort, { 'i', 's', 'c' }),
     ['<Esc>'] = cmp.mapping(cmp_abort, { 'i', 's', 'c' }),
     ['<C-Space>'] = cmp.mapping(cmp_toggle, { 'i', 's', 'c' }),
@@ -752,6 +768,9 @@ vim.cmd[[
   let g:netrw_keepdir = 0
   let g:netrw_localcopydircmd = 'cp -r'
 ]]
+
+-- [[ Configure undotree ]]
+vim.keymap.set('n', "<leader>u", vim.cmd.UndotreeToggle, { desc = "Undo history" })
 
 -- [[ Configure Which-key ]]
 require('which-key').setup()

@@ -86,6 +86,9 @@ require('packer').startup(function(use)
   -- symbol outline
   use { "simrat39/symbols-outline.nvim" }
 
+  -- undo tree
+  use { "mbbill/undotree" }
+
   -- Add custom plugins to packer from ~/.config/nvim/lua/custom/plugins.lua
   local has_plugins, plugins = pcall(require, 'custom.plugins')
   if has_plugins then
