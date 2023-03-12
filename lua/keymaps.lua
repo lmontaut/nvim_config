@@ -94,7 +94,11 @@ vim.keymap.set("n", "<leader>bc", "<CMD>bd!<CR>", { noremap = true, silent = tru
 -- Better indentation
 vim.keymap.set("n", "L", ">>", { noremap = true, silent = true })
 vim.keymap.set("n", "H", "<<", { noremap = true, silent = true })
+vim.keymap.set("i", "<C-l>", "<C-t>", opts)
+vim.keymap.set("i", "<C-h>", "<C-d>", opts)
 
+-- Replace under cursor
+vim.keymap.set("n", "<leader>S", ":%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>", { noremap = true, silent = false })
 
 -- -- VISUAL MODE -- --
 -- -- Stay in indent mode
