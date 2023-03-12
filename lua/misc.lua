@@ -30,3 +30,12 @@ vim.cmd [[
       set undofile
   endif
 ]]
+
+-- Search in current buffers
+vim.cmd [[
+  function ClearQuickfixList()
+    call setqflist([])
+  endfunction
+  command! ClearQuickfixList call ClearQuickfixList()
+]]
+vim.keymap.set("n", "<leader>sb", "<CMD>ClearQuickfixList<CR>:bufdo vimgrepadd <C-r><C-w> %<Left><Left>")

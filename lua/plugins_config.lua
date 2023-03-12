@@ -483,7 +483,7 @@ cmp.setup({
     ['<C-d>'] = cmp.mapping({ i = cmp_scroll }),
     ['<C-u>'] = cmp.mapping({ i = cmp_scroll_back }),
     ['<C-e>'] = cmp.mapping(cmp_abort, { 'i', 's', 'c' }),
-    ['<Esc>'] = cmp.mapping(cmp_abort, { 'i', 's', 'c' }),
+    ['<Esc>'] = cmp.mapping(cmp_abort, { 'i', 's' }),
     ['<C-Space>'] = cmp.mapping(cmp_toggle, { 'i', 's', 'c' }),
     ['<CR>'] = cmp.mapping({ i=cmp_confirm, s=cmp_confirm, c=cmp_confirm }),
     ['<Tab>'] = cmp.mapping({ i=cmp_tab, s=cmp_tab, c=cmp_tab }),

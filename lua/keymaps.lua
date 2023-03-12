@@ -31,12 +31,6 @@ vim.keymap.set('i', "<S-TAB>", "<C-d>", { noremap = true, silent = true, desc = 
 vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
 vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
 
--- Better window navigation
-vim.keymap.set("n", "<C-h>", "<C-w>h", opts)
-vim.keymap.set("n", "<C-j>", "<C-w>j", opts)
-vim.keymap.set("n", "<C-k>", "<C-w>k", opts)
-vim.keymap.set("n", "<C-l>", "<C-w>l", opts)
-
 -- Resize with arrows
 vim.keymap.set("n", "<C-Up>", "<cmd>resize +10<CR>", opts)
 vim.keymap.set("n", "<C-Down>", "<cmd>resize -10<CR>", opts)
@@ -97,27 +91,32 @@ vim.keymap.set("n", "<C-f>", ":<C-f>", { noremap = true, silent = true, desc = "
 vim.keymap.set("n", "<leader>bc", "<CMD>bd!<CR>", { noremap = true, silent = true, desc = "Close buffer" })
 
 -- Better indentation
-vim.keymap.set("n", "L", ">>", { noremap = true, silent = true })
-vim.keymap.set("n", "H", "<<", { noremap = true, silent = true })
 vim.keymap.set("i", "<C-l>", "<C-t>", opts)
 vim.keymap.set("i", "<C-h>", "<C-d>", opts)
 
 -- Replace under cursor
 vim.keymap.set("n", "<leader>S", ":%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>", { noremap = true, silent = false })
 
--- -- VISUAL MODE -- --
--- -- Stay in indent mode
+-- Move lines around - visual
 vim.keymap.set("v", ">", ">gv", opts)
 vim.keymap.set("v", "<", "<gv", opts)
 vim.keymap.set("v", "L", ">gv", opts)
 vim.keymap.set("v", "H", "<gv", opts)
+vim.keymap.set("v", "<C-l>", ">gv", opts)
+vim.keymap.set("v", "<C-h>", "<gv", opts)
+vim.keymap.set("v", "<C-k>", ":m '>+1<CR>gv=gv", opts)
+vim.keymap.set("v", "<C-j>", ":m '<-2<CR>gv=gv", opts)
 
--- Move lines around
-vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", opts)
-vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", opts)
+-- Move lines around - normal
+vim.keymap.set("n", "H", "<<", opts)
+vim.keymap.set("n", "L", ">>", opts)
+vim.keymap.set("n", "<C-h>", "<<", opts)
+vim.keymap.set("n", "<C-l>", ">>", opts)
+vim.keymap.set("n", "<C-k>", "ddkP==", opts)
+vim.keymap.set("n", "<C-j>", "ddp==", opts)
 
 -- Keep what is in register when pasting in visual mode
--- vim.keymap.set("v", "p", '"_dP', opts)
+vim.keymap.set("v", "p", '"_dP', opts)
 
 -- -- TERMINAL MODE -- --
 local topts = { silent = true }
