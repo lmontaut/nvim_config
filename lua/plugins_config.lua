@@ -744,6 +744,8 @@ vim.keymap.set('n', '<leader>i', "<CMD>SymbolsOutline<CR>", { desc = 'Symbols ou
 
 -- [[ Configure fugitive ]]
 vim.keymap.set('n', '<leader>gg', '<CMD>vertical rightbelow Git<CR>', { desc = 'Git status' })
+vim.keymap.set('n', '<leader>gL', '<CMD>vertical rightbelow Git log<CR>', { desc = 'Git short log' })
+vim.keymap.set('n', '<leader>gl', '<CMD>rightbelow vsplit | Gclog<CR>', { desc = 'Git log' })
 vim.keymap.set('n', '<leader>gt', '<CMD>tabnew<CR><cmd>0G<CR><cmd>norm gUk>gsk>gg<CR>', { desc = 'Git status tab' })
 vim.keymap.set('n', '<leader>gj', '<CMD>Gitsigns next_hunk<CR>', { desc = 'Next hunk' })
 vim.keymap.set('n', '<leader>gk', '<CMD>Gitsigns prev_hunk<CR>', { desc = 'Previous hunk' })
