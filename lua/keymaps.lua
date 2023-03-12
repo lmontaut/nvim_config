@@ -107,7 +107,7 @@ vim.keymap.set("i", "{<CR>", "{<CR>}<Esc>O", opts)
 vim.keymap.set("i", "{;<CR>", "{<CR>};<Esc>O", opts)
 
 -- Replace under cursor
-vim.keymap.set("n", "<leader>S", ":%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>", { noremap = true, silent = false })
+vim.keymap.set("n", "<leader>S", ":%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>", { noremap = true, silent = false, desc = "Search and replace word" })
 
 -- Move lines around - visual
 vim.keymap.set("v", ">", ">gv", opts)
@@ -129,6 +129,15 @@ vim.keymap.set("n", "<C-j>", "ddp==", opts)
 
 -- Keep what is in register when pasting in visual mode
 vim.keymap.set("v", "p", '"_dP', opts)
+
+-- Search in current buffers
+vim.cmd [[
+  function ClearQuickfixList()
+    call setqflist([])
+  endfunction
+  command! ClearQuickfixList call ClearQuickfixList()
+]]
+vim.keymap.set("n", "<leader>sb", "<CMD>ClearQuickfixList<CR>:bufdo vimgrepadd <C-r><C-w> %<Left><Left>", { noremap = true, silent = false, desc = "Grep in buffers" })
 
 -- -- TERMINAL MODE -- --
 local topts = { silent = true }
