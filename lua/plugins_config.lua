@@ -52,7 +52,6 @@ require('telescope').setup {
         ["<C-j>"] = actions.move_selection_next,
         ["<C-k>"] = actions.move_selection_previous,
 
-        ["<C-c>"] = actions.close,
         ["<esc>"] = actions.close,
 
         ["<CR>"] = actions.select_default,
@@ -63,7 +62,8 @@ require('telescope').setup {
         ["<C-u>"] = actions.preview_scrolling_up,
         ["<C-d>"] = actions.preview_scrolling_down,
 
-        ["<C-q>"] = actions.send_to_qflist + actions.open_qflist,
+        ["<C-q>"] = actions.smart_send_to_qflist + actions.open_qflist,
+        ["<C-c>"] = actions.edit_command_line,
         -- ["<M-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
       },
     },
