@@ -621,7 +621,7 @@ local green = "#98be65"
 
 local python_env = {
   function()
-    local utils = require "config.plugins_config.utils"
+    local utils = require "utils"
     -- if vim.bo.filetype == "python" or vim.bo.filetype == "cpp" then
     local venv = os.getenv "CONDA_DEFAULT_ENV"
     if venv then
