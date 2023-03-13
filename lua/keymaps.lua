@@ -53,11 +53,12 @@ vim.keymap.set("n", "<leader>qo", ":copen<CR>", { noremap = true, silent = true,
 
 -- Make
 -- vim.keymap.set("n", "<leader>mm", function() return ":make<Space>" end, { noremap = true, silent = false, desc = "make", expr = true })
-vim.keymap.set("n", "<leader>mm", ":Make<Space>", { noremap = true, silent = false, desc = "Make" })
-vim.keymap.set("n", "<leader>mm", ":make<Space>", { noremap = true, silent = false, desc = "make" })
+vim.keymap.set("n", "<leader>mm", ":make!<Space>", { noremap = true, silent = false, desc = "make! (+enter command)" })
 vim.keymap.set("n", "<leader>m<CR>", ":make<CR>", { noremap = true, silent = true, desc = "make<CR>" })
-vim.keymap.set("n", "<leader>mM", ":Make<Space>", { noremap = true, silent = false, desc = "Make" })
-vim.keymap.set("n", "<leader>m!", ":Make!<Space>", { noremap = true, silent = false, desc = "Make!" })
+vim.keymap.set("n", "<leader>m!<CR>", ":make!<CR>", { noremap = true, silent = true, desc = "make!<CR>" })
+vim.keymap.set("n", "<leader>mM", ":Make<Space>", { noremap = true, silent = false, desc = "Make (+enter command)" })
+vim.keymap.set("n", "<leader>M<CR>", ":Make<CR>", { noremap = true, silent = false, desc = "Make<CR>" })
+vim.keymap.set("n", "<leader>M!", ":Make!<CR>", { noremap = true, silent = false, desc = "Make!<CR>" })
 vim.keymap.set("n", "<leader>ms", ":setlocal<Space>makeprg=", { noremap = true, silent = false, desc = "Set makeprg localy" })
 vim.keymap.set("n", "<leader>mS", ":set<Space>makeprg=", { noremap = true, silent = false, desc = "Set makeprg globaly" })
 vim.keymap.set("n", "<leader>mb", ":set<Space>makeprg=make\\ -C\\ build\\ -j10", { noremap = true, silent = false, desc = "Set makeprg to make -C build" })
@@ -150,7 +151,7 @@ vim.keymap.set("n", "<leader>sb", "<CMD>ClearQuickfixList<CR>:bufdo vimgrepadd <
 local topts = { silent = true }
 vim.keymap.set("t", "<ESC>", "<C-\\><C-n>", topts)
 vim.keymap.set("t", "jk", "<C-\\><C-n>", topts)
-vim.keymap.set("t", "<C-h>", "<C-\\><C-n><C-w>h", topts)
-vim.keymap.set("t", "<C-j>", "<C-\\><C-n><C-w>j", topts)
-vim.keymap.set("t", "<C-k>", "<C-\\><C-n><C-w>k", topts)
-vim.keymap.set("t", "<C-l>", "<C-\\><C-n><C-w>l", topts)
+vim.keymap.set("t", "<C-w>h", "<C-\\><C-n><C-w>h", topts)
+vim.keymap.set("t", "<C-w>j", "<C-\\><C-n><C-w>j", topts)
+vim.keymap.set("t", "<C-w>k", "<C-\\><C-n><C-w>k", topts)
+vim.keymap.set("t", "<C-w>l", "<C-\\><C-n><C-w>l", topts)

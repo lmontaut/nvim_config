@@ -200,9 +200,9 @@ require('nvim-treesitter.configs').setup {
 }
 
 -- Diagnostic keymaps
-vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)
-vim.keymap.set('n', ']d', vim.diagnostic.goto_next)
-vim.keymap.set('n', 'gl', vim.diagnostic.open_float)
+vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Previous diagnostic' })
+vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Next diagnostic' })
+vim.keymap.set('n', 'gl', vim.diagnostic.open_float, { desc = 'Open diagnostic under cursor' })
 -- vim.keymap.set('n', '<leader>qq', vim.diagnostic.setloclist)
 
 -- [[ Condifure LSP ]]
@@ -234,6 +234,7 @@ local on_attach = function(_, bufnr)
   nmap('<leader>lc', vim.lsp.buf.code_action, 'Code action')
 
   nmap('gd', vim.lsp.buf.definition, 'Goto Definition')
+  nmap('gh', "<CMD>ClangdSwitchSourceHeader<CR>", 'Switch from source to header')
   nmap('gr', require('telescope.builtin').lsp_references, 'Goto References')
   nmap('gI', vim.lsp.buf.implementation, 'Goto Implementation')
   -- nmap('<leader>D', vim.lsp.buf.type_definition, 'Type [D]efinition')
@@ -530,32 +531,32 @@ cmp.setup.cmdline(':', {
 })
 
 -- [[ Configure Project ]]
--- require("project_nvim").setup {
---   -- Manual mode doesn't automatically change your root directory, so you have
---   -- the option to manually do so using `:ProjectRoot` command.
---   manual_mode = true,
---   -- Methods of detecting the root directory. **"lsp"** uses the native neovim
---   -- lsp, while **"pattern"** uses vim-rooter like glob pattern matching. Here
---   -- order matters: if one is not detected, the other is used as fallback. You
---   -- can also delete or rearangne the detection methods.
---   -- detection_methods = { "lsp", "pattern" },
---   detection_methods = { "pattern" },
---   -- All the patterns used to detect root dir, when **"pattern"** is in
---   -- detection_methods
---   -- patterns = { ".git", "_darcs", ".hg", ".bzr", ".svn", "Makefile", "package.json" },
---   patterns = { ".git" },
---   -- Table of lsp clients to ignore by name
---   -- eg: { "efm", ... }
---   -- ignore_lsp = {},
---   -- Don't calculate root dir on specific directories
---   -- Ex: { "~/.cargo/*", ... }
---   -- exclude_dirs = {},
---   -- Show hidden files in telescope
---   show_hidden = true,
---   -- When set to false, you will get a message when project.nvim changes your
---   -- directory.
---   silent_chdir = true,
--- }
+require("project_nvim").setup {
+  -- Manual mode doesn't automatically change your root directory, so you have
+  -- the option to manually do so using `:ProjectRoot` command.
+  manual_mode = false,
+  -- Methods of detecting the root directory. **"lsp"** uses the native neovim
+  -- lsp, while **"pattern"** uses vim-rooter like glob pattern matching. Here
+  -- order matters: if one is not detected, the other is used as fallback. You
+  -- can also delete or rearangne the detection methods.
+  -- detection_methods = { "lsp", "pattern" },
+  detection_methods = { "pattern" },
+  -- All the patterns used to detect root dir, when **"pattern"** is in
+  -- detection_methods
+  -- patterns = { ".git", "_darcs", ".hg", ".bzr", ".svn", "Makefile", "package.json" },
+  patterns = { ".git" },
+  -- Table of lsp clients to ignore by name
+  -- eg: { "efm", ... }
+  -- ignore_lsp = {},
+  -- Don't calculate root dir on specific directories
+  -- Ex: { "~/.cargo/*", ... }
+  -- exclude_dirs = {},
+  -- Show hidden files in telescope
+  show_hidden = true,
+  -- When set to false, you will get a message when project.nvim changes your
+  -- directory.
+  silent_chdir = true,
+}
 
 -- Telescope integration
 require('telescope').load_extension('projects')
@@ -616,22 +617,25 @@ local conditions = {
   -- end,
 }
 
+local green = "#98be65"
+
 local python_env = {
   function()
     local utils = require "config.plugins_config.utils"
-    if vim.bo.filetype == "python" or vim.bo.filetype == "cpp" then
-      local venv = os.getenv "CONDA_DEFAULT_ENV"
-      if venv then
-        return string.format("  (%s)", utils.env_cleanup(venv))
-      end
-      venv = os.getenv "VIRTUAL_ENV"
-      if venv then
-        return string.format("  (%s)", utils.env_cleanup(venv))
-      end
-      return ""
+    -- if vim.bo.filetype == "python" or vim.bo.filetype == "cpp" then
+    local venv = os.getenv "CONDA_DEFAULT_ENV"
+    if venv then
+      return string.format("  (%s)", utils.env_cleanup(venv))
+    end
+    venv = os.getenv "VIRTUAL_ENV"
+    if venv then
+      return string.format("  (%s)", utils.env_cleanup(venv))
     end
     return ""
+    -- end
+    -- return ""
   end,
+  color = {fg = green},
   cond = conditions.hide_in_width,
 }
 
@@ -744,9 +748,11 @@ vim.keymap.set('n', '<leader>i', "<CMD>SymbolsOutline<CR>", { desc = 'Symbols ou
 
 -- [[ Configure fugitive ]]
 vim.keymap.set('n', '<leader>gg', '<CMD>vertical rightbelow Git<CR>', { desc = 'Git status' })
-vim.keymap.set('n', '<leader>gL', '<CMD>vertical rightbelow Git log<CR>', { desc = 'Git short log' })
-vim.keymap.set('n', '<leader>gl', '<CMD>rightbelow vsplit | Gclog<CR>', { desc = 'Git log' })
+vim.keymap.set('n', '<leader>gl', '<CMD>vertical rightbelow Git log --oneline<CR>', { desc = 'Git short log' })
+vim.keymap.set('n', '<leader>gL', '<CMD>rightbelow vsplit | Gclog<CR>', { desc = 'Git log' })
 vim.keymap.set('n', '<leader>gt', '<CMD>tabnew<CR><cmd>0G<CR><cmd>norm gUk>gsk>gg<CR>', { desc = 'Git status tab' })
+vim.keymap.set('n', '<leader>gl', '<CMD>vertical rightbelow Git log --oneline<CR>', { desc = 'Git short log' })
+vim.keymap.set('n', '<leader>gh', '<CMD>rightbelow vsplit | Gclog -g stash<CR>', { desc = 'Git list stashes' })
 vim.keymap.set('n', '<leader>gj', '<CMD>Gitsigns next_hunk<CR>', { desc = 'Next hunk' })
 vim.keymap.set('n', '<leader>gk', '<CMD>Gitsigns prev_hunk<CR>', { desc = 'Previous hunk' })
 vim.keymap.set('n', '<leader>gc', '<CMD>Git commit -v -q<CR>', { desc = 'Git commit' })
