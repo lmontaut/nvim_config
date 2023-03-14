@@ -24,7 +24,8 @@ vim.keymap.set("v", "\\", "<ESC><CMD>lua require(\"Comment.api\").toggle.linewis
 -- See `:help indent_blankline.txt`
 require('indent_blankline').setup {
   char = '┊',
-  show_trailing_blankline_indent = false,
+  show_trailing_blankline_indent = true,
+  indent_blankline_use_treesitter = true,
 }
 
 -- [[ Configure Gitsigns ]]
@@ -114,7 +115,7 @@ pcall(require('telescope').load_extension, 'fzf')
 vim.keymap.set('n', '<leader>?', require('telescope.builtin').oldfiles, { desc = 'Find recently opened files' })
 vim.keymap.set('n', '<leader>,', require('telescope.builtin').buffers, { desc = 'Find buffer' })
 vim.keymap.set('n', '<leader><space>', require('telescope.builtin').git_files, { desc = 'Find git file' })
-vim.keymap.set('n', '<leader>sc', require('telescope.builtin').command_history, { desc = 'Command history' })
+vim.keymap.set('n', '<leader>sh', require('telescope.builtin').command_history, { desc = 'Command history' })
 vim.keymap.set('n', '<leader>sq', require('telescope.builtin').quickfix, { desc = 'Quickfix list' })
 vim.keymap.set('n', '<leader>sf', require('telescope.builtin').find_files, { desc = 'Find files' })
 vim.keymap.set('n', '<leader>/', function()
@@ -127,7 +128,6 @@ end, { desc = 'Fuzzily search in current buffer' })
 
 vim.keymap.set('n', '<leader>sf', require('telescope.builtin').find_files, { desc = 'Search files' })
 vim.keymap.set('n', '<leader>sk', require('telescope.builtin').keymaps, { desc = 'Search keymaps' })
-vim.keymap.set('n', '<leader>sh', require('telescope.builtin').help_tags, { desc = 'Search help' })
 vim.keymap.set('n', '<leader>sw', require('telescope.builtin').grep_string, { desc = 'Search current word' })
 vim.keymap.set('n', '<leader>sg', require('telescope.builtin').live_grep, { desc = 'Grep in directory' })
 vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = 'Search diagnostics' })

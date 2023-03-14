@@ -21,6 +21,10 @@ vim.keymap.set("n", "N", "Nzzzv", opts)
 vim.keymap.set("n", "J", "mzJ`z", opts)
 vim.keymap.set("n", "Q", "<nop>", opts)
 
+-- When opening a window, cursor on it
+vim.keymap.set("n", "<C-w>V", "<CMD>rightbelow vsplit<CR>", { noremap = true, silent = true, desc = "Vsplit and focus" })
+vim.keymap.set("n", "<C-w>S", "<CMD>rightbelow split<CR>", { noremap = true, silent = true, desc = "Split and focus" })
+
 -- -- INSERT MODE -- --
 -- Escape from INSERT mode
 vim.keymap.set('i', "jk", "<ESC>", { noremap = true, silent = true, desc = "Escape INSERT mode" })
@@ -36,6 +40,12 @@ vim.keymap.set("n", "<C-Up>", "<cmd>resize +10<CR>", opts)
 vim.keymap.set("n", "<C-Down>", "<cmd>resize -10<CR>", opts)
 vim.keymap.set("n", "<C-Left>", "<cmd>vertical resize -10<CR>", opts)
 vim.keymap.set("n", "<C-Right>", "<cmd>vertical resize +10<CR>", opts)
+
+-- Kill window above, below, left, right
+vim.keymap.set("n", "<C-w>K", "<C-w>k:q<CR>", opts)
+vim.keymap.set("n", "<C-w>J", "<C-w>j:q<CR>", opts)
+vim.keymap.set("n", "<C-w>L", "<C-w>l:q<CR>", opts)
+vim.keymap.set("n", "<C-w>H", "<C-w>h:q<CR>", opts)
 
 -- Quicklist navigation
 -- Even if the quicklist is not open, you can navigate with :cn and :cp
@@ -90,6 +100,7 @@ vim.keymap.set("n", "<C-f>", ":<C-f>", { noremap = true, silent = true, desc = "
 
 -- Buffer close
 vim.keymap.set("n", "<leader>bc", "<CMD>bd!<CR>", { noremap = true, silent = true, desc = "Close buffer" })
+vim.keymap.set("n", "<leader>bd", ":bd<Space>", { noremap = true, silent = false, desc = "Select which buffer to delete" })
 
 -- Better indentation insert mode
 vim.keymap.set("i", "<C-l>", "<C-t>", opts)
@@ -97,6 +108,9 @@ vim.keymap.set("i", "<C-h>", "<C-d>", opts)
 
 -- Delete in front of cursor in insert mode
 vim.keymap.set("i", "<C-u>", "<space><Esc>ce", opts)
+
+-- All users commands
+vim.keymap.set('n', '<leader>sc', ":com<CR>", { desc = "All user's command" })
 
 -- Automatic bracket closing
 -- vim.keymap.set("i", '"', '""<left>', opts)
@@ -124,8 +138,8 @@ vim.keymap.set("v", "L", ">gv", opts)
 vim.keymap.set("v", "H", "<gv", opts)
 vim.keymap.set("v", "<C-l>", ">gv", opts)
 vim.keymap.set("v", "<C-h>", "<gv", opts)
-vim.keymap.set("v", "<C-k>", ":m '>+1<CR>gv=gv", opts)
-vim.keymap.set("v", "<C-j>", ":m '<-2<CR>gv=gv", opts)
+vim.keymap.set("v", "<C-j>", ":m '>+1<CR>gv=gv", opts)
+vim.keymap.set("v", "<C-k>", ":m '<-2<CR>gv=gv", opts)
 
 -- Move lines around - normal
 vim.keymap.set("n", "H", "<<", opts)
@@ -138,7 +152,7 @@ vim.keymap.set("n", "<C-j>", "ddp==", opts)
 -- Keep what is in register when pasting in visual mode
 vim.keymap.set("v", "p", '"_dP', opts)
 
--- Search in current buffers
+-- Vimgrep in current buffers
 vim.cmd [[
   function ClearQuickfixList()
     call setqflist([])
@@ -151,7 +165,9 @@ vim.keymap.set("n", "<leader>sb", "<CMD>ClearQuickfixList<CR>:bufdo vimgrepadd <
 local topts = { silent = true }
 vim.keymap.set("t", "<ESC>", "<C-\\><C-n>", topts)
 vim.keymap.set("t", "jk", "<C-\\><C-n>", topts)
-vim.keymap.set("t", "<C-w>h", "<C-\\><C-n><C-w>h", topts)
-vim.keymap.set("t", "<C-w>j", "<C-\\><C-n><C-w>j", topts)
-vim.keymap.set("t", "<C-w>k", "<C-\\><C-n><C-w>k", topts)
-vim.keymap.set("t", "<C-w>l", "<C-\\><C-n><C-w>l", topts)
+
+vim.cmd[[
+  autocmd TermOpen * execute 'norm G'
+  autocmd TermOpen * nnoremap <silent> <buffer> <leader>qq :cc<CR>:bd<Space>term://*/dev/null*<CR>
+  autocmd TermOpen * nnoremap <silent> <buffer> <CR> :bd<CR>
+]]

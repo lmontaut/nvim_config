@@ -1,5 +1,6 @@
 -- [[ Setting options ]]
 -- See `:help vim.o`
+vim.o.encoding = "utf-8"
 
 -- Set highlight on search
 vim.o.hlsearch = false
