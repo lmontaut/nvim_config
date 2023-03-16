@@ -825,13 +825,24 @@ vim.keymap.set('n', "<leader>u", vim.cmd.UndotreeToggle, { desc = "Undo history"
 local pap = require("pap")
 vim.api.nvim_create_user_command('Papcmd', function(command) pap.set_cmd(command.args) end, { nargs = "*" })
 vim.api.nvim_create_user_command('Pap', function(command) pap.run_cmd(command.args, false) end, { nargs = "*" })
+vim.api.nvim_create_user_command('Paprun', function(command) pap.run_cmd_base(command.args, false) end, { nargs = "*" })
+vim.api.nvim_create_user_command('Par', function(command) pap.run_cmd_base(command.args, false) end, { nargs = "*" })
+vim.api.nvim_create_user_command('Papa', function(command) pap.run_cmd_base(command.args, false) end, { nargs = "*" })
 vim.keymap.set("n", "<leader>qe", ":cg<Space>~/.cache/nvim/out.txt<CR>:cc<CR>", { noremap = true, silent = true, desc = "Load error file into quickfix" })
 
 
 -----------------------------
 -- [[ Configure Which-key ]]
 -----------------------------
-require('which-key').setup()
+require('which-key').setup({
+  triggers_blacklist = {
+    -- list of mode / prefixes that should never be hooked by WhichKey
+    -- this is mostly relevant for keymaps that start with a native binding
+    i = { "j", "k", "g" },
+    v = { "j", "k" },
+  }
+})
+
 local wk = require("which-key")
 wk.register({
   b = {
