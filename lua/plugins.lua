@@ -13,7 +13,10 @@ end
 
 require('packer').startup(function(use)
   -- Package manager
-  use 'wbthomason/packer.nvim'
+  use { 'wbthomason/packer.nvim' }
+
+  -- Plenary: lots of useful functions
+  use { 'nvim-lua/plenary.nvim' }
 
   use { -- LSP Configuration & Plugins
     'neovim/nvim-lspconfig',

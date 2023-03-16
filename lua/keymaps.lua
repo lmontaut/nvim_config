@@ -12,23 +12,23 @@ local opts = { noremap = true, silent = true }
 vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
 
 -- Keep cursor middle screen when scrolling and jumping around
-vim.keymap.set("n", "<C-d>", "<C-d>zz", opts)
-vim.keymap.set("n", "<C-u>", "<C-u>zz", opts)
-vim.keymap.set("n", "<C-o>", "<C-o>zz", opts)
-vim.keymap.set("n", "<C-i>", "<C-i>zz", opts)
-vim.keymap.set("n", "n", "nzzzv", opts)
-vim.keymap.set("n", "N", "Nzzzv", opts)
-vim.keymap.set("n", "J", "mzJ`z", opts)
-vim.keymap.set("n", "Q", "<nop>", opts)
+vim.keymap.set("n", "<C-d>", "<C-d>zz", { desc = "Scroll down", opts.args })
+vim.keymap.set("n", "<C-u>", "<C-u>zz", { desc = "Scroll up", opts.args })
+vim.keymap.set("n", "<C-o>", "<C-o>zz", { desc = "Previous mark", opts.args })
+vim.keymap.set("n", "<C-i>", "<C-i>zz", { desc = "Next mark", opts.args })
+vim.keymap.set("n", "n", "nzzzv", { desc = "Next search", opts.args })
+vim.keymap.set("n", "N", "Nzzzv", { desc = "Previous search", opts.args })
+vim.keymap.set("n", "J", "mzJ`z", { desc = "Concatenate prev line", opts.args })
+vim.keymap.set("n", "Q", "<nop>")
 
 -- When opening a window, cursor on it
-vim.keymap.set("n", "<C-w>V", "<CMD>rightbelow vsplit<CR>", { noremap = true, silent = true, desc = "Vsplit and focus" })
-vim.keymap.set("n", "<C-w>S", "<CMD>rightbelow split<CR>", { noremap = true, silent = true, desc = "Split and focus" })
+vim.keymap.set("n", "<C-w>V", "<CMD>rightbelow vsplit<CR>", { desc = "Vsplit and focus", opts.args })
+vim.keymap.set("n", "<C-w>S", "<CMD>rightbelow split<CR>", { desc = "Split and focus", opts.args })
 
 -- -- INSERT MODE -- --
 -- Escape from INSERT mode
-vim.keymap.set('i', "jk", "<ESC>", { noremap = true, silent = true, desc = "Escape INSERT mode" })
-vim.keymap.set('i', "<S-TAB>", "<C-d>", { noremap = true, silent = true, desc = "Unindent INSERT mode" })
+vim.keymap.set('i', "jk", "<ESC>", { desc = "Escape INSERT mode", noremap = true, silent = true })
+vim.keymap.set('i', "<S-TAB>", "<C-d>", { desc = "Unindent INSERT mode", noremap = true, silent = true })
 
 -- -- NORMAL MODE -- --
 -- Remap for dealing with word wrap
@@ -36,36 +36,42 @@ vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = tr
 vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
 
 -- Resize with arrows
-vim.keymap.set("n", "<C-Up>", "<cmd>resize +10<CR>", opts)
-vim.keymap.set("n", "<C-Down>", "<cmd>resize -10<CR>", opts)
-vim.keymap.set("n", "<C-Left>", "<cmd>vertical resize -10<CR>", opts)
-vim.keymap.set("n", "<C-Right>", "<cmd>vertical resize +10<CR>", opts)
+vim.keymap.set("n", "<C-Up>", "<cmd>resize +10<CR>", { desc = "Resize up", opts.args })
+vim.keymap.set("n", "<C-Down>", "<cmd>resize -10<CR>", { desc = "Resize down", opts.args })
+vim.keymap.set("n", "<C-Left>", "<cmd>vertical resize -10<CR>", { desc = "Resize left", opts.args })
+vim.keymap.set("n", "<C-Right>", "<cmd>vertical resize +10<CR>", { desc = "Resize right", opts.args })
 
 -- Kill window above, below, left, right
-vim.keymap.set("n", "<C-w>K", "<C-w>k:q<CR>", opts)
-vim.keymap.set("n", "<C-w>J", "<C-w>j:q<CR>", opts)
-vim.keymap.set("n", "<C-w>L", "<C-w>l:q<CR>", opts)
-vim.keymap.set("n", "<C-w>H", "<C-w>h:q<CR>", opts)
+vim.keymap.set("n", "<C-w>xk", "<C-w>k:q<CR>", { desc = "Kill window up", opts.args })
+vim.keymap.set("n", "<C-w>xj", "<C-w>j:q<CR>", { desc = "Kill window down", opts.args })
+vim.keymap.set("n", "<C-w>xl", "<C-w>l:q<CR>", { desc = "Kill window right", opts.args })
+vim.keymap.set("n", "<C-w>xh", "<C-w>h:q<CR>", { desc = "Kill window left", opts.args })
+
+-- Window navigation with leader key
+vim.keymap.set("n", "<leader>wl", "<C-w>l", { desc = "Nav window right", opts.args })
+vim.keymap.set("n", "<leader>wh", "<C-w>h", { desc = "Nav window left", opts.args })
+vim.keymap.set("n", "<leader>wk", "<C-w>k", { desc = "Nav window up", opts.args })
+vim.keymap.set("n", "<leader>wj", "<C-w>j", { desc = "Nav window down", opts.args })
 
 -- Quicklist navigation
 -- Even if the quicklist is not open, you can navigate with :cn and :cp
-vim.keymap.set("n", "<C-n>", ":cn<CR>zz", { noremap = true, silent = true, desc = "Quicklist next" })
-vim.keymap.set("n", "<C-p>", ":cp<CR>zz", { noremap = true, silent = true, desc = "Quicklist prev" })
-vim.keymap.set("n", "<leader>qn", ":cn<CR>zz", { noremap = true, silent = true, desc = "Quicklist next" })
-vim.keymap.set("n", "<leader>qp", ":cp<CR>zz", { noremap = true, silent = true, desc = "Quicklist prev" })
-vim.keymap.set("n", "<leader>qo", ":copen<CR>", { noremap = true, silent = true, desc = "Quicklist open" })
-vim.keymap.set("n", "<leader>qO", ":Copen<CR>", { noremap = true, silent = true, desc = "Quicklist open (dispatched)" })
-vim.keymap.set("n", "<leader>qc", ":cclose<CR>", { noremap = true, silent = true, desc = "Quicklist close" })
-vim.keymap.set("n", "<leader>qq", ":cc<CR>zz", { noremap = true, silent = true, desc = "Quicklist show current" })
-vim.keymap.set("n", "<leader>qN", ":cfirst<CR>", { noremap = true, silent = true, desc = "Quicklist first" })
-vim.keymap.set("n", "<leader>qP", ":clast<CR>", { noremap = true, silent = true, desc = "Quicklist last" })
-vim.keymap.set("n", "<leader>qo", ":copen<CR>", { noremap = true, silent = true, desc = "Quicklist open" })
+vim.keymap.set("n", "<C-n>", ":cn<CR>zz", { desc = "Quicklist next", opts.args })
+vim.keymap.set("n", "<C-p>", ":cp<CR>zz", { desc = "Quicklist prev", opts.args })
+vim.keymap.set("n", "<leader>qn", ":cn<CR>zz", { desc = "Quicklist next", opts.args })
+vim.keymap.set("n", "<leader>qp", ":cp<CR>zz", { desc = "Quicklist prev", opts.args })
+vim.keymap.set("n", "<leader>qo", ":copen<CR>", { desc = "Quicklist open", opts.args })
+vim.keymap.set("n", "<leader>qO", ":Copen<CR>", { desc = "Quicklist open (dispatched)", opts.args })
+vim.keymap.set("n", "<leader>qc", ":cclose<CR>", { desc = "Quicklist close", opts.args })
+vim.keymap.set("n", "<leader>qq", ":cc<CR>zz", { desc = "Quicklist show current", opts.args })
+vim.keymap.set("n", "<leader>qN", ":cfirst<CR>", { desc = "Quicklist first", opts.args })
+vim.keymap.set("n", "<leader>qP", ":clast<CR>", { desc = "Quicklist last", opts.args })
+vim.keymap.set("n", "<leader>qo", ":copen<CR>", { desc = "Quicklist open", opts.args })
 
 -- Make
 -- vim.keymap.set("n", "<leader>mm", function() return ":make<Space>" end, { noremap = true, silent = false, desc = "make", expr = true })
 vim.keymap.set("n", "<leader>mm", ":make!<Space>", { noremap = true, silent = false, desc = "make! (+enter command)" })
-vim.keymap.set("n", "<leader>m<CR>", ":make<CR>", { noremap = true, silent = true, desc = "make<CR>" })
-vim.keymap.set("n", "<leader>m!<CR>", ":make!<CR>", { noremap = true, silent = true, desc = "make!<CR>" })
+vim.keymap.set("n", "<leader>m<CR>", ":make<CR>", { desc = "make<CR>", opts.args })
+vim.keymap.set("n", "<leader>m!<CR>", ":make!<CR>", { desc = "make!<CR>", opts.args })
 vim.keymap.set("n", "<leader>mM", ":Make<Space>", { noremap = true, silent = false, desc = "Make (+enter command)" })
 vim.keymap.set("n", "<leader>M<CR>", ":Make<CR>", { noremap = true, silent = false, desc = "Make<CR>" })
 vim.keymap.set("n", "<leader>M!", ":Make!<CR>", { noremap = true, silent = false, desc = "Make!<CR>" })
@@ -78,8 +84,8 @@ vim.keymap.set("n", "<leader>mc", ":setlocal<Space>makeprg=clang++\\ -Wall\\ -We
 vim.keymap.set("n", "<leader>mt", ":Make!<Space>test", { noremap = true, silent = false, desc = "Make! test" })
 
 -- File exploration
-vim.keymap.set("n", "<leader>2", ":Explore<CR>", { noremap = true, silent = true, desc = "Explore" })
-vim.keymap.set("n", "<leader>3", ":Rexplore<CR>", { noremap = true, silent = true, desc = "Rexplore" })
+vim.keymap.set("n", "<leader>2", ":Explore<CR>", { desc = "Explore", opts.args })
+vim.keymap.set("n", "<leader>3", ":Rexplore<CR>", { desc = "Rexplore", opts.args })
 
 -- Launch terminal command
 vim.keymap.set("n", "<leader>t", ":below split | terminal<Space>", { noremap = true, silent = false, desc = "Launch terminal horizontal" })
@@ -89,25 +95,25 @@ vim.keymap.set("n", "<leader>T", ":rightbelow vsplit | terminal<Space>", { norem
 vim.keymap.set("n", "<leader>h", ":vertical rightbelow help<Space>", { noremap = true, silent = false, desc = "Vim help" })
 
 -- Last buffer
-vim.keymap.set("n", "<leader>1", "<CMD>b#<CR>", { noremap = true, silent = true, desc = "Last buffer" })
+vim.keymap.set("n", "<leader>1", "<CMD>b#<CR>", { desc = "Last buffer", opts.args })
 
 -- Quit
-vim.keymap.set("n", "<C-c>", "<CMD>q<CR>", { noremap = true, silent = true, desc = "Quit window" })
+vim.keymap.set("n", "<C-c>", "<CMD>q<CR>", { desc = "Quit window", opts.args })
 
-vim.keymap.set("n", "<C-w>o", "<CMD>only<CR>", { noremap = true, silent = true, desc = "Quit other windows" })
+vim.keymap.set("n", "<C-w>o", "<CMD>only<CR>", { desc = "Quit other windows", opts.args })
 
-vim.keymap.set("n", "<C-f>", ":<C-f>", { noremap = true, silent = true, desc = "Command history" })
+vim.keymap.set("n", "<C-f>", ":<C-f>", { desc = "Command history", opts.args })
 
 -- Buffer close
-vim.keymap.set("n", "<leader>bc", "<CMD>bd!<CR>", { noremap = true, silent = true, desc = "Close buffer" })
+vim.keymap.set("n", "<leader>bc", "<CMD>bd!<CR>", { desc = "Close buffer", opts.args })
 vim.keymap.set("n", "<leader>bd", ":bd<Space>", { noremap = true, silent = false, desc = "Select which buffer to delete" })
 
 -- Better indentation insert mode
-vim.keymap.set("i", "<C-l>", "<C-t>", opts)
-vim.keymap.set("i", "<C-h>", "<C-d>", opts)
+vim.keymap.set("i", "<C-l>", "<C-t>", { desc = "", opts.args })
+vim.keymap.set("i", "<C-h>", "<C-d>", { desc = "", opts.args })
 
 -- Delete in front of cursor in insert mode
-vim.keymap.set("i", "<C-u>", "<space><Esc>ce", opts)
+vim.keymap.set("i", "<C-u>", "<space><Esc>ce", { desc = "Delete after cursor", opts.args })
 
 -- All users commands
 vim.keymap.set('n', '<leader>sc', ":com<CR>", { desc = "All user's command" })
@@ -123,34 +129,34 @@ vim.keymap.set('n', '<leader>sc', ":com<CR>", { desc = "All user's command" })
 -- vim.keymap.set("i", "[", "[]<left>", opts)
 -- vim.keymap.set("i", "[<CR>", "[<CR>]<Esc>O", opts)
 -- vim.keymap.set("i", "[]", "[]", opts)
-vim.keymap.set("i", "{", "{}<left>", opts)
-vim.keymap.set("i", "{}", "{}", opts)
-vim.keymap.set("i", "{<CR>", "{<CR>}<Esc>O", opts)
-vim.keymap.set("i", "{;<CR>", "{<CR>};<Esc>O", opts)
+vim.keymap.set("i", "{", "{}<left>", { opts.args })
+vim.keymap.set("i", "{}", "{}", { opts.args })
+vim.keymap.set("i", "{<CR>", "{<CR>}<Esc>O", { opts.args })
+vim.keymap.set("i", "{;<CR>", "{<CR>};<Esc>O", { opts.args })
 
 -- Replace under cursor
 vim.keymap.set("n", "<leader>S", ":%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>", { noremap = true, silent = false, desc = "Search and replace word" })
 
 -- Move lines around - visual
-vim.keymap.set("v", ">", ">gv", opts)
-vim.keymap.set("v", "<", "<gv", opts)
-vim.keymap.set("v", "L", ">gv", opts)
-vim.keymap.set("v", "H", "<gv", opts)
-vim.keymap.set("v", "<C-l>", ">gv", opts)
-vim.keymap.set("v", "<C-h>", "<gv", opts)
-vim.keymap.set("v", "<C-j>", ":m '>+1<CR>gv=gv", opts)
-vim.keymap.set("v", "<C-k>", ":m '<-2<CR>gv=gv", opts)
+vim.keymap.set("v", ">", ">gv", { desc = "Indent", opts.args })
+vim.keymap.set("v", "<", "<gv", { desc = "Unindent", opts.args })
+-- vim.keymap.set("v", "L", ">gv", { desc = "", opts.args })
+-- vim.keymap.set("v", "H", "<gv", { desc = "", opts.args })
+vim.keymap.set("v", "<C-l>", ">gv", { desc = "Indent", opts.args })
+vim.keymap.set("v", "<C-h>", "<gv", { desc = "Unindent", opts.args })
+vim.keymap.set("v", "<C-j>", ":m '>+1<CR>gv=gv", { desc = "Move lines up", opts.args })
+vim.keymap.set("v", "<C-k>", ":m '<-2<CR>gv=gv", { desc = "Move lines down", opts.args })
 
 -- Move lines around - normal
-vim.keymap.set("n", "H", "<<", opts)
-vim.keymap.set("n", "L", ">>", opts)
-vim.keymap.set("n", "<C-h>", "<<", opts)
-vim.keymap.set("n", "<C-l>", ">>", opts)
-vim.keymap.set("n", "<C-k>", "ddkP==", opts)
-vim.keymap.set("n", "<C-j>", "ddp==", opts)
+-- vim.keymap.set("n", "H", "<<", { desc = "", opts.args })
+-- vim.keymap.set("n", "L", ">>", { desc = "", opts.args })
+vim.keymap.set("n", "<C-h>", "<<", { desc = "Indent", opts.args })
+vim.keymap.set("n", "<C-l>", ">>", { desc = "Unindent", opts.args })
+vim.keymap.set("n", "<C-k>", "ddkP==", { desc = "Move line up", opts.args })
+vim.keymap.set("n", "<C-j>", "ddp==", { desc = "Move line down", opts.args })
 
 -- Keep what is in register when pasting in visual mode
-vim.keymap.set("v", "p", '"_dP', opts)
+vim.keymap.set("v", "p", '"_dP', { desc = "Paste", opts.args })
 
 -- Vimgrep in current buffers
 vim.cmd [[
@@ -163,11 +169,18 @@ vim.keymap.set("n", "<leader>sb", "<CMD>ClearQuickfixList<CR>:bufdo vimgrepadd <
 
 -- -- TERMINAL MODE -- --
 local topts = { silent = true }
-vim.keymap.set("t", "<ESC>", "<C-\\><C-n>", topts)
-vim.keymap.set("t", "jk", "<C-\\><C-n>", topts)
+vim.keymap.set("t", "<ESC>", "<C-\\><C-n>", { desc = "Escape", topts.args })
+vim.keymap.set("t", "jk", "<C-\\><C-n>", { desc = "Escape", topts.args })
+vim.keymap.set("t", "<C-w>l", "<C-\\><C-n><C-w>l", { desc = "Nav window right", topts.args })
+vim.keymap.set("t", "<C-w>h", "<C-\\><C-n><C-w>h", { desc = "Nav window left", topts.args })
+vim.keymap.set("t", "<C-w>k", "<C-\\><C-n><C-w>k", { desc = "Nav window up", topts.args })
+vim.keymap.set("t", "<C-w>j", "<C-\\><C-n><C-w>j", { desc = "Nav window down", topts.args })
+
+vim.api.nvim_create_autocmd({ 'TermOpen' }, {
+    command = 'startinsert',
+})
 
 vim.cmd[[
-  autocmd TermOpen * execute 'norm G'
-  autocmd TermOpen * nnoremap <silent> <buffer> <leader>qq :cc<CR>:bd<Space>term://*/dev/null*<CR>
-  autocmd TermOpen * nnoremap <silent> <buffer> <CR> :bd<CR>
+  autocmd TermOpen * nnoremap <silent> <buffer> q :q<CR>
+  autocmd FileType TelescopePrompt,TelescopeResults iunmap <silent> <buffer> jk
 ]]

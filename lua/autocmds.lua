@@ -9,10 +9,6 @@ vim.cmd[[
   autocmd FileType help nnoremap <buffer> q :bd<CR>
   autocmd FileType dap-float nnoremap <buffer> q :bd<CR>
   autocmd FileType netrw nnoremap <buffer> q :Rexplore<CR>
-  autocmd Filetype netrw nnoremap <buffer> <C-l> <C-W>l
-  autocmd Filetype netrw nnoremap <buffer> <C-h> <C-W>h
-  autocmd Filetype netrw nnoremap <buffer> <C-j> <C-W>j
-  autocmd Filetype netrw nnoremap <buffer> <C-k> <C-W>k
 ]]
 
 -- Stop from continuing comments when going to line with "o"
