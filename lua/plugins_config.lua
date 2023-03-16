@@ -1,10 +1,14 @@
+-------------------------
 -- [[ Configure Packer ]]
+-------------------------
 vim.keymap.set("n", "<leader>Pc", "<CMD>PackerCompile<CR>", { desc = "Packer compile" })
 vim.keymap.set("n", "<leader>Pi", "<CMD>PackerInstall<CR>", { desc = "Packer install" })
 vim.keymap.set("n", "<leader>Pd", "<CMD>PackerClean<CR>", { desc = "Packer clean" })
 vim.keymap.set("n", "<leader>Ps", "<CMD>source %<CR>", { desc = "Source current file" })
 
+---------------------------------------
 -- [[ Configure lualine as statusline ]]
+---------------------------------------
 -- See `:help lualine.txt`
 require('lualine').setup {
   options = {
@@ -15,7 +19,9 @@ require('lualine').setup {
   },
 }
 
+-------------------------------
 -- [[ Configure Comment.nvim ]]
+-------------------------------
 require('Comment').setup()
 vim.keymap.set("n", "\\", require('Comment.api').toggle.linewise.current, { desc = "Comment" })
 vim.keymap.set("v", "\\", "<ESC><CMD>lua require(\"Comment.api\").toggle.linewise(vim.fn.visualmode())<CR>", { desc = "Comment" })
@@ -28,7 +34,9 @@ require('indent_blankline').setup {
   indent_blankline_use_treesitter = true,
 }
 
+---------------------------
 -- [[ Configure Gitsigns ]]
+---------------------------
 -- See `:help gitsigns.txt`
 require('gitsigns').setup {
   signs = {
@@ -40,7 +48,9 @@ require('gitsigns').setup {
   },
 }
 
+----------------------------
 -- [[ Configure Telescope ]]
+----------------------------
 -- See `:help telescope` and `:help telescope.setup()`
 local actions = require "telescope.actions"
 require('telescope').setup {
@@ -133,10 +143,14 @@ vim.keymap.set('n', '<leader>sg', require('telescope.builtin').live_grep, { desc
 vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = 'Search diagnostics' })
 vim.keymap.set('n', '<leader>ss', require('telescope.builtin').grep_string, { desc = 'Search string' })
 
+---------------------------
 -- [[ Configure Chadtree ]]
+---------------------------
 vim.keymap.set('n', '<leader>e', '<CMD>CHADopen<CR>', { desc = 'File browser' })
 
+-------------------------------
 -- [[ Configure Treesitter ]]
+-------------------------------
 -- See `:help nvim-treesitter`
 require('nvim-treesitter.configs').setup {
   -- Add languages to be installed here that you want installed for treesitter
@@ -205,7 +219,9 @@ vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Next diagnostic' }
 vim.keymap.set('n', 'gl', vim.diagnostic.open_float, { desc = 'Open diagnostic under cursor' })
 -- vim.keymap.set('n', '<leader>qq', vim.diagnostic.setloclist)
 
--- [[ Condifure LSP ]]
+----------------------
+-- [[ Configure LSP ]]
+----------------------
 --  This function gets run when an LSP connects to a particular buffer.
 local on_attach = function(_, bufnr)
   -- NOTE: Remember that lua is a real programming language, and as such it is possible
@@ -332,7 +348,9 @@ local config = {
 vim.diagnostic.config(config)
 vim.lsp.diagnostics_config = config
 
+-------------------------------
 -- [[ Configure Mason ]]
+-------------------------------
 -- Setup mason so it can manage external tooling
 require('mason').setup()
 
@@ -353,7 +371,9 @@ mason_lspconfig.setup_handlers {
   end,
 }
 
+-------------------------
 -- [[ Configure fidget ]]
+-------------------------
 -- Turn on lsp status information
 require('fidget').setup()
 
@@ -530,7 +550,9 @@ cmp.setup.cmdline(':', {
   })
 })
 
+--------------------------
 -- [[ Configure Project ]]
+--------------------------
 require("project_nvim").setup {
   -- Manual mode doesn't automatically change your root directory, so you have
   -- the option to manually do so using `:ProjectRoot` command.
@@ -563,12 +585,16 @@ require('telescope').load_extension('projects')
 vim.keymap.set('n', '<leader>p', "<CMD>Telescope projects<CR>", { desc = 'Open project...' })
 vim.keymap.set('n', '<leader>r', "<CMD>Telescope resume<CR>", { desc = 'Telescope resume' })
 
+-----------------------------
 -- [[ Configure bufferline ]]
+-----------------------------
 -- require('bufferline').setup()
 -- vim.keymap.set('n', '<C-]>', "<CMD>BufferLineCycleNext<CR>", { desc = 'Next buffer' })
 -- vim.keymap.set('n', '<C-[>', "<CMD>BufferLineCyclePrev<CR>", { desc = 'Previous buffer' })
 
+--------------------------
 -- [[ Configure lualine ]]
+--------------------------
 local mode = {
   function()
     return " "
@@ -742,11 +768,15 @@ require('lualine').setup({
 	extensions = {},
 })
 
+----------------------------------
 -- [[ Configure symbols outline ]]
+----------------------------------
 require("symbols-outline").setup()
 vim.keymap.set('n', '<leader>i', "<CMD>SymbolsOutline<CR>", { desc = 'Symbols outline' })
 
+---------------------------
 -- [[ Configure fugitive ]]
+---------------------------
 vim.keymap.set('n', '<leader>gg', '<CMD>vertical rightbelow Git<CR>', { desc = 'Git status' })
 vim.keymap.set('n', '<leader>gl', '<CMD>vertical rightbelow Git log --oneline<CR>', { desc = 'Git short log' })
 vim.keymap.set('n', '<leader>gL', '<CMD>rightbelow vsplit | Gclog<CR>', { desc = 'Git log' })
@@ -767,48 +797,51 @@ vim.keymap.set('n', '<leader>gd', '<CMD>Gitsigns preview_hunk_inline<CR>', { des
 vim.keymap.set('n', '<leader>gD', '<CMD>Git diff<CR>', { desc = 'Git file diff' })
 vim.keymap.set('n', '<leader>gr', '<CMD>Gitsigns reset_hunk<CR>', { desc = 'Git reset hunk' })
 
+----------------------------
 -- [[ Configure vim-sneak ]]
+----------------------------
 vim.cmd [[
   nmap f <Plug>Sneak_f
   nmap F <Plug>Sneak_F
   let g:sneak#use_ic_scs = 1
 ]]
 
+------------------------
 -- [[ Configure netrw ]]
+------------------------
 vim.cmd[[
   let g:netrw_keepdir = 0
   let g:netrw_localcopydircmd = 'cp -r'
 ]]
 
+---------------------------
 -- [[ Configure undotree ]]
+---------------------------
 vim.keymap.set('n', "<leader>u", vim.cmd.UndotreeToggle, { desc = "Undo history" })
 
+----------------------
 -- [[ Configure Pap ]]
+----------------------
 local pap = require("pap")
 vim.api.nvim_create_user_command('Papcmd', function(command) pap.set_cmd(command.args) end, { nargs = "*" })
 vim.api.nvim_create_user_command('Pap', function(command) pap.run_cmd(command.args, false) end, { nargs = "*" })
 vim.keymap.set("n", "<leader>qe", ":cg<Space>~/.cache/nvim/out.txt<CR>:cc<CR>", { noremap = true, silent = true, desc = "Load error file into quickfix" })
 
 
+-----------------------------
 -- [[ Configure Which-key ]]
+-----------------------------
 require('which-key').setup()
 local wk = require("which-key")
 wk.register({
-  m = {
-    name = "Make"
+  b = {
+    name = "Buffers"
   },
-  P = {
-    name = "Packer"
+  --
+  l = {
+    name = "LSP"
   },
-  p = {
-    name = "Projects"
-  },
-  s = {
-    name = "Search"
-  },
-  q = {
-    name = "Quicklist"
-  },
+  --
   g = {
     name = "Git",
     s = {
@@ -818,10 +851,24 @@ wk.register({
       name = "Unstage"
     }
   },
-  l = {
-    name = "LSP"
+  --
+  m = {
+    name = "Make"
   },
-  b = {
-    name = "Buffers"
-  }
+  --
+  P = {
+    name = "Packer"
+  },
+  --
+  p = {
+    name = "Projects"
+  },
+  --
+  q = {
+    name = "Quicklist"
+  },
+  --
+  s = {
+    name = "Search"
+  },
 }, { prefix = "<leader>" })
