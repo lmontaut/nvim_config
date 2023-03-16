@@ -783,6 +783,13 @@ vim.cmd[[
 -- [[ Configure undotree ]]
 vim.keymap.set('n', "<leader>u", vim.cmd.UndotreeToggle, { desc = "Undo history" })
 
+-- [[ Configure Pap ]]
+local pap = require("pap")
+vim.api.nvim_create_user_command('Papcmd', function(command) pap.set_cmd(command.args) end, { nargs = "*" })
+vim.api.nvim_create_user_command('Pap', function(command) pap.run_cmd(command.args, false) end, { nargs = "*" })
+vim.keymap.set("n", "<leader>qe", ":cg<Space>~/.cache/nvim/out.txt<CR>:cc<CR>", { noremap = true, silent = true, desc = "Load error file into quickfix" })
+
+
 -- [[ Configure Which-key ]]
 require('which-key').setup()
 local wk = require("which-key")
