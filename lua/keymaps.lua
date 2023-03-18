@@ -14,6 +14,9 @@ vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
 -----------------------
 -- -- NORMAL MODE -- --
 -----------------------
+-- List of default keymaps:  https://blog.codepen.io/2014/02/21/vim-key-bindings/
+-- Available keymaps: | ) ( ] [ "
+
 -- Keep cursor middle screen when scrolling and jumping around
 vim.keymap.set("n", "<C-d>", "<C-d>zz", { desc = "Scroll down", opts.args })
 vim.keymap.set("n", "<C-u>", "<C-u>zz", { desc = "Scroll up", opts.args })
@@ -39,10 +42,10 @@ vim.keymap.set("n", "<C-Left>", "<cmd>vertical resize -10<CR>", { desc = "Resize
 vim.keymap.set("n", "<C-Right>", "<cmd>vertical resize +10<CR>", { desc = "Resize right", opts.args })
 
 -- Kill window above, below, left, right
-vim.keymap.set("n", "<C-w>xk", "<C-w>k:q<CR>", { desc = "Kill window up", opts.args })
-vim.keymap.set("n", "<C-w>xj", "<C-w>j:q<CR>", { desc = "Kill window down", opts.args })
-vim.keymap.set("n", "<C-w>xl", "<C-w>l:q<CR>", { desc = "Kill window right", opts.args })
-vim.keymap.set("n", "<C-w>xh", "<C-w>h:q<CR>", { desc = "Kill window left", opts.args })
+vim.keymap.set("n", "<C-w>qk", "<C-w>k:close<CR>", { desc = "Kill window up", opts.args })
+vim.keymap.set("n", "<C-w>qj", "<C-w>j:close<CR>", { desc = "Kill window down", opts.args })
+vim.keymap.set("n", "<C-w>ql", "<C-w>l:close<CR>", { desc = "Kill window right", opts.args })
+vim.keymap.set("n", "<C-w>qh", "<C-w>h:close<CR>", { desc = "Kill window left", opts.args })
 
 -- Window navigation with leader key
 vim.keymap.set("n", "<leader>wl", "<C-w>l", { desc = "Nav window right", opts.args })
@@ -94,8 +97,8 @@ vim.keymap.set("n", "<leader>h", ":vertical rightbelow help<Space>", { noremap =
 -- Last buffer
 vim.keymap.set("n", "<leader>1", "<CMD>b#<CR>", { desc = "Last buffer", opts.args })
 
--- Quit -- not such a good idea
--- vim.keymap.set("n", "<C-c>", "<CMD>q<CR>", { desc = "Quit window", opts.args })
+-- Quit window, except if it is the last one (ie does not quit vim)!
+vim.keymap.set("n", "<C-c>", ":close<CR>", { desc = "Quit window", opts.args })
 
 vim.keymap.set("n", "<C-w>o", "<CMD>only<CR>", { desc = "Quit other windows", opts.args })
 
@@ -134,12 +137,13 @@ vim.keymap.set("n", "<leader>]", ":tabnext<CR>", { desc = "Tab next", opts.args 
 vim.keymap.set("n", "<leader>[", ":tabprevious<CR>", { desc = "Tab previous", opts.args })
 
 -- Location list navigation
-vim.keymap.set("n", "<C-]>", ":lnext<CR>", { desc = "Location next", opts.args })
-vim.keymap.set("n", "<C-[>", ":lprevious<CR>", { desc = "Location previous", opts.args })
+vim.keymap.set("n", "<leader>qj", ":lnext<CR>", { desc = "Location next", opts.args })
+vim.keymap.set("n", "<leader>qk", ":lprevious<CR>", { desc = "Location previous", opts.args })
 
 -----------------------
 -- -- INSERT MODE -- --
 -----------------------
+
 -- Escape from INSERT mode
 vim.keymap.set('i', "jk", "<ESC>", { desc = "Escape INSERT mode", noremap = true, silent = true })
 vim.keymap.set('i', "<S-TAB>", "<C-d>", { desc = "Unindent INSERT mode", noremap = true, silent = true })
@@ -202,5 +206,5 @@ vim.api.nvim_create_autocmd({ 'TermOpen' }, {
 })
 
 vim.cmd[[
-  autocmd TermOpen * nnoremap <silent> <buffer> q :q<CR>
+  autocmd TermOpen * nnoremap <silent> <buffer> q :close<CR>
 ]]

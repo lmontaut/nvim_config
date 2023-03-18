@@ -508,8 +508,9 @@ cmp.setup({
   sources = {
     { name = 'nvim_lsp' },
     { name = 'luasnip' },
-    -- { name = 'buffer' },
+    { name = 'buffer' },
     { name = 'path' },
+    -- { name = 'file' },
   },
   -- window = {
     -- completion = cmp.config.window.bordered(),
@@ -531,7 +532,7 @@ cmp.setup.cmdline({ '/', '?' }, {
 cmp.setup.cmdline(':', {
   -- mapping = cmp.mapping.preset.cmdline(),
   sources = cmp.config.sources({
-    { name = 'path' }
+    { name = 'path' },
   }, {
     { name = 'cmdline' }
   })

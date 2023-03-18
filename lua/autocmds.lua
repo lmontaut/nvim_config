@@ -1,13 +1,14 @@
 -- Rebinds per buffertype
 vim.cmd[[
-  autocmd FileType fugitive nnoremap <buffer> q :bd<CR>
-  autocmd FileType qf nnoremap <buffer> q :bd<CR>
-  autocmd FileType git nnoremap <buffer> q :bd<CR>
-  autocmd FileType vim nnoremap <buffer> q :bd<CR>
-  autocmd FileType vimcmake nnoremap <buffer> q :bd<CR>
-  autocmd FileType lspinfo nnoremap <buffer> q :bd<CR>
-  autocmd FileType help nnoremap <buffer> q :bd<CR>
-  autocmd FileType dap-float nnoremap <buffer> q :bd<CR>
+  autocmd FileType fugitive nnoremap <buffer> q :close<CR>
+  autocmd FileType fugitive nnoremap <buffer> + <nop>
+  autocmd FileType qf nnoremap <buffer> q :close<CR>
+  autocmd FileType git nnoremap <buffer> q :close<CR>
+  autocmd FileType vim nnoremap <buffer> q :close<CR>
+  autocmd FileType vimcmake nnoremap <buffer> q :close<CR>
+  autocmd FileType lspinfo nnoremap <buffer> q :close<CR>
+  autocmd FileType help nnoremap <buffer> q :close<CR>
+  autocmd FileType dap-float nnoremap <buffer> q :close<CR>
   autocmd FileType netrw nnoremap <buffer> q :Rexplore<CR>
 ]]
 
