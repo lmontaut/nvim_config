@@ -8,10 +8,13 @@ if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
 end
 
 -- How to use:
--- 1 - add plugin, source %, PackerInstall
--- 2 - comment plugin, source % PackerCompile to take effect , PackerClean to delete folder
+-- 1 - add plugin, :source %, :PackerInstall, :PackerCompile
+-- 2 - comment plugin, :source %, :PackerCompile to take effect, :PackerClean to delete folder
 
 require('packer').startup(function(use)
+  -- Main plugins: Telescope, cmp, treesitter, fugitive, comment, which-key, DAP and Pap
+  -- Optional: packer, plenary, lsp-config, sneak, project, lualine, indent-blankline
+
   -- Package manager
   use { 'wbthomason/packer.nvim' }
 
@@ -60,9 +63,6 @@ require('packer').startup(function(use)
   use { 'tpope/vim-fugitive' }
   use { 'tpope/vim-rhubarb' }
   use { 'lewis6991/gitsigns.nvim' }
-
-  -- Dispatch build commands
-  use {  'tpope/vim-dispatch' }
 
   use { 'navarasu/onedark.nvim' } -- Theme inspired by Atom
   use { 'nvim-lualine/lualine.nvim' } -- Fancier statusline
