@@ -272,6 +272,7 @@ end
 local pythonpath = os.getenv("CONDA_PREFIX") .. "/bin/python"
 local servers = {
   clangd = {},
+  lua_ls = {},
   cmake = {},
   rust_analyzer = {},
   -- gopls = {},
@@ -284,17 +285,12 @@ local servers = {
     }
   },
   -- tsserver = {},
-
-  sumneko_lua = {
-    Lua = {
-      workspace = { checkThirdParty = false },
-      telemetry = { enable = false },
-    },
-  },
 }
 
 -- Setup neovim lua configuration
-require('neodev').setup()
+require('neodev').setup({
+  library = { plugins = { "nvim-dap-ui" }, types = true }, -- To have type checking in dap-ui
+})
 
 -- nvim-cmp supports additional completion capabilities, so broadcast that to servers
 local capabilities = vim.lsp.protocol.make_client_capabilities()
@@ -832,10 +828,37 @@ require('which-key').setup({
   }
 })
 
----------------------------
+----------------------
 -- [[ Configure DAP ]]
----------------------------
-vim.fn.sign_define('DapBreakpoint', {text='🛑', texthl='', linehl='', numhl=''})
+----------------------
+-- Helper to setup stuff:
+-- https://github.com/mfussenegger/nvim-dap/wiki/Cookbook
+
+local dap_breakpoint = {
+  breakpoint = {
+    -- text = "🛑",
+    text = "",
+    texthl = "DapUIModifiedValue",
+    linehl = "",
+    numhl = "",
+  },
+  stopped = {
+    text = "",
+    texthl = "DapUIModifiedValue",
+    linehl = "DiffText",
+    numhl = "",
+  },
+  rejected = {
+    text = "",
+    texthl = "ALEErrorSign",
+    linehl = "SpellBad",
+    numhl = "",
+  },
+}
+
+vim.fn.sign_define("DapBreakpoint", dap_breakpoint.breakpoint)
+vim.fn.sign_define("DapStopped", dap_breakpoint.stopped)
+vim.fn.sign_define("DapBreakpointRejected", dap_breakpoint.rejected)
 
 local dap = require('dap')
 dap.adapters.lldb = {
@@ -857,102 +880,66 @@ dap.configurations.cpp = {
       cancelreturn = ""
     })
     end,
-    -- program = function()
-    --   return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
-    -- end,
     cwd = '${workspaceFolder}',
     stopOnEntry = false,
     args = {},
+    runInTerminal=true -- So that the program's output is displayed in console
   },
 }
 dap.configurations.c = dap.configurations.cpp
 dap.configurations.rust = dap.configurations.cpp
 
--- Unmap all keymaps starting with ]
--- vim.keymap.set('n', ']]', "<nop>", { silent = true, noremap = true })
--- vim.keymap.set('n', ']%', "<nop>", { silent = true, noremap = true })
--- vim.keymap.set('n', '])', "<nop>", { silent = true, noremap = true })
--- vim.keymap.set('n', '][', "<nop>", { silent = true, noremap = true })
--- vim.keymap.set('n', ']}', "<nop>", { silent = true, noremap = true })
--- vim.keymap.set('n', ']<', "<nop>", { silent = true, noremap = true })
--- vim.keymap.set('n', ']m', "<nop>", { silent = true, noremap = true })
--- vim.keymap.set('n', ']M', "<nop>", { silent = true, noremap = true })
--- vim.keymap.set('n', ']s', "<nop>", { silent = true, noremap = true })
--- vim.keymap.set('n', '[]', "<nop>", { silent = true, noremap = true })
--- vim.keymap.set('n', '[%', "<nop>", { silent = true, noremap = true })
--- vim.keymap.set('n', '[)', "<nop>", { silent = true, noremap = true })
--- vim.keymap.set('n', '[[', "<nop>", { silent = true, noremap = true })
--- vim.keymap.set('n', '[}', "<nop>", { silent = true, noremap = true })
--- vim.keymap.set('n', '[<', "<nop>", { silent = true, noremap = true })
--- vim.keymap.set('n', '[m', "<nop>", { silent = true, noremap = true })
--- vim.keymap.set('n', '[M', "<nop>", { silent = true, noremap = true })
--- vim.keymap.set('n', '[s', "<nop>", { silent = true, noremap = true })
--- vim.cmd[[
---   nnoremap <silent><nowait> \[ \[\[
---   nnoremap <silent><nowait> \] \]\]
---   function! MakeBracketMaps()
---       nnoremap <silent><nowait><buffer> \[ :<c-u>exe 'normal '.v:count.'\[\['<cr>
---       nnoremap <silent><nowait><buffer> \] :<c-u>exe 'normal '.v:count.'\]\]'<cr>
---   endfunction
---
---   augroup bracketmaps
---       autocmd!
---       autocmd FileType * call MakeBracketMaps()
---   augroup END
--- ]]
--- vim.keymap.set('n', ']', ']]', { silent = true, noremap = true, nowait = true })
--- vim.keymap.set('n', '[', '[[', { silent = true, noremap = true, nowait = true })
-
-
+dap.defaults.fallback.external_terminal = {
+  command = '/Applications/Alacritty.app/Contents/MacOS/alacritty';
+  args = {'-e'};
+}
 
 -- keymaps
 local dapopts = { silent = true, noremap = true }
 -- TODO: attach to running debugger
 --
 vim.keymap.set('n', "<F5>", function() require("dap").continue() end, { desc = "Launch/continue", dapopts.args })
-vim.keymap.set('n', "<leader>dc", function() require("dap").continue() end, { desc = "Launch/continue", dapopts.args })
-vim.keymap.set('n', "<leader>dC", function() require("dap").reverse_continue() end, { desc = "Reverse continue", dapopts.args })
-vim.keymap.set('n', "<leader>drr", function() require("dap").continue() end, { desc = "Launch/continue", dapopts.args })
+vim.keymap.set('n', "<leader>dl", function() require("dap").continue() end, { desc = "Launch/continue", dapopts.args })
+vim.keymap.set('n', "<leader>dL", function() require("dap").reverse_continue() end, { desc = "Reverse continue", dapopts.args })
 --
 vim.keymap.set('n', "<leader>dq", function() require("dap").disconnect() end, { desc = "Disconnect/quit", dapopts.args })
 --
 vim.keymap.set('n', "<leader>dR", function() require("dap").restart() end, { desc = "Restart", dapopts.args })
-vim.keymap.set('n', "<leader>drr", function() require("dap").restart() end, { desc = "Restart", dapopts.args })
 --
-vim.keymap.set('n', "<leader>dL", function() require("dap").run_last() end, { desc = "Run last", dapopts.args })
-vim.keymap.set('n', "<leader>drl", function() require("dap").run_last() end, { desc = "Run last", dapopts.args })
+-- vim.keymap.set('n', "<leader>dL", function() require("dap").run_last() end, { desc = "Run last", dapopts.args }) -- possibly needed if using .json configs
 --
 vim.keymap.set('n', "<F9>", function() require("dap").step_over() end, { desc = "Step over", dapopts.args })
 vim.keymap.set('n', 'L', function() require("dap").step_over() end, { desc = "Step over (or L)", nowait = true, dapopts.args })
-vim.keymap.set('n', "<leader>dj", function() require("dap").step_over() end, { desc = "Step over", dapopts.args })
+vim.keymap.set('n', "<leader>dsj", function() require("dap").step_over() end, { desc = "Step over", dapopts.args })
 --
 vim.keymap.set('n', "<F7>", function() require("dap").step_back() end, { desc = "Step back", dapopts.args })
 vim.keymap.set('n', 'H', function() require("dap").step_back() end, { desc = "Step back (or H)", nowait = true, dapopts.args })
-vim.keymap.set('n', "<leader>dk", function() require("dap").step_back() end, { desc = "Step back", dapopts.args })
+vim.keymap.set('n', "<leader>dsk", function() require("dap").step_back() end, { desc = "Step back", dapopts.args })
 --
 vim.keymap.set('n', "<F8>", function() require("dap").step_into() end, { desc = "Step into", dapopts.args })
 vim.keymap.set('n', '}', function() require("dap").step_into() end, { desc = "Step into", dapopts.args })
-vim.keymap.set('n', "<leader>di", function() require("dap").step_into() end, { desc = "Step into (or '}')", dapopts.args })
+vim.keymap.set('n', "<leader>dsi", function() require("dap").step_into() end, { desc = "Step into (or '}')", dapopts.args })
 --
 vim.keymap.set('n', "<F10>", function() require("dap").step_out() end, { desc = "Step out", dapopts.args })
 vim.keymap.set('n', '{', function() require("dap").step_out() end, { desc = "Step out", dapopts.args })
-vim.keymap.set('n', "<leader>do", function() require("dap").step_out() end, { desc = "Step out (or '{')", dapopts.args })
+vim.keymap.set('n', "<leader>dso", function() require("dap").step_out() end, { desc = "Step out (or '{')", dapopts.args })
 --
-vim.keymap.set('n', "<leader>dl", function() require("dap").run_to_cursor() end, { desc = "Debug until line under cursor", dapopts.args })
+vim.keymap.set('n', "<leader>dc", function() require("dap").run_to_cursor() end, { desc = "Debug until cursor", dapopts.args })
 --
 vim.keymap.set('n', ')', function() require("dap").down() end, { desc = "Down stacktrace", dapopts.args })
 --
 vim.keymap.set('n', '(', function() require("dap").up() end, { desc = "Up stacktrace", dapopts.args })
 --
-vim.keymap.set('n', "<Leader>dt", function() require("dap").toggle_breakpoint() end, { desc = "Breakpoint", dapopts.args })
-vim.keymap.set('n', "<Leader>dT", function()
+vim.keymap.set('n', "<Leader>dp", function() require("dap").pause() end, { desc = "Pause", dapopts.args })
+--
+vim.keymap.set('n', "<Leader>dk", function() require("dap").toggle_breakpoint() end, { desc = "Breakpoint", dapopts.args })
+vim.keymap.set('n', "<Leader>dK", function()
   require("dap").set_breakpoint(vim.fn.input({
       prompt = "[Condition] > ",
       default = "",
       cancelreturn = ""
     })
   ) end, { desc = "Breakpoint set condition", dapopts.args })
-vim.keymap.set('n', "<Leader>db", function() require("dap").list_breakpoints() end, { desc = "List breakpoints", dapopts.args })
 vim.keymap.set('n', "<Leader>dD", function() require("dap").clear_breakpoints() end, { desc = "Clear breakpoints", dapopts.args })
 --
 vim.keymap.set('n', "<Leader>dr", function() require("dap").repl.toggle() end, { desc = "REPL toggle", dapopts.args })
@@ -961,20 +948,125 @@ vim.keymap.set({'n', 'v'}, "|", function()
   require("dap.ui.widgets").hover()
 end, { desc = "Hover", dapopts.args })
 --
--- vim.keymap.set({'n', 'v'}, "<Leader>dp", function()
---   require("dap.ui.widgets").preview()
--- end, { desc = "Preview", dapopts.args })
---
-vim.keymap.set('n', "<Leader>df", function()
+vim.keymap.set('n', "<Leader>dsf", function()
   local widgets = require("dap.ui.widgets")
-  widgets.centered_float(widgets.frames)
+  local sidebar = widgets.sidebar(widgets.frames)
+  sidebar.open()
 end, { desc = "Show frames", dapopts.args })
 --
-vim.keymap.set('n', "<Leader>ds", function()
+vim.keymap.set('n', "<Leader>dss", function()
   local widgets = require("dap.ui.widgets")
-  widgets.centered_float(widgets.scopes)
+  local sidebar = widgets.sidebar(widgets.scopes)
+  sidebar.open()
 end, { desc = "Show scopes", dapopts.args })
 
+-- Integration with Telescope
+require('telescope').load_extension("dap")
+vim.keymap.set('n', '<leader>dtc', ':Telescope dap commands<CR>', { desc = "Telescope dap commands", dapopts.args })
+vim.keymap.set('n', '<leader>dtC', ':Telescope dap configurations<CR>', { desc = "Telescope dap configurations", dapopts.args })
+vim.keymap.set('n', '<leader>dtv', ':Telescope dap variables<CR>', { desc = "Telescope dap variables", dapopts.args })
+vim.keymap.set('n', '<leader>dtf', ':Telescope dap frames<CR>', { desc = "Telescope dap frames", dapopts.args })
+vim.keymap.set('n', '<leader>dtb', ':Telescope dap list_breakpoints<CR>', { desc = "Telescope dap list_breakpoints", dapopts.args })
+vim.keymap.set('n', '<leader>db',  ':Telescope dap list_breakpoints<CR>', { desc = "Telescope dap list_breakpoints", dapopts.args })
+
+-------------------------
+-- [[ Configure DAP UI ]]
+-------------------------
+require("dapui").setup({
+  controls = {
+    element = "repl",
+    enabled = true,
+    icons = {
+      disconnect = "",
+      pause = "",
+      play = "",
+      run_last = "",
+      step_back = "",
+      step_over = "",
+      step_into = "",
+      step_out = "",
+      terminate = ""
+    }
+  },
+  element_mappings = {},
+  expand_lines = false,
+  floating = {
+    border = "single",
+    mappings = {
+      close = { "q", "<Esc>" }
+    }
+  },
+  force_buffers = true,
+  icons = {
+    collapsed = "",
+    current_frame = "",
+    expanded = ""
+  },
+  layouts = {
+    { elements = {
+        { id = "scopes", size = 0.8 }, -- Variables of the program
+        { id = "console", size = 0.2 },
+        -- { id = "stacks", size = 0.4 },
+        -- { id = "breakpoints", size = 0.25 },
+      },
+      position = "right",
+      size = 60
+    },
+    { elements = {
+        -- { id = "console", size = 0.5 },
+        { id = "stacks", size = 0.4 },
+        { id = "watches", size = 0.6 }, -- Keep track of expressions
+        -- { id = "repl", size = 0.35 }
+      },
+      position = "bottom",
+      size = 15
+    }
+  },
+  mappings = {
+    edit = "e",
+    expand = { "<CR>", "<2-LeftMouse>" },
+    open = "o",
+    remove = "d",
+    repl = "r",
+    toggle = "t"
+  },
+  render = {
+    indent = 1,
+    max_value_lines = 100
+  }
+})
+
+-- Automatically open/close ui when debugger starts/stops
+dap.listeners.after.event_initialized["dapui_config"] = function()
+  require("dapui").open()
+end
+dap.listeners.before.event_terminated["dapui_config"] = function()
+  require("dapui").close()
+end
+dap.listeners.before.event_exited["dapui_config"] = function()
+  require("dapui").close()
+end
+vim.keymap.set("n", "<leader>do", function() require("dapui").open() end, { desc = "Open DAP UI (no start)", dapopts.args })
+vim.keymap.set("n", "<leader>dc", function() require("dapui").close() end, { desc = "Close DAP UI (no quit)", dapopts.args })
+vim.keymap.set("n", "<leader><CR>", function() require("dapui").toggle() end, { desc = "Toggle DAP UI", dapopts.args })
+
+
+------------------------
+-- [[ Configure netrw ]]
+------------------------
+-- Navigation help:
+-- u -> Goes back previously
+-- U -> Goes forward previously
+-- % -> Create file
+-- d -> Create directory
+-- D -> Delete
+vim.cmd[[
+  let g:netrw_liststyle = 1
+]]
+
+----------------------------
+-- [[ Configure Which-key ]]
+----------------------------
 local wk = require("which-key")
 wk.register({
   b = {
@@ -982,8 +1074,11 @@ wk.register({
   },
   d = {
     name = "Debbuger",
-    r = {
-      name = "Run",
+    t = {
+      name = "Search with Telescope"
+    },
+    s = {
+      name = "Step/show"
     }
   },
   --

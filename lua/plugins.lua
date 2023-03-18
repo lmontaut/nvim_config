@@ -12,8 +12,8 @@ end
 -- 2 - comment plugin, :source %, :PackerCompile to take effect, :PackerClean to delete folder
 
 require('packer').startup(function(use)
-  -- Main plugins: Telescope, cmp, treesitter, fugitive, comment, which-key, DAP and Pap
-  -- Optional: packer, plenary, lsp-config, sneak, project, lualine, indent-blankline
+  -- Main plugins: Telescope, cmp, treesitter, lsp-config, neodev, fugitive, comment, which-key, DAP and Pap
+  -- Optional: packer, plenary, sneak, project, lualine, indent-blankline
 
   -- Package manager
   use { 'wbthomason/packer.nvim' }
@@ -79,8 +79,8 @@ require('packer').startup(function(use)
   -- Helper to know what each binding does
   use { "folke/which-key.nvim" }
 
-  -- File browser
-  use { "ms-jpq/chadtree" }
+  -- File browser -- takes way too much ram wtf
+  -- use { "ms-jpq/chadtree" }
 
   -- Navigation
   use { "justinmk/vim-sneak" }
@@ -101,7 +101,13 @@ require('packer').startup(function(use)
   use { "~/code/nvim/nvim-pap" }
 
   -- Debugger
-  use { "mfussenegger/nvim-dap" }
+  use { "mfussenegger/nvim-dap",
+    requires = { "nvim-telescope/telescope-dap.nvim" },
+  }
+
+  use { "rcarriga/nvim-dap-ui",
+    requires = "mfussenegger/nvim-dap"
+  }
 
   -- Add custom plugins to packer from ~/.config/nvim/lua/custom/plugins.lua
   local has_plugins, plugins = pcall(require, 'custom.plugins')
