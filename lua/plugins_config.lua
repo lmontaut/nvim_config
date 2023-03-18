@@ -201,9 +201,9 @@ require('nvim-treesitter.configs').setup {
 }
 
 -- Diagnostic keymaps
-vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Previous diagnostic' })
-vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Next diagnostic' })
-vim.keymap.set('n', 'gl', vim.diagnostic.open_float, { desc = 'Open diagnostic under cursor' })
+vim.keymap.set('n', "<leader>lk", vim.diagnostic.goto_prev, { desc = 'LSP: Previous diagnostic' })
+vim.keymap.set('n', "<leader>lj", vim.diagnostic.goto_next, { desc = 'LSP: Next diagnostic' })
+vim.keymap.set('n', "gl", vim.diagnostic.open_float, { desc = 'LSP: Open diagnostic under cursor' })
 -- vim.keymap.set('n', '<leader>qq', vim.diagnostic.setloclist)
 
 ----------------------
@@ -832,10 +832,159 @@ require('which-key').setup({
   }
 })
 
+---------------------------
+-- [[ Configure DAP ]]
+---------------------------
+vim.fn.sign_define('DapBreakpoint', {text='🛑', texthl='', linehl='', numhl=''})
+
+local dap = require('dap')
+dap.adapters.lldb = {
+  type = "executable",
+  command = "/opt/homebrew/Cellar/llvm/15.0.7_1/bin/lldb-vscode", -- Adjust depdending on llvm version
+  name = "lldb"
+}
+
+dap.configurations.cpp = {
+  {
+    name = 'Launch',
+    type = 'lldb',
+    request = 'launch',
+    program = function()
+      return vim.fn.input({
+      prompt = "[Path to executable] > ",
+      default = vim.fn.getcwd() .. '/',
+      completion = "file",
+      cancelreturn = ""
+    })
+    end,
+    -- program = function()
+    --   return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+    -- end,
+    cwd = '${workspaceFolder}',
+    stopOnEntry = false,
+    args = {},
+  },
+}
+dap.configurations.c = dap.configurations.cpp
+dap.configurations.rust = dap.configurations.cpp
+
+-- Unmap all keymaps starting with ]
+-- vim.keymap.set('n', ']]', "<nop>", { silent = true, noremap = true })
+-- vim.keymap.set('n', ']%', "<nop>", { silent = true, noremap = true })
+-- vim.keymap.set('n', '])', "<nop>", { silent = true, noremap = true })
+-- vim.keymap.set('n', '][', "<nop>", { silent = true, noremap = true })
+-- vim.keymap.set('n', ']}', "<nop>", { silent = true, noremap = true })
+-- vim.keymap.set('n', ']<', "<nop>", { silent = true, noremap = true })
+-- vim.keymap.set('n', ']m', "<nop>", { silent = true, noremap = true })
+-- vim.keymap.set('n', ']M', "<nop>", { silent = true, noremap = true })
+-- vim.keymap.set('n', ']s', "<nop>", { silent = true, noremap = true })
+-- vim.keymap.set('n', '[]', "<nop>", { silent = true, noremap = true })
+-- vim.keymap.set('n', '[%', "<nop>", { silent = true, noremap = true })
+-- vim.keymap.set('n', '[)', "<nop>", { silent = true, noremap = true })
+-- vim.keymap.set('n', '[[', "<nop>", { silent = true, noremap = true })
+-- vim.keymap.set('n', '[}', "<nop>", { silent = true, noremap = true })
+-- vim.keymap.set('n', '[<', "<nop>", { silent = true, noremap = true })
+-- vim.keymap.set('n', '[m', "<nop>", { silent = true, noremap = true })
+-- vim.keymap.set('n', '[M', "<nop>", { silent = true, noremap = true })
+-- vim.keymap.set('n', '[s', "<nop>", { silent = true, noremap = true })
+-- vim.cmd[[
+--   nnoremap <silent><nowait> \[ \[\[
+--   nnoremap <silent><nowait> \] \]\]
+--   function! MakeBracketMaps()
+--       nnoremap <silent><nowait><buffer> \[ :<c-u>exe 'normal '.v:count.'\[\['<cr>
+--       nnoremap <silent><nowait><buffer> \] :<c-u>exe 'normal '.v:count.'\]\]'<cr>
+--   endfunction
+--
+--   augroup bracketmaps
+--       autocmd!
+--       autocmd FileType * call MakeBracketMaps()
+--   augroup END
+-- ]]
+-- vim.keymap.set('n', ']', ']]', { silent = true, noremap = true, nowait = true })
+-- vim.keymap.set('n', '[', '[[', { silent = true, noremap = true, nowait = true })
+
+
+
+-- keymaps
+local dapopts = { silent = true, noremap = true }
+-- TODO: attach to running debugger
+--
+vim.keymap.set('n', "<F5>", function() require("dap").continue() end, { desc = "Launch/continue", dapopts.args })
+vim.keymap.set('n', "<leader>dc", function() require("dap").continue() end, { desc = "Launch/continue", dapopts.args })
+vim.keymap.set('n', "<leader>dC", function() require("dap").reverse_continue() end, { desc = "Reverse continue", dapopts.args })
+vim.keymap.set('n', "<leader>drr", function() require("dap").continue() end, { desc = "Launch/continue", dapopts.args })
+--
+vim.keymap.set('n', "<leader>dq", function() require("dap").disconnect() end, { desc = "Disconnect/quit", dapopts.args })
+--
+vim.keymap.set('n', "<leader>dR", function() require("dap").restart() end, { desc = "Restart", dapopts.args })
+vim.keymap.set('n', "<leader>drr", function() require("dap").restart() end, { desc = "Restart", dapopts.args })
+--
+vim.keymap.set('n', "<leader>dL", function() require("dap").run_last() end, { desc = "Run last", dapopts.args })
+vim.keymap.set('n', "<leader>drl", function() require("dap").run_last() end, { desc = "Run last", dapopts.args })
+--
+vim.keymap.set('n', "<F9>", function() require("dap").step_over() end, { desc = "Step over", dapopts.args })
+vim.keymap.set('n', 'L', function() require("dap").step_over() end, { desc = "Step over (or L)", nowait = true, dapopts.args })
+vim.keymap.set('n', "<leader>dj", function() require("dap").step_over() end, { desc = "Step over", dapopts.args })
+--
+vim.keymap.set('n', "<F7>", function() require("dap").step_back() end, { desc = "Step back", dapopts.args })
+vim.keymap.set('n', 'H', function() require("dap").step_back() end, { desc = "Step back (or H)", nowait = true, dapopts.args })
+vim.keymap.set('n', "<leader>dk", function() require("dap").step_back() end, { desc = "Step back", dapopts.args })
+--
+vim.keymap.set('n', "<F8>", function() require("dap").step_into() end, { desc = "Step into", dapopts.args })
+vim.keymap.set('n', '}', function() require("dap").step_into() end, { desc = "Step into", dapopts.args })
+vim.keymap.set('n', "<leader>di", function() require("dap").step_into() end, { desc = "Step into (or '}')", dapopts.args })
+--
+vim.keymap.set('n', "<F10>", function() require("dap").step_out() end, { desc = "Step out", dapopts.args })
+vim.keymap.set('n', '{', function() require("dap").step_out() end, { desc = "Step out", dapopts.args })
+vim.keymap.set('n', "<leader>do", function() require("dap").step_out() end, { desc = "Step out (or '{')", dapopts.args })
+--
+vim.keymap.set('n', "<leader>dl", function() require("dap").run_to_cursor() end, { desc = "Debug until line under cursor", dapopts.args })
+--
+vim.keymap.set('n', ')', function() require("dap").down() end, { desc = "Down stacktrace", dapopts.args })
+--
+vim.keymap.set('n', '(', function() require("dap").up() end, { desc = "Up stacktrace", dapopts.args })
+--
+vim.keymap.set('n', "<Leader>dt", function() require("dap").toggle_breakpoint() end, { desc = "Breakpoint", dapopts.args })
+vim.keymap.set('n', "<Leader>dT", function()
+  require("dap").set_breakpoint(vim.fn.input({
+      prompt = "[Condition] > ",
+      default = "",
+      cancelreturn = ""
+    })
+  ) end, { desc = "Breakpoint set condition", dapopts.args })
+vim.keymap.set('n', "<Leader>db", function() require("dap").list_breakpoints() end, { desc = "List breakpoints", dapopts.args })
+vim.keymap.set('n', "<Leader>dD", function() require("dap").clear_breakpoints() end, { desc = "Clear breakpoints", dapopts.args })
+--
+vim.keymap.set('n', "<Leader>dr", function() require("dap").repl.toggle() end, { desc = "REPL toggle", dapopts.args })
+--
+vim.keymap.set({'n', 'v'}, "|", function()
+  require("dap.ui.widgets").hover()
+end, { desc = "Hover", dapopts.args })
+--
+-- vim.keymap.set({'n', 'v'}, "<Leader>dp", function()
+--   require("dap.ui.widgets").preview()
+-- end, { desc = "Preview", dapopts.args })
+--
+vim.keymap.set('n', "<Leader>df", function()
+  local widgets = require("dap.ui.widgets")
+  widgets.centered_float(widgets.frames)
+end, { desc = "Show frames", dapopts.args })
+--
+vim.keymap.set('n', "<Leader>ds", function()
+  local widgets = require("dap.ui.widgets")
+  widgets.centered_float(widgets.scopes)
+end, { desc = "Show scopes", dapopts.args })
+
 local wk = require("which-key")
 wk.register({
   b = {
     name = "Buffers"
+  },
+  d = {
+    name = "Debbuger",
+    r = {
+      name = "Run",
+    }
   },
   --
   l = {

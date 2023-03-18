@@ -30,7 +30,7 @@ vim.o.cursorline = true
 
 -- Decrease update time
 vim.o.updatetime = 500
-vim.o.timeoutlen = 500
+vim.o.timeoutlen = 100
 vim.o.smartindent = true
 vim.wo.signcolumn = 'yes'
 vim.o.showbreak = ">>"
