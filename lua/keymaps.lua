@@ -94,8 +94,8 @@ vim.keymap.set("n", "<leader>h", ":vertical rightbelow help<Space>", { noremap =
 -- Last buffer
 vim.keymap.set("n", "<leader>1", "<CMD>b#<CR>", { desc = "Last buffer", opts.args })
 
--- Quit
-vim.keymap.set("n", "<C-c>", "<CMD>q<CR>", { desc = "Quit window", opts.args })
+-- Quit -- not such a good idea
+-- vim.keymap.set("n", "<C-c>", "<CMD>q<CR>", { desc = "Quit window", opts.args })
 
 vim.keymap.set("n", "<C-w>o", "<CMD>only<CR>", { desc = "Quit other windows", opts.args })
 
@@ -128,6 +128,15 @@ vim.cmd [[
 ]]
 vim.keymap.set("n", "<leader>sb", "<CMD>ClearQuickfixList<CR>:bufdo vimgrepadd <C-r><C-w> %<Left><Left>", { noremap = true, silent = false, desc = "Grep in buffers" })
 
+-- Tab navigation
+vim.keymap.set("n", "<leader><CR>", ":tabnew<CR>", { desc = "Tab new", opts.args })
+vim.keymap.set("n", "<leader>]", ":tabnext<CR>", { desc = "Tab next", opts.args })
+vim.keymap.set("n", "<leader>[", ":tabprevious<CR>", { desc = "Tab previous", opts.args })
+
+-- Location list navigation
+vim.keymap.set("n", "<C-]>", ":lnext<CR>", { desc = "Location next", opts.args })
+vim.keymap.set("n", "<C-[>", ":lprevious<CR>", { desc = "Location previous", opts.args })
+
 -----------------------
 -- -- INSERT MODE -- --
 -----------------------
@@ -136,8 +145,8 @@ vim.keymap.set('i', "jk", "<ESC>", { desc = "Escape INSERT mode", noremap = true
 vim.keymap.set('i', "<S-TAB>", "<C-d>", { desc = "Unindent INSERT mode", noremap = true, silent = true })
 
 -- Better indentation insert mode
-vim.keymap.set("i", "<C-l>", "<C-t>", { desc = "", opts.args })
-vim.keymap.set("i", "<C-h>", "<C-d>", { desc = "", opts.args })
+vim.keymap.set("i", "<C-l>", "<C-t>", { desc = "Indent", opts.args })
+vim.keymap.set("i", "<C-h>", "<C-d>", { desc = "Unindent", opts.args })
 
 -- Delete in front of cursor in insert mode
 vim.keymap.set("i", "<C-u>", "<space><Esc>ce", { desc = "Delete after cursor", opts.args })

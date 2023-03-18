@@ -97,7 +97,11 @@ require('packer').startup(function(use)
   -- undo tree
   use { "mbbill/undotree" }
 
+  -- My Pap
   use { "~/code/nvim/nvim-pap" }
+
+  -- Debugger
+  use { "mfussenegger/nvim-dap" }
 
   -- Add custom plugins to packer from ~/.config/nvim/lua/custom/plugins.lua
   local has_plugins, plugins = pcall(require, 'custom.plugins')

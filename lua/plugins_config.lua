@@ -6,19 +6,6 @@ vim.keymap.set("n", "<leader>Pi", "<CMD>PackerInstall<CR>", { desc = "Packer ins
 vim.keymap.set("n", "<leader>Pd", "<CMD>PackerClean<CR>", { desc = "Packer clean" })
 vim.keymap.set("n", "<leader>Ps", "<CMD>source %<CR>", { desc = "Source current file" })
 
----------------------------------------
--- [[ Configure lualine as statusline ]]
----------------------------------------
--- See `:help lualine.txt`
-require('lualine').setup {
-  options = {
-    icons_enabled = false,
-    theme = 'onedark',
-    component_separators = '|',
-    section_separators = '',
-  },
-}
-
 -------------------------------
 -- [[ Configure Comment.nvim ]]
 -------------------------------
@@ -605,10 +592,10 @@ local mode = {
 }
 
 local branch = {
-	"branch",
-	icon = "",
+  "branch",
+  icon = "",
   color = { gui = "bold" },
-	icons_enabled = true,
+  icons_enabled = true,
 }
 
 local filename = {
@@ -674,9 +661,9 @@ local diagnostics = {
 }
 
 local diff = {
-	"diff",
-	colored = true,
-	symbols = { added = " ", modified = " ", removed = " " }, -- changes diff symbols
+  "diff",
+  colored = true,
+  symbols = { added = " ", modified = " ", removed = " " }, -- changes diff symbols
   cond = conditions.hide_in_width
 }
 
@@ -730,42 +717,41 @@ local lsp = {
 
 -- cool function for progress
 local progress = function()
-	local current_line = vim.fn.line(".")
-	local total_lines = vim.fn.line("$")
-	local chars = { "__", "▁▁", "▂▂", "▃▃", "▄▄", "▅▅", "▆▆", "▇▇", "██" }
-	local line_ratio = current_line / total_lines
-	local index = math.ceil(line_ratio * #chars)
-	return chars[index]
+  local current_line = vim.fn.line(".")
+  local total_lines = vim.fn.line("$")
+  local chars = { "__", "▁▁", "▂▂", "▃▃", "▄▄", "▅▅", "▆▆", "▇▇", "██" }
+  local line_ratio = current_line / total_lines
+  local index = math.ceil(line_ratio * #chars)
+  return chars[index]
 end
 
 require('lualine').setup({
-	options = {
-		icons_enabled = true,
-		theme = "auto",
-		component_separators = { left = "", right = "" },
-		section_separators = { left = "", right = "" },
-		disabled_filetypes = { "alpha", "dashboard", "NvimTree", "Outline", "startify" },
-		always_divide_middle = true,
-	},
-	sections = {
-		lualine_a = { mode },
-		lualine_b = { branch, filename },
-		lualine_c = { python_env, diff },
-		-- lualine_x = { "encoding", "fileformat", "filetype" },
-		lualine_x = { diagnostics, treesitter, lsp },
-		lualine_y = { "fileformat", "filetype" },
+  options = {
+    icons_enabled = true,
+    theme = "auto",
+    component_separators = { left = '', right = ''},
+    section_separators = { left = '', right = ''},
+    disabled_filetypes = { "alpha", "dashboard", "NvimTree", "Outline", "startify" },
+    always_divide_middle = true,
+  },
+  sections = {
+    lualine_a = { mode },
+    lualine_b = { branch, filename, diff },
+    lualine_c = { python_env },
+    lualine_x = { diagnostics, treesitter, lsp },
+    lualine_y = { "fileformat", "filetype" },
     lualine_z = { progress },
-	},
-	inactive_sections = {
-		lualine_a = { "filename" },
-		lualine_b = {},
-		lualine_c = {},
-		lualine_x = {},
-		lualine_y = {},
-		lualine_z = {},
-	},
-	tabline = {},
-	extensions = {},
+  },
+  inactive_sections = {
+    lualine_a = { "filename" },
+    lualine_b = {},
+    lualine_c = {},
+    lualine_x = {},
+    lualine_y = {},
+    lualine_z = {},
+  },
+  tabline = {},
+  extensions = {"quickfix", "fugitive", "nvim-dap-ui", "symbols-outline", "chadtree"},
 })
 
 ----------------------------------
@@ -794,8 +780,10 @@ vim.keymap.set('n', '<leader>gsh', '<CMD>Gitsigns stage_hunk<CR>', { desc = 'Git
 vim.keymap.set('n', '<leader>guf', '<CMD>Git reset %<CR>', { desc = 'Git unstage file' })
 vim.keymap.set('n', '<leader>guh', '<CMD>Gitsigns undo_stage_hunk<CR>', { desc = 'Git unstage hunk' })
 vim.keymap.set('n', '<leader>gd', '<CMD>Gitsigns preview_hunk_inline<CR>', { desc = 'Git hunk diff' })
-vim.keymap.set('n', '<leader>gD', '<CMD>Git diff<CR>', { desc = 'Git file diff' })
+vim.keymap.set('n', '<leader>gD', '<CMD>Gdiffsplit<CR>', { desc = 'Git file diff' })
 vim.keymap.set('n', '<leader>gr', '<CMD>Gitsigns reset_hunk<CR>', { desc = 'Git reset hunk' })
+vim.keymap.set('n', '<leader>gb', '<CMD>Gitsigns toggle_current_line_blame<CR>', { desc = 'Git toggle blame line' })
+vim.keymap.set('n', '<leader>gB', '<CMD>GBrowse<CR>', { desc = 'Git open remote' })
 
 ----------------------------
 -- [[ Configure vim-sneak ]]
@@ -838,8 +826,8 @@ require('which-key').setup({
   triggers_blacklist = {
     -- list of mode / prefixes that should never be hooked by WhichKey
     -- this is mostly relevant for keymaps that start with a native binding
-    i = { "j", "k", "g" },
-    v = { "j", "k" },
+    i = { 'j', 'k', 'g' },
+    v = { 'j', 'k' },
   }
 })
 
