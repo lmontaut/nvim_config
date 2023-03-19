@@ -815,14 +815,6 @@ vim.cmd [[
   let g:sneak#use_ic_scs = 1
 ]]
 
-------------------------
--- [[ Configure netrw ]]
-------------------------
-vim.cmd[[
-  let g:netrw_keepdir = 0
-  let g:netrw_localcopydircmd = 'cp -r'
-]]
-
 ---------------------------
 -- [[ Configure undotree ]]
 ---------------------------
@@ -1110,6 +1102,8 @@ vim.keymap.set("n", "<leader><CR>", function() require("dapui").toggle() end, { 
 -- D -> Delete
 vim.cmd[[
   let g:netrw_liststyle = 1
+  let g:netrw_keepdir = 0
+  let g:netrw_localcopydircmd = 'cp -r'
 ]]
 
 ----------------------------
