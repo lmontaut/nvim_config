@@ -53,7 +53,7 @@ require('telescope').setup {
         ["<esc>"] = actions.close,
 
         ["<CR>"] = actions.select_default,
-        ["<C-a>"] = actions.select_horizontal,
+        ["<C-s>"] = actions.select_horizontal,
         ["<C-v>"] = actions.select_vertical,
         ["<C-t>"] = actions.select_tab,
 
@@ -788,7 +788,8 @@ vim.keymap.set('n', '<leader>i', "<CMD>SymbolsOutline<CR>", { desc = 'Symbols ou
 ---------------------------
 -- [[ Configure fugitive ]]
 ---------------------------
-vim.keymap.set('n', '<leader>gg', '<CMD>vertical rightbelow Git<CR>', { desc = 'Git status' })
+vim.keymap.set('n', '<leader>gg', '<CMD>vertical rightbelow Git<CR>:vertical resize 80<CR>', { desc = 'Git status' })
+vim.keymap.set('n', '<leader>gG', '<CMD>vertical rightbelow Git<CR>', { desc = 'Git status (half screen)' })
 vim.keymap.set('n', '<leader>gl', '<CMD>vertical rightbelow Git log --oneline<CR>', { desc = 'Git short log' })
 vim.keymap.set('n', '<leader>gL', '<CMD>rightbelow vsplit | Gclog<CR>', { desc = 'Git log' })
 vim.keymap.set('n', '<leader>gt', '<CMD>tabnew<CR><cmd>0G<CR><cmd>norm gUk>gsk>gg<CR>', { desc = 'Git status tab' })
