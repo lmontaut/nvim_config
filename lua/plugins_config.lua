@@ -59,6 +59,7 @@ require('telescope').setup {
 
         -- Absolutely insane, you can refine your search
         ["<C-e>"] = actions.to_fuzzy_refine,
+        ["?"] = actions.which_key,
 
         ["<C-u>"] = actions.preview_scrolling_up,
         ["<C-d>"] = actions.preview_scrolling_down,
@@ -790,8 +791,8 @@ vim.keymap.set('n', '<leader>i', "<CMD>SymbolsOutline<CR>", { desc = 'Symbols ou
 ---------------------------
 vim.keymap.set('n', '<leader>gg', '<CMD>vertical rightbelow Git<CR>', { desc = 'Git status' })
 vim.keymap.set('n', '<leader>gG', '<CMD>vertical rightbelow Git<CR>:vertical resize 80<CR>', { desc = 'Git status (half screen)' })
-vim.keymap.set('n', '<leader>gl', '<CMD>vertical rightbelow Git log --oneline<CR>', { desc = 'Git short log' })
-vim.keymap.set('n', '<leader>gL', '<CMD>rightbelow vsplit | Gclog<CR>', { desc = 'Git log' })
+vim.keymap.set('n', '<leader>gC', '<CMD>vertical rightbelow Git log --oneline<CR>', { desc = 'Git short log' })
+vim.keymap.set('n', '<leader>gL', '<CMD>rightbelow vsplit | Gclog<CR>', { desc = 'Git log (fugitive)' })
 vim.keymap.set('n', '<leader>gj', '<CMD>Gitsigns next_hunk<CR>', { desc = 'Next hunk' })
 vim.keymap.set('n', '<leader>gk', '<CMD>Gitsigns prev_hunk<CR>', { desc = 'Previous hunk' })
 vim.keymap.set('n', '<leader>gc', '<CMD>Git commit -v -q<CR>', { desc = 'Git commit' })
@@ -803,11 +804,14 @@ vim.keymap.set('n', '<leader>gS', '<CMD>Git reset %<CR>', { desc = 'Git unstage 
 vim.keymap.set('n', '<leader>gs', '<CMD>Gitsigns stage_hunk<CR>', { desc = 'Git stage hunk' })
 vim.keymap.set('n', '<leader>gS', '<CMD>Gitsigns undo_stage_hunk<CR>', { desc = 'Git unstage hunk' })
 vim.keymap.set('n', '<leader>gd', '<CMD>Gdiffsplit<CR>', { desc = 'Git file diff' })
+vim.keymap.set('n', '<leader>gm', '<CMD>Gdiffsplit!<CR>', { desc = 'Git solve conflicts' })
+vim.keymap.set('n', '<leader>g[', '<CMD>diffget //2<CR>', { desc = 'Git conflict select target (left/up)' })
+vim.keymap.set('n', '<leader>g]', '<CMD>diffget //3<CR>', { desc = 'Git conflict select source (right/down)' })
 vim.keymap.set('n', '<leader>gr', '<CMD>Gitsigns reset_hunk<CR>', { desc = 'Git reset hunk' })
 vim.keymap.set('n', '<leader>gt', '<CMD>Gitsigns toggle_current_line_blame<CR>', { desc = 'Git toggle blame line' })
-vim.keymap.set('n', '<leader>gh', require('telescope.builtin').git_stash, { desc = 'Git stashes' })
+vim.keymap.set('n', '<leader>gu', require('telescope.builtin').git_stash, { desc = 'Git stashes' })
 vim.keymap.set('n', '<leader>gb', require('telescope.builtin').git_branches, { desc = 'Git branches' })
-vim.keymap.set('n', '<leader>gC', require('telescope.builtin').git_commits, { desc = 'Git commits' })
+vim.keymap.set('n', '<leader>gl', require('telescope.builtin').git_commits, { desc = 'Git log' })
 vim.keymap.set('n', '<leader>gB', '<CMD>GBrowse<CR>', { desc = 'Git open remote' })
 
 ----------------------------
