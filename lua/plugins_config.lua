@@ -1115,4 +1115,7 @@ wk.register({
   s = {
     name = "Search"
   },
+  w = {
+    name = "Window"
+  }
 }, { prefix = "<leader>" })

@@ -196,10 +196,6 @@ vim.keymap.set("v", "p", '"_dP', { desc = "Paste", opts.args })
 local topts = { silent = true }
 vim.keymap.set("t", "<ESC>", "<C-\\><C-n>", { desc = "Escape", topts.args })
 vim.keymap.set("t", "jk", "<C-\\><C-n>", { desc = "Escape", topts.args })
-vim.keymap.set("t", "<C-w>l", "<C-\\><C-n><C-w>l", { desc = "Nav window right", topts.args })
-vim.keymap.set("t", "<C-w>h", "<C-\\><C-n><C-w>h", { desc = "Nav window left", topts.args })
-vim.keymap.set("t", "<C-w>k", "<C-\\><C-n><C-w>k", { desc = "Nav window up", topts.args })
-vim.keymap.set("t", "<C-w>j", "<C-\\><C-n><C-w>j", { desc = "Nav window down", topts.args })
 
 vim.api.nvim_create_autocmd({ 'TermOpen' }, {
     command = 'startinsert',
