@@ -755,7 +755,30 @@ require('lualine').setup({
 ----------------------------------
 -- [[ Configure symbols outline ]]
 ----------------------------------
-require("symbols-outline").setup()
+require("symbols-outline").setup({
+  show_guides = true,
+  auto_preview = false,
+  position = 'right',
+  auto_close = false,
+  show_numbers = false,
+  show_relative_numbers = false,
+  autofold_depth = 1,
+  auto_unfold_hover = true,
+  keymaps = {
+    close = {"<Esc>", "q"},
+    goto_location = "<Cr>",
+    focus_location = "o",
+    hover_symbol = "<C-space>",
+    toggle_preview = "K",
+    rename_symbol = "r",
+    code_actions = "a",
+    fold = "h",
+    fold_all = "H",
+    unfold = "l",
+    unfold_all = "L",
+    fold_reset = "R",
+  },
+})
 vim.keymap.set('n', '<leader>i', "<CMD>SymbolsOutline<CR>", { desc = 'Symbols outline' })
 
 ---------------------------
