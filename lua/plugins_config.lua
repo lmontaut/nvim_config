@@ -891,6 +891,7 @@ dap.adapters.lldb = {
   name = "lldb"
 }
 
+-- C/C++/Rust config
 dap.configurations.cpp = {
   {
     name = 'Launch',
@@ -912,6 +913,29 @@ dap.configurations.cpp = {
 }
 dap.configurations.c = dap.configurations.cpp
 dap.configurations.rust = dap.configurations.cpp
+
+-- Python config
+dap.adapters.python = {
+  type = 'executable';
+  command = os.getenv("CONDA_PREFIX") .. "/bin/python", -- adjust as needed
+  args = { '-m', 'debugpy.adapter' };
+}
+
+dap.configurations.python = {
+  {
+    -- The first three options are required by nvim-dap
+    type = 'python'; -- the type here established the link to the adapter definition: `dap.adapters.python`
+    request = 'launch';
+    name = "Launch file";
+
+    -- Options below are for debugpy, see https://github.com/microsoft/debugpy/wiki/Debug-configuration-settings for supported options
+
+    program = "${file}"; -- This configuration will launch the current file if used.
+    pythonPath = os.getenv("CONDA_PREFIX") .. "/bin/python",
+    console="integratedTerminal", -- So that the program's output is displayed in console
+    redirectOutput=true -- So that the program's output is displayed in console
+  },
+}
 
 dap.defaults.fallback.external_terminal = {
   command = '/Applications/Alacritty.app/Contents/MacOS/alacritty';
