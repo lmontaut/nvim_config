@@ -1090,6 +1090,20 @@ vim.keymap.set("n", "<leader>do", function() require("dapui").open() end, { desc
 vim.keymap.set("n", "<leader>dc", function() require("dapui").close() end, { desc = "Close DAP UI (no quit)", dapopts.args })
 vim.keymap.set("n", "<leader><CR>", function() require("dapui").toggle() end, { desc = "Toggle DAP UI", dapopts.args })
 
+-- Completion (if debugger supports it)
+require("cmp").setup({
+  enabled = function()
+    return vim.api.nvim_buf_get_option(0, "buftype") ~= "prompt"
+        or require("cmp_dap").is_dap_buffer()
+  end
+})
+
+require("cmp").setup.filetype({ "dap-repl", "dapui_watches", "dapui_hover" }, {
+  sources = {
+    { name = "dap" },
+  },
+})
+
 
 ------------------------
 -- [[ Configure netrw ]]
