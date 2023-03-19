@@ -788,27 +788,26 @@ vim.keymap.set('n', '<leader>i', "<CMD>SymbolsOutline<CR>", { desc = 'Symbols ou
 ---------------------------
 -- [[ Configure fugitive ]]
 ---------------------------
-vim.keymap.set('n', '<leader>gg', '<CMD>vertical rightbelow Git<CR>:vertical resize 80<CR>', { desc = 'Git status' })
-vim.keymap.set('n', '<leader>gG', '<CMD>vertical rightbelow Git<CR>', { desc = 'Git status (half screen)' })
+vim.keymap.set('n', '<leader>gg', '<CMD>vertical rightbelow Git<CR>', { desc = 'Git status' })
+vim.keymap.set('n', '<leader>gG', '<CMD>vertical rightbelow Git<CR>:vertical resize 80<CR>', { desc = 'Git status (half screen)' })
 vim.keymap.set('n', '<leader>gl', '<CMD>vertical rightbelow Git log --oneline<CR>', { desc = 'Git short log' })
 vim.keymap.set('n', '<leader>gL', '<CMD>rightbelow vsplit | Gclog<CR>', { desc = 'Git log' })
-vim.keymap.set('n', '<leader>gt', '<CMD>tabnew<CR><cmd>0G<CR><cmd>norm gUk>gsk>gg<CR>', { desc = 'Git status tab' })
-vim.keymap.set('n', '<leader>gl', '<CMD>vertical rightbelow Git log --oneline<CR>', { desc = 'Git short log' })
-vim.keymap.set('n', '<leader>gh', '<CMD>rightbelow vsplit | Gclog -g stash<CR>', { desc = 'Git list stashes' })
 vim.keymap.set('n', '<leader>gj', '<CMD>Gitsigns next_hunk<CR>', { desc = 'Next hunk' })
 vim.keymap.set('n', '<leader>gk', '<CMD>Gitsigns prev_hunk<CR>', { desc = 'Previous hunk' })
 vim.keymap.set('n', '<leader>gc', '<CMD>Git commit -v -q<CR>', { desc = 'Git commit' })
 vim.keymap.set('n', '<leader>gf', '<CMD>Git fetch<CR>', { desc = 'Git fetch' })
 vim.keymap.set('n', '<leader>gp', '<CMD>Git pull<CR>', { desc = 'Git pull' })
 vim.keymap.set('n', '<leader>gP', '<CMD>Git push<CR>', { desc = 'Git push' })
-vim.keymap.set('n', '<leader>gsf', '<CMD>Git add %<CR>', { desc = 'Git stage file' })
-vim.keymap.set('n', '<leader>gsh', '<CMD>Gitsigns stage_hunk<CR>', { desc = 'Git stage hunk' })
-vim.keymap.set('n', '<leader>guf', '<CMD>Git reset %<CR>', { desc = 'Git unstage file' })
-vim.keymap.set('n', '<leader>guh', '<CMD>Gitsigns undo_stage_hunk<CR>', { desc = 'Git unstage hunk' })
-vim.keymap.set('n', '<leader>gd', '<CMD>Gitsigns preview_hunk_inline<CR>', { desc = 'Git hunk diff' })
-vim.keymap.set('n', '<leader>gD', '<CMD>Gdiffsplit<CR>', { desc = 'Git file diff' })
+vim.keymap.set('n', '<leader>ga', '<CMD>Git add %<CR>', { desc = 'Git stage file' })
+vim.keymap.set('n', '<leader>gS', '<CMD>Git reset %<CR>', { desc = 'Git unstage file' })
+vim.keymap.set('n', '<leader>gs', '<CMD>Gitsigns stage_hunk<CR>', { desc = 'Git stage hunk' })
+vim.keymap.set('n', '<leader>gS', '<CMD>Gitsigns undo_stage_hunk<CR>', { desc = 'Git unstage hunk' })
+vim.keymap.set('n', '<leader>gd', '<CMD>Gdiffsplit<CR>', { desc = 'Git file diff' })
 vim.keymap.set('n', '<leader>gr', '<CMD>Gitsigns reset_hunk<CR>', { desc = 'Git reset hunk' })
-vim.keymap.set('n', '<leader>gb', '<CMD>Gitsigns toggle_current_line_blame<CR>', { desc = 'Git toggle blame line' })
+vim.keymap.set('n', '<leader>gt', '<CMD>Gitsigns toggle_current_line_blame<CR>', { desc = 'Git toggle blame line' })
+vim.keymap.set('n', '<leader>gh', require('telescope.builtin').git_stash, { desc = 'Git stashes' })
+vim.keymap.set('n', '<leader>gb', require('telescope.builtin').git_branches, { desc = 'Git branches' })
+vim.keymap.set('n', '<leader>gC', require('telescope.builtin').git_commits, { desc = 'Git commits' })
 vim.keymap.set('n', '<leader>gB', '<CMD>GBrowse<CR>', { desc = 'Git open remote' })
 
 ----------------------------
@@ -1149,12 +1148,6 @@ wk.register({
   --
   g = {
     name = "Git",
-    s = {
-      name = "Stage"
-    },
-    u = {
-      name = "Unstage"
-    }
   },
   --
   m = {

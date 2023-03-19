@@ -129,7 +129,7 @@ vim.cmd [[
 vim.keymap.set("n", "<leader>sb", "<CMD>ClearQuickfixList<CR>:bufdo vimgrepadd <C-r><C-w> %<Left><Left>", { noremap = true, silent = false, desc = "Grep in buffers" })
 
 -- Tab navigation
-vim.keymap.set("n", "<leader><CR>", "mz:tabnew %<CR>`z", { desc = "Tab new", opts.args })
+vim.keymap.set("n", "<C-t>", "mz:tabnew %<CR>`z", { desc = "Tab new", opts.args })
 vim.keymap.set("n", "<leader>]", ":tabnext<CR>", { desc = "Tab next", opts.args })
 vim.keymap.set("n", "<leader>[", ":tabprevious<CR>", { desc = "Tab previous", opts.args })
 
