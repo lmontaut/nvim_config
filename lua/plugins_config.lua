@@ -113,6 +113,7 @@ vim.keymap.set('n', '<leader>?', require('telescope.builtin').oldfiles, { desc =
 vim.keymap.set('n', '<leader>,', require('telescope.builtin').buffers, { desc = 'Find buffer' })
 vim.keymap.set('n', '<leader><space>', require('telescope.builtin').git_files, { desc = 'Find git file' })
 vim.keymap.set('n', '<leader>sh', require('telescope.builtin').command_history, { desc = 'Command history' })
+vim.keymap.set('n', '<leader>sc', require('telescope.builtin').commands, { desc = 'All commands' })
 vim.keymap.set('n', '<leader>sq', require('telescope.builtin').quickfix, { desc = 'Quickfix list' })
 vim.keymap.set('n', '<leader>sf', require('telescope.builtin').find_files, { desc = 'Find files' })
 vim.keymap.set('n', '<leader>/', function()

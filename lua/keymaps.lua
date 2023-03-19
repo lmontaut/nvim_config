@@ -108,9 +108,6 @@ vim.keymap.set("n", "<C-f>", ":<C-f>", { desc = "Command history", opts.args })
 vim.keymap.set("n", "<leader>bc", "<CMD>bd!<CR>", { desc = "Close buffer", opts.args })
 vim.keymap.set("n", "<leader>bd", ":bd<Space>", { noremap = true, silent = false, desc = "Select which buffer to delete" })
 
--- All users commands (things like :help)
-vim.keymap.set('n', '<leader>sc', ":com<CR>", { desc = "All user's command" })
-
 -- Replace under cursor
 vim.keymap.set("n", "<leader>S", ":%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>", { noremap = true, silent = false, desc = "Search and replace word" })
 
