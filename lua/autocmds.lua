@@ -44,3 +44,10 @@ vim.cmd [[
 vim.cmd [[
   au! BufEnter *.py setl nosmartindent
 ]]
+
+vim.cmd [[
+  augroup quickfix_group
+    autocmd!
+    autocmd filetype qf setlocal errorformat+=%f\|%l\ col\ %c\|%m
+  augroup END
+]]
