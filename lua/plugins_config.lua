@@ -996,7 +996,7 @@ vim.keymap.set('n', "<Leader>dr", function() require("dap").repl.toggle() end, {
 --
 vim.keymap.set({'n', 'v'}, "|", function()
   require("dap.ui.widgets").hover()
-end, { desc = "Hover", dapopts.args })
+end, { desc = "DAP variable value", dapopts.args })
 --
 vim.keymap.set('n', "<Leader>dsf", function()
   local widgets = require("dap.ui.widgets")
