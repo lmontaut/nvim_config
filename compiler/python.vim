@@ -11,7 +11,7 @@ endif
 let s:cpo_save = &cpo
 set cpo&vim
 
-setlocal errorformat=%A\ \ File\ \"%f\"\\\,\ line\ %l\\\,%m,
+set errorformat=%A\ \ File\ \"%f\"\\\,\ line\ %l\\\,%m,
       \%C\ \ \ \ %.%#,
       \%+Z%.%#Error\:\ %.%#,
       \%A\ \ File\ \"%f\"\\\,\ line\ %l,
