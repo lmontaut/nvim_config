@@ -170,7 +170,7 @@ vim.keymap.set("i", "{<CR>", "{<CR>}<Esc>O", { opts.args })
 vim.keymap.set("i", "{;<CR>", "{<CR>};<Esc>O", { opts.args })
 
 -- Make it so gjk does not remove you from insert mode - for my sanity
-vim.keymap.set("i", "gjk", "gjk")
+-- vim.keymap.set("i", "gjk", "gjk")
 
 -----------------------
 -- -- VISUAL MODE -- --
