@@ -44,8 +44,8 @@ require('telescope').setup {
   defaults = {
     mappings = {
       i = {
-        ["<C-n>"] = actions.cycle_history_next,
         ["jk"] = { "<cmd>startinsert<cr>j<cmd>startinsert<cr>k", type = "command" },
+        ["<C-n>"] = actions.cycle_history_next,
         ["<C-p>"] = actions.cycle_history_prev,
 
         ["<C-j>"] = actions.move_selection_next,
@@ -59,13 +59,14 @@ require('telescope').setup {
         ["<C-t>"] = actions.select_tab,
 
         -- Absolutely insane, you can refine your search
-        ["<C-e>"] = actions.to_fuzzy_refine,
+        -- ["<C-e>"] = actions.to_fuzzy_refine, -- already set to ctrl + space
         ["?"] = actions.which_key,
 
         ["<C-u>"] = actions.preview_scrolling_up,
         ["<C-d>"] = actions.preview_scrolling_down,
 
         ["<C-q>"] = actions.smart_send_to_qflist + actions.open_qflist,
+        ["<C-]>"] = actions.smart_send_to_qflist,
         ["<C-c>"] = actions.edit_command_line,
         -- ["<M-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
       },
@@ -99,8 +100,8 @@ require('telescope').setup {
     diagnostics = {
       theme = "ivy",
     },
-    find_files = {
-      -- find_command = { "rg", "--files", "--hidden", },
+    find_files = { -- Search ALL files, even if not tracked by git
+      find_command = { "rg", "--files", "--hidden", },
       theme = "ivy",
     },
     git_files = {
@@ -117,9 +118,9 @@ pcall(require('telescope').load_extension, 'fzf')
 vim.keymap.set('n', '<leader>?', require('telescope.builtin').oldfiles, { desc = 'Find recently opened files' })
 vim.keymap.set('n', '<leader>,', require('telescope.builtin').buffers, { desc = 'Find buffer' })
 vim.keymap.set('n', '<leader><space>', require('telescope.builtin').git_files, { desc = 'Find git file' })
-vim.keymap.set('n', '<leader>sh', require('telescope.builtin').command_history, { desc = 'Command history' })
-vim.keymap.set('n', '<leader>sC', require('telescope.builtin').commands, { desc = 'All commands' })
-vim.keymap.set('n', '<leader>sq', require('telescope.builtin').quickfix, { desc = 'Quickfix list' })
+vim.keymap.set('n', '<leader>sh', require('telescope.builtin').command_history, { desc = 'Search command history' })
+vim.keymap.set('n', '<leader>sC', require('telescope.builtin').commands, { desc = 'Search all vim commands' })
+vim.keymap.set('n', '<leader>sq', require('telescope.builtin').quickfix, { desc = 'Search in quickfix' })
 vim.keymap.set('n', '<leader>sf', require('telescope.builtin').find_files, { desc = 'Find files' })
 vim.keymap.set('n', '<leader>/', function()
   -- You can pass additional configuration to telescope to change theme, layout, etc.
@@ -136,6 +137,15 @@ vim.keymap.set('n', '<leader>sg', require('telescope.builtin').live_grep, { desc
 vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = 'Search diagnostics' })
 vim.keymap.set('n', '<leader>ss', require('telescope.builtin').grep_string, { desc = 'Search string' })
 vim.keymap.set('n', '<leader>sc', require('telescope.builtin').git_commits, { desc = 'Search git commits' })
+vim.keymap.set('n', '<leader>sm', require('telescope.builtin').man_pages, { desc = 'Search man pages' })
+vim.keymap.set('n', '<leader>8', require('telescope.builtin').reloader, { desc = 'Reload vim modules' })
+vim.keymap.set('n', '<leader>s/', require('telescope.builtin').search_history, { desc = 'Search history' })
+vim.keymap.set('n', '<leader>sl', require('telescope.builtin').lsp_incoming_calls, { desc = 'Search LSP incoming calls' })
+vim.keymap.set('n', '<leader>sL', require('telescope.builtin').lsp_outgoing_calls, { desc = 'Search LSP outgoing calls' })
+-- Quickfix list interaction
+vim.keymap.set('n', '<leader>sQ', require('telescope.builtin').quickfixhistory, { desc = 'Search quickfix history' })
+vim.keymap.set('n', '<leader>qh', require('telescope.builtin').quickfixhistory, { desc = 'Quickfix history' })
+vim.keymap.set('n', '<leader>qt', require('telescope.builtin').quickfix, { desc = 'Telescope quickfix' })
 
 ---------------------------
 -- [[ Configure Chadtree ]]
@@ -243,11 +253,13 @@ local on_attach = function(_, bufnr)
   nmap('<leader>lr', vim.lsp.buf.rename, 'Rename')
   nmap('<leader>lc', vim.lsp.buf.code_action, 'Code action')
 
-  nmap('gd', vim.lsp.buf.definition, 'Goto Definition')
+  -- nmap('gd', vim.lsp.buf.definition, 'Goto Definition')
+  nmap('gd', require('telescope.builtin').lsp_definitions, 'Goto definition')
+  nmap('gD', require('telescope.builtin').lsp_implementations, 'Goto implementation')
+  nmap('gt', require('telescope.builtin').lsp_type_definitions, 'Goto type definitions')
   nmap('gh', "<CMD>ClangdSwitchSourceHeader<CR>", 'Switch from source to header')
   nmap('gr', require('telescope.builtin').lsp_references, 'Goto References')
   nmap('gI', vim.lsp.buf.implementation, 'Goto Implementation')
-  -- nmap('<leader>D', vim.lsp.buf.type_definition, 'Type [D]efinition')
   nmap('<leader>ls', require('telescope.builtin').lsp_document_symbols, 'Document symbols')
   nmap('<leader>lS', require('telescope.builtin').lsp_dynamic_workspace_symbols, 'Workspace symbols')
   nmap('<leader>ld', require('telescope.builtin').diagnostics, 'Diagnostics')
