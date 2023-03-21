@@ -45,6 +45,7 @@ require('telescope').setup {
     mappings = {
       i = {
         ["jk"] = { "<cmd>startinsert<cr>j<cmd>startinsert<cr>k", type = "command" },
+        ["kj"] = { "<cmd>normal<cr>", type = "command" },
         ["<C-n>"] = actions.cycle_history_next,
         ["<C-p>"] = actions.cycle_history_prev,
 
