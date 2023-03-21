@@ -66,7 +66,6 @@ vim.keymap.set("n", "<leader>qc", ":cclose<CR>", { desc = "Quicklist close", opt
 vim.keymap.set("n", "<leader>qq", ":cc<CR>zz", { desc = "Quicklist show current", opts.args })
 vim.keymap.set("n", "<leader>qN", ":cfirst<CR>", { desc = "Quicklist first", opts.args })
 vim.keymap.set("n", "<leader>qP", ":clast<CR>", { desc = "Quicklist last", opts.args })
-vim.keymap.set("n", "<leader>qo", ":copen<CR>", { desc = "Quicklist open", opts.args })
 
 -- Make
 -- vim.keymap.set("n", "<leader>mm", function() return ":make<Space>" end, { noremap = true, silent = false, desc = "make", expr = true })
