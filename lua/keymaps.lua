@@ -55,9 +55,16 @@ vim.keymap.set("n", "<leader>wk", "<C-w>k", { desc = "Nav window up", opts.args 
 vim.keymap.set("n", "<leader>wj", "<C-w>j", { desc = "Nav window down", opts.args })
 vim.keymap.set("n", "<leader>wv", "<C-w>v", { desc = "Window vertical split", opts.args })
 vim.keymap.set("n", "<leader>ws", "<C-w>s", { desc = "Window split", opts.args })
-vim.keymap.set("n", "<leader>wL", "<C-w>v", { desc = "Window vertical split", opts.args })
-vim.keymap.set("n", "<leader>wJ", "<C-w>s", { desc = "Window split", opts.args })
-vim.keymap.set("n", "<leader>wJ", ":conly<CR>", { desc = "Quit all other windows", opts.args })
+vim.keymap.set("n", "<leader>wo", ":only<CR>", { desc = "Quit all other windows", opts.args })
+vim.keymap.set("n", "<leader>w_", "<C-w>_", { desc = "Window max out height", opts.args })
+vim.keymap.set("n", "<leader>w|", "<C-w>|", { desc = "Window max out width", opts.args })
+vim.keymap.set("n", "<leader>w=", "<C-w>=", { desc = "Windows equal height and width", opts.args })
+vim.keymap.set("n", "<leader>wt", "mz:tabnew %<CR>`z", { desc = "Tab new", opts.args })
+vim.keymap.set("n", "<leader>wx", "<C-w>x", { desc = "Swap current with next", opts.args })
+vim.keymap.set("n", "<leader>wL", "<C-w>L", { desc = "Send window far right", opts.args })
+vim.keymap.set("n", "<leader>wH", "<C-w>H", { desc = "Send window far left", opts.args })
+vim.keymap.set("n", "<leader>wJ", "<C-w>J", { desc = "Send window far down", opts.args })
+vim.keymap.set("n", "<leader>wK", "<C-w>K", { desc = "Send window far up", opts.args })
 
 -- Quicklist navigation
 -- Even if the quicklist is not open, you can navigate with :cn and :cp
