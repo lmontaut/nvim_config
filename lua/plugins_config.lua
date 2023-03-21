@@ -523,8 +523,8 @@ cmp.setup({
     ['<CR>'] = cmp.mapping({ i=cmp_confirm, s=cmp_confirm, c=cmp_confirm }),
     ['<Tab>'] = cmp.mapping({ i=cmp_tab, s=cmp_tab, c=cmp_tab }),
     ['<S-Tab>'] = cmp.mapping(cmp_s_tab, { 'i', 's', 'c' }),
-    ['<C-n>'] = cmp.mapping(cmp_tab, { 'i', 's', 'c' }),
-    ['<C-p>'] = cmp.mapping(cmp_s_tab, { 'i', 's', 'c' }),
+    ['<C-n>'] = cmp.mapping(cmp_tab, { 'i', 's' }),
+    ['<C-p>'] = cmp.mapping(cmp_s_tab, { 'i', 's' }),
   },
   formatting = {
     format = format,
