@@ -95,6 +95,15 @@ require('telescope').setup {
     lsp_document_symbols = {
       theme = "ivy",
     },
+    lsp_definitions = {
+      theme = "ivy",
+    },
+    lsp_implementations = {
+      theme = "ivy",
+    },
+    lsp_type_definitions = {
+      theme = "ivy",
+    },
     lsp_workspace_symbols = {
       theme = "ivy",
     },
@@ -260,7 +269,7 @@ local on_attach = function(_, bufnr)
   nmap('gt', require('telescope.builtin').lsp_type_definitions, 'Goto type definitions')
   nmap('gh', "<CMD>ClangdSwitchSourceHeader<CR>", 'Switch from source to header')
   nmap('gr', require('telescope.builtin').lsp_references, 'Goto References')
-  nmap('gI', vim.lsp.buf.implementation, 'Goto Implementation')
+  -- nmap('gI', vim.lsp.buf.implementation, 'Goto Implementation')
   nmap('<leader>ls', require('telescope.builtin').lsp_document_symbols, 'Document symbols')
   nmap('<leader>lS', require('telescope.builtin').lsp_dynamic_workspace_symbols, 'Workspace symbols')
   nmap('<leader>ld', require('telescope.builtin').diagnostics, 'Diagnostics')
