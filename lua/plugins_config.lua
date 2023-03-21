@@ -1115,16 +1115,29 @@ require("dapui").setup({
 -- Automatically open/close ui when debugger starts/stops
 dap.listeners.after.event_initialized["dapui_config"] = function()
   require("dapui").open()
+  vim.cmd("stopinsert")
 end
 dap.listeners.before.event_terminated["dapui_config"] = function()
   require("dapui").close()
+  vim.cmd("stopinsert")
 end
 dap.listeners.before.event_exited["dapui_config"] = function()
   require("dapui").close()
+  vim.cmd("stopinsert")
 end
-vim.keymap.set("n", "<leader>do", function() require("dapui").open() end, { desc = "Open DAP UI (no start)", dapopts.args })
-vim.keymap.set("n", "<leader>dc", function() require("dapui").close() end, { desc = "Close DAP UI (no quit)", dapopts.args })
-vim.keymap.set("n", "<leader><CR>", function() require("dapui").toggle() end, { desc = "Toggle DAP UI", dapopts.args })
+
+vim.keymap.set("n", "<leader>do", function()
+  require("dapui").open()
+  vim.cmd("stopinsert")
+end, { desc = "Open DAP UI (no start)", dapopts.args })
+vim.keymap.set("n", "<leader>dc", function()
+  require("dapui").close()
+  vim.cmd("stopinsert")
+end, { desc = "Close DAP UI (no quit)", dapopts.args })
+vim.keymap.set("n", "<leader><CR>", function()
+  require("dapui").toggle()
+  vim.cmd("stopinsert")
+end, { desc = "Toggle DAP UI", dapopts.args })
 
 -- Completion (if debugger supports it)
 require("cmp").setup({
