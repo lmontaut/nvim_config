@@ -905,6 +905,12 @@ dap.adapters.lldb = {
   name = "lldb"
 }
 
+dap.adapters.codelldb = {
+  type = 'server',
+  host = '127.0.0.1',
+  port = 13000
+}
+
 -- C/C++/Rust config
 dap.configurations.cpp = {
   {
@@ -922,6 +928,7 @@ dap.configurations.cpp = {
     cwd = '${workspaceFolder}',
     stopOnEntry = false,
     args = {},
+    reverseDebugging = true, -- Not available on bare metal
     runInTerminal=true -- So that the program's output is displayed in console
   },
 }
@@ -986,7 +993,7 @@ vim.keymap.set('n', "<F10>", function() require("dap").step_out() end, { desc = 
 vim.keymap.set('n', '{', function() require("dap").step_out() end, { desc = "Step out", dapopts.args })
 vim.keymap.set('n', "<leader>dso", function() require("dap").step_out() end, { desc = "Step out (or '{')", dapopts.args })
 --
-vim.keymap.set('n', "<leader>dc", function() require("dap").run_to_cursor() end, { desc = "Debug until cursor", dapopts.args })
+vim.keymap.set('n', "<leader>dn", function() require("dap").run_to_cursor() end, { desc = "Debug until cursor", dapopts.args })
 --
 vim.keymap.set('n', ')', function() require("dap").down() end, { desc = "Down stacktrace", dapopts.args })
 --
@@ -1006,9 +1013,7 @@ vim.keymap.set('n', "<Leader>dD", function() require("dap").clear_breakpoints() 
 --
 vim.keymap.set('n', "<Leader>dr", function() require("dap").repl.toggle() end, { desc = "REPL toggle", dapopts.args })
 --
-vim.keymap.set({'n', 'v'}, "|", function()
-  require("dap.ui.widgets").hover()
-end, { desc = "DAP variable value", dapopts.args })
+vim.keymap.set({'n', 'v'}, "|", "<CMD>lua require('dapui').eval()<CR>", { desc = "DAP variable value", dapopts.args })
 --
 vim.keymap.set('n', "<Leader>dsf", function()
   local widgets = require("dap.ui.widgets")
