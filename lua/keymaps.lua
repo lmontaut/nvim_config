@@ -100,6 +100,14 @@ vim.keymap.set("n", "<leader>mt", ":Make!<Space>test", { noremap = true, silent 
 vim.keymap.set("n", "<leader>2", ":Explore<CR>", { desc = "Explore", opts.args })
 vim.keymap.set("n", "<leader>3", ":Rexplore<CR>", { desc = "Rexplore", opts.args })
 
+-- Wrap/unwrap
+vim.keymap.set("n", "<leader>vw", ":setlocal wrap<CR>", { desc = "Wrap text", opts.args })
+vim.keymap.set("n", "<leader>vW", ":setlocal nowrap<CR>", { desc = "Unwrap text", opts.args })
+
+-- hl/nohl search
+vim.keymap.set("n", "<leader>vh", ":setlocal hlsearch<CR>", { desc = "Highligth search", opts.args })
+vim.keymap.set("n", "<leader>vH", ":setlocal nohlsearch<CR>", { desc = "No highligth search", opts.args })
+
 -- Launch terminal command
 vim.keymap.set("n", "<leader>t", ":below split | terminal<Space>", { noremap = true, silent = false, desc = "Launch terminal horizontal" })
 vim.keymap.set("n", "<leader>T", ":rightbelow vsplit | terminal<Space>", { noremap = true, silent = false, desc = "Launch terminal vertical" })

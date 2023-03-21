@@ -823,13 +823,13 @@ vim.keymap.set('n', '<leader>gp', ':Git pull<Space>', { desc = 'Git pull', silen
 vim.keymap.set('n', '<leader>gP', ':Git push<Space>', { desc = 'Git push', silent = false })
 vim.keymap.set('n', '<leader>ga', ':Git add %<Space>', { desc = 'Git stage file', silent = false })
 vim.keymap.set('n', '<leader>gS', ':Git reset %<Space>', { desc = 'Git unstage file', silent = false })
-vim.keymap.set('n', '<leader>gs', '<CMD>Gitsigns stage_hunk<CR>', { desc = 'Git stage hunk' })
-vim.keymap.set('n', '<leader>gS', '<CMD>Gitsigns undo_stage_hunk<CR>', { desc = 'Git unstage hunk' })
+vim.keymap.set({ 'n', 'v' }, '<leader>gs', '<CMD>Gitsigns stage_hunk<CR>', { desc = 'Git stage hunk' })
+vim.keymap.set({ 'n', 'v' }, '<leader>gS', '<CMD>Gitsigns undo_stage_hunk<CR>', { desc = 'Git unstage hunk' })
 vim.keymap.set('n', '<leader>gd', '<CMD>Gdiffsplit<CR>', { desc = 'Git file diff' })
 vim.keymap.set('n', '<leader>gm', '<CMD>Gdiffsplit!<CR>', { desc = 'Git solve conflicts' })
 vim.keymap.set('n', '<leader>g[', '<CMD>diffget //2<CR>', { desc = 'Git conflict select target (left/up)' })
 vim.keymap.set('n', '<leader>g]', '<CMD>diffget //3<CR>', { desc = 'Git conflict select source (right/down)' })
-vim.keymap.set('n', '<leader>gr', '<CMD>Gitsigns reset_hunk<CR>', { desc = 'Git reset hunk' })
+vim.keymap.set({ 'n', 'v' }, '<leader>gr', '<CMD>Gitsigns reset_hunk<CR>', { desc = 'Git reset hunk' })
 vim.keymap.set('n', '<leader>gR', '<CMD>Gitsigns reset_buffer<CR>', { desc = 'Git reset buffer' })
 vim.keymap.set('n', '<leader>gt', '<CMD>Gitsigns toggle_current_line_blame<CR>', { desc = 'Git toggle blame line' })
 vim.keymap.set('n', '<leader>gu', require('telescope.builtin').git_stash, { desc = 'Git stashes' })
@@ -861,19 +861,6 @@ vim.api.nvim_create_user_command('Paprun', function(command) pap.run_cmd_base(co
 vim.api.nvim_create_user_command('Par', function(command) pap.run_cmd_base(command.args, false) end, { nargs = "*" })
 vim.api.nvim_create_user_command('Papa', function(command) pap.run_cmd_base(command.args, false) end, { nargs = "*" })
 vim.keymap.set("n", "<leader>qe", ":cg<Space>~/.cache/nvim/out.txt<CR>:cc<CR>", { noremap = true, silent = true, desc = "Load error file into quickfix" })
-
-
------------------------------
--- [[ Configure Which-key ]]
------------------------------
-require('which-key').setup({
-  triggers_blacklist = {
-    -- list of mode / prefixes that should never be hooked by WhichKey
-    -- this is mostly relevant for keymaps that start with a native binding
-    i = { 'j', 'k', 'g' },
-    v = { 'j', 'k' },
-  }
-})
 
 ----------------------
 -- [[ Configure DAP ]]
@@ -1173,6 +1160,15 @@ vim.cmd[[
 -- [[ Configure Which-key ]]
 ----------------------------
 local wk = require("which-key")
+wk.setup({
+  triggers_blacklist = {
+    -- list of mode / prefixes that should never be hooked by WhichKey
+    -- this is mostly relevant for keymaps that start with a native binding
+    i = { 'j', 'k', 'g', 'gjk' },
+    v = { 'j', 'k' },
+  }
+})
+
 wk.register({
   b = {
     name = "Buffers"
@@ -1192,7 +1188,7 @@ wk.register({
   },
   --
   g = {
-    name = "Git",
+    name = "Git"
   },
   --
   m = {
@@ -1213,6 +1209,9 @@ wk.register({
   --
   s = {
     name = "Search"
+  },
+  u = {
+    name = "Vim"
   },
   w = {
     name = "Window"
