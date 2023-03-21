@@ -45,7 +45,7 @@ require('telescope').setup {
     mappings = {
       i = {
         ["jk"] = { "<cmd>startinsert<cr>j<cmd>startinsert<cr>k", type = "command" },
-        ["kj"] = { "<cmd>normal<cr>", type = "command" },
+        ["kj"] = { "<cmd>stopinsert<cr>", type = "command" },
         ["<C-n>"] = actions.cycle_history_next,
         ["<C-p>"] = actions.cycle_history_prev,
 
@@ -60,6 +60,7 @@ require('telescope').setup {
         ["<C-t>"] = actions.select_tab,
 
         -- Absolutely insane, you can refine your search
+        ["<C-e>"] = actions.to_fuzzy_refine, -- in case C-space doesn't work
         ["<C-space>"] = actions.to_fuzzy_refine, -- already set to ctrl + space
         ["?"] = actions.which_key,
 
