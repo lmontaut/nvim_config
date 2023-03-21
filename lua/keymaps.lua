@@ -53,6 +53,11 @@ vim.keymap.set("n", "<leader>wl", "<C-w>l", { desc = "Nav window right", opts.ar
 vim.keymap.set("n", "<leader>wh", "<C-w>h", { desc = "Nav window left", opts.args })
 vim.keymap.set("n", "<leader>wk", "<C-w>k", { desc = "Nav window up", opts.args })
 vim.keymap.set("n", "<leader>wj", "<C-w>j", { desc = "Nav window down", opts.args })
+vim.keymap.set("n", "<leader>wv", "<C-w>v", { desc = "Window vertical split", opts.args })
+vim.keymap.set("n", "<leader>ws", "<C-w>s", { desc = "Window split", opts.args })
+vim.keymap.set("n", "<leader>wL", "<C-w>v", { desc = "Window vertical split", opts.args })
+vim.keymap.set("n", "<leader>wJ", "<C-w>s", { desc = "Window split", opts.args })
+vim.keymap.set("n", "<leader>wJ", ":conly<CR>", { desc = "Quit all other windows", opts.args })
 
 -- Quicklist navigation
 -- Even if the quicklist is not open, you can navigate with :cn and :cp
@@ -63,6 +68,7 @@ vim.keymap.set("n", "<leader>qp", ":cp<CR>zz", { desc = "Quicklist prev", opts.a
 vim.keymap.set("n", "<leader>qo", ":copen 15<CR>", { desc = "Quicklist open", opts.args })
 vim.keymap.set("n", "<leader>qO", ":Copen<CR>", { desc = "Quicklist open (dispatched)", opts.args })
 vim.keymap.set("n", "<leader>qc", ":cclose<CR>", { desc = "Quicklist close", opts.args })
+vim.keymap.set("n", "<leader>qi", ":cclose<CR>", { desc = "Quicklist close", opts.args })
 vim.keymap.set("n", "<leader>qq", ":cc<CR>zz", { desc = "Quicklist show current", opts.args })
 vim.keymap.set("n", "<leader>qN", ":cfirst<CR>", { desc = "Quicklist first", opts.args })
 vim.keymap.set("n", "<leader>qP", ":clast<CR>", { desc = "Quicklist last", opts.args })
