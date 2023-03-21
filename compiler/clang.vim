@@ -1,19 +1,18 @@
 " Vim compiler file
 " Compiler:         Clang Compiler
 
-if exists("current_compiler")
-	finish
-endif
+if exists("current_compiler") | finish | endif
 let current_compiler = "clang"
-
-let s:cpo_save = &cpo
-set cpo&vim
 
 if exists(":CompilerSet") != 2
 	command -nargs=* CompilerSet setlocal <args>
 endif
 
-CompilerSet errorformat=
+let s:cpo_save = &cpo
+set cpo&vim
+
+" Original errorformat, keeping if needed for later
+set errorformat=
       \%*[^\"]\"%f\"%*\\D%l:%c:\ %m,
       \%*[^\"]\"%f\"%*\\D%l:\ %m,
       \\"%f\"%*\\D%l:%c:\ %m,
@@ -32,11 +31,28 @@ CompilerSet errorformat=
       \%X%*\\a[%*\\d]:\ Leaving\ directory\ %*[`']%f',
       \%D%*\\a:\ Entering\ directory\ %*[`']%f',
       \%X%*\\a:\ Leaving\ directory\ %*[`']%f',
-      \%DMaking\ %*\\a\ in\ %f
+      \%DMaking\ %*\\a\ in\ %f,
 
-if exists('g:compiler_gcc_ignore_unmatched_lines')
-  CompilerSet errorformat+=%-G%.%#
-endif
+" Reduced error format:
+" set errorformat=
+" 		\%-G,
+" 		\%-G%f:%l:\ %trror:\ (Each\ undeclared\ identifier\ is\ reported\ only\ once,
+" 		\%-G%f:%l:\ %trror:\ for\ each\ function\ it\ appears\ in.),
+" 		\%f:%l:%c:\ %trror:\ %m,
+" 		\%f:%l:%c:\ %tarning:\ %m,
+" 		\%f:%l:%c:\ %m,
+" 		\%f:%l:\ %trror:\ %m,
+" 		\%f:%l:\ %tarning:\ %m,
+" 		\%-G%.%#
 
-let &cpo = s:cpo_save
-unlet s:cpo_save
+set errorformat+=
+		\%EAssertion\ failed:\ %m,%Z
+		" \%EAssertion\ failed:\ %.%*file\ %m\ %.%*line\ %m\ %m,%Z
+		" \%C\ %#file\ %f,
+		" \%C\ %#line\ %l,
+		" \%E\ \ left:%m,%C\ right:%m\ %f:%l,%Z
+		" \%Eassertion:\ %m,
+		" \%E\ \ left:%m,%C\ right:%m,%Z
+
+silent CompilerSet makeprg
+silent CompilerSet errorformat
