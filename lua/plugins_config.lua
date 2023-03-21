@@ -967,7 +967,10 @@ vim.keymap.set('n', "<F5>", function() require("dap").continue() end, { desc = "
 vim.keymap.set('n', "<leader>dl", function() require("dap").continue() end, { desc = "Launch/continue", dapopts.args })
 vim.keymap.set('n', "<leader>dL", function() require("dap").reverse_continue() end, { desc = "Reverse continue", dapopts.args })
 --
-vim.keymap.set('n', "<leader>dq", function() require("dap").disconnect() end, { desc = "Disconnect/quit", dapopts.args })
+vim.keymap.set('n', "<leader>dq", function()
+  require("dap").disconnect()
+  vim.cmd("stopinsert")
+end, { desc = "Disconnect/quit", dapopts.args })
 --
 vim.keymap.set('n', "<leader>dR", function() require("dap").restart() end, { desc = "Restart", dapopts.args })
 --
