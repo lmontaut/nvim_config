@@ -60,7 +60,7 @@ require('telescope').setup {
         ["<C-t>"] = actions.select_tab,
 
         -- Absolutely insane, you can refine your search
-        -- ["<C-e>"] = actions.to_fuzzy_refine, -- already set to ctrl + space
+        ["<C-space>"] = actions.to_fuzzy_refine, -- already set to ctrl + space
         ["?"] = actions.which_key,
 
         ["<C-u>"] = actions.preview_scrolling_up,
