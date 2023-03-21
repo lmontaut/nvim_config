@@ -1144,6 +1144,14 @@ require("cmp").setup.filetype({ "dap-repl", "dapui_watches", "dapui_hover" }, {
   },
 })
 
+vim.api.nvim_create_autocmd("BufEnter", {
+    pattern = "*",
+    callback = function()
+      if vim.api.nvim_buf_get_option(0, "buftype") == "prompt" then
+        vim.api.nvim_buf_set_keymap(0, 'i', "<C-w>", "<cmd>norm ciw<cr>", { silent = true, noremap = true })
+      end
+    end,
+})
 
 ------------------------
 -- [[ Configure netrw ]]
