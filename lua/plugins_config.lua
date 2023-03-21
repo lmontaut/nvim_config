@@ -1210,7 +1210,7 @@ wk.register({
   s = {
     name = "Search"
   },
-  u = {
+  v = {
     name = "Vim"
   },
   w = {
