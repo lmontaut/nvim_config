@@ -110,6 +110,9 @@ require('packer').startup(function(use)
     requires = { "mfussenegger/nvim-dap", "rcarriga/cmp-dap" }
   }
 
+  -- Just files syntax highlighting
+  use {'NoahTheDuke/vim-just' }
+
   -- Add custom plugins to packer from ~/.config/nvim/lua/custom/plugins.lua
   local has_plugins, plugins = pcall(require, 'custom.plugins')
   if has_plugins then
