@@ -61,7 +61,7 @@ require('telescope').setup {
 
         -- Absolutely insane, you can refine your search
         ["<C-e>"] = actions.to_fuzzy_refine, -- in case C-space doesn't work
-        ["<C-space>"] = actions.to_fuzzy_refine, -- already set to ctrl + space
+        -- ["<C-space>"] = actions.to_fuzzy_refine, -- already set to ctrl + space
         ["?"] = actions.which_key,
 
         ["<C-u>"] = actions.preview_scrolling_up,
@@ -94,6 +94,9 @@ require('telescope').setup {
       theme = "ivy",
     },
     lsp_document_symbols = {
+      theme = "ivy",
+    },
+    lsp_dynamic_workspace_symbols = {
       theme = "ivy",
     },
     lsp_definitions = {
@@ -300,7 +303,8 @@ end
 --  the `settings` field of the server config. You must look up that documentation yourself.
 local pythonpath = os.getenv("CONDA_PREFIX") .. "/bin/python"
 local servers = {
-  clangd = {},
+  -- clangd = {},
+  -- ccls = {},
   lua_ls = {},
   cmake = {},
   rust_analyzer = {},
