@@ -862,6 +862,7 @@ vim.keymap.set('n', "<leader>u", vim.cmd.UndotreeToggle, { desc = "Undo history"
 local pap = require("pap")
 vim.api.nvim_create_user_command('Papcmd', function(command) pap.set_cmd(command.args) end, { nargs = "*" })
 vim.api.nvim_create_user_command('Pap', function(command) pap.run_cmd(command.args, false) end, { nargs = "*" })
+vim.api.nvim_create_user_command('Papsize', function(command) pap.set_window_size(command.args) end, { nargs = "*" })
 vim.api.nvim_create_user_command('Paprun', function(command) pap.run_cmd_base(command.args, false) end, { nargs = "*" })
 vim.api.nvim_create_user_command('Par', function(command) pap.run_cmd_base(command.args, false) end, { nargs = "*" })
 vim.api.nvim_create_user_command('Papa', function(command) pap.run_cmd_base(command.args, false) end, { nargs = "*" })
