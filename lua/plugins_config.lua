@@ -603,7 +603,7 @@ require("project_nvim").setup {
 
 -- Telescope integration
 require('telescope').load_extension('projects')
-vim.keymap.set('n', '<leader>p', "<CMD>Telescope projects<CR>", { desc = 'Open project...' })
+vim.keymap.set('n', '<leader>sp', "<CMD>Telescope projects<CR>", { desc = 'Open project...' })
 vim.keymap.set('n', '<leader>r', "<CMD>Telescope resume<CR>", { desc = 'Telescope resume' })
 
 --------------------------------
@@ -871,6 +871,10 @@ vim.api.nvim_create_user_command('Paprun', function(command) pap.run_custom_cmd(
 vim.api.nvim_create_user_command('Par', function(command) pap.run_custom_cmd(command.args, false) end, { nargs = "*" })
 vim.api.nvim_create_user_command('Papa', function(command) pap.run_custom_cmd(command.args, false) end, { nargs = "*" })
 vim.keymap.set("n", "<leader>qe", ":cg<Space>~/.cache/nvim/out.txt<CR>:cc<CR>", { noremap = true, silent = true, desc = "Load error file into quickfix" })
+vim.keymap.set("n", "<leader>ps", ":Papsize<CR>", { noremap = true, silent = true, desc = "Set pap window size" })
+vim.keymap.set("n", "<leader>pr", ":Paprun<CR>",  { noremap = true, silent = true, desc = "Paprun (any cmd)" })
+vim.keymap.set("n", "<leader>pc", ":Papcmd<CR>",  { noremap = true, silent = true, desc = "Set pap default cmd" })
+vim.keymap.set("n", "<leader>pp", ":Pap<space>",  { noremap = true, silent = false, desc = "Pap (prefix default cmd)" })
 
 -------------------------
 -- [[ Configure DAP ]] --
