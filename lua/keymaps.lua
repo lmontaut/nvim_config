@@ -219,6 +219,6 @@ vim.api.nvim_create_autocmd({ 'TermOpen' }, {
     command = 'startinsert',
 })
 
-vim.cmd[[
-  autocmd TermOpen * nnoremap <silent> <buffer> q :close<CR>
-]]
+-- vim.cmd[[
+--   autocmd TermOpen * nnoremap <silent> <buffer> q :close<CR>
+-- ]]
