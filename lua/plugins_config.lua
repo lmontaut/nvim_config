@@ -1188,7 +1188,9 @@ require('neorg').setup {
   load = {
     ["core.defaults"] = {}, -- Loads default behaviour
     ["core.norg.concealer"] = {
-
+      config = {
+        folds = false
+      }
     }, -- Adds pretty icons to your documents
     ["core.norg.dirman"] = { -- Manages Neorg workspaces
       config = {
