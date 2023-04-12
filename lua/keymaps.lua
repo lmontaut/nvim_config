@@ -158,6 +158,9 @@ vim.keymap.set("n", "<leader>[", ":tabprevious<CR>", { desc = "Tab previous", op
 vim.keymap.set("n", "<leader>qj", ":lnext<CR>", { desc = "Location next", opts.args })
 vim.keymap.set("n", "<leader>qk", ":lprevious<CR>", { desc = "Location previous", opts.args })
 
+-- Set (local) folding
+vim.keymap.set("n", "<leader>z", ":setlocal foldmethod=indent<CR>" , { desc = "Fold w.r.t indent", opts.args })
+
 -----------------------
 -- -- INSERT MODE -- --
 -----------------------

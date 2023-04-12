@@ -1181,6 +1181,26 @@ vim.cmd[[
   let g:netrw_localcopydircmd = 'cp -r'
 ]]
 
+---------------------------
+-- [[ Configure neorg ]] --
+---------------------------
+require('neorg').setup {
+    load = {
+        ["core.defaults"] = {}, -- Loads default behaviour
+        ["core.norg.concealer"] = {}, -- Adds pretty icons to your documents
+        ["core.norg.dirman"] = { -- Manages Neorg workspaces
+            config = {
+                workspaces = {
+                    notes = "~/notes",
+                    research = "~/notes/research",
+                    programming = "~/notes/programming",
+                    perso = "~/notes/perso",
+                },
+            },
+        },
+    },
+}
+
 -------------------------------
 -- [[ Configure Which-key ]] --
 -------------------------------
