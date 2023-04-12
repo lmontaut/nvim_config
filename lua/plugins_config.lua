@@ -1225,7 +1225,7 @@ wk.register({
   },
   --
   p = {
-    name = "Projects"
+    name = "Pap"
   },
   --
   q = {
