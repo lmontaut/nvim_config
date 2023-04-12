@@ -1200,6 +1200,7 @@ require('neorg').setup {
         },
     },
 }
+vim.keymap.set("n", "<leader>nw", ":Neorg workspace<space>", { noremap = true, silent = false, desc = "Neorg workspace" })
 
 -------------------------------
 -- [[ Configure Which-key ]] --
@@ -1230,6 +1231,10 @@ wk.register({
   --
   l = {
     name = "LSP"
+  },
+  --
+  n = {
+    name = "Neorg"
   },
   --
   g = {
