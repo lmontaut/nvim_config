@@ -82,19 +82,19 @@ vim.keymap.set("n", "<leader>qP", ":clast<CR>", { desc = "Quicklist last", opts.
 
 -- Make
 -- vim.keymap.set("n", "<leader>mm", function() return ":make<Space>" end, { noremap = true, silent = false, desc = "make", expr = true })
-vim.keymap.set("n", "<leader>mm", ":make!<Space>", { noremap = true, silent = false, desc = "make! (+enter command)" })
-vim.keymap.set("n", "<leader>m<CR>", ":make<CR>", { desc = "make<CR>", opts.args })
-vim.keymap.set("n", "<leader>m!<CR>", ":make!<CR>", { desc = "make!<CR>", opts.args })
-vim.keymap.set("n", "<leader>mM", ":Make<Space>", { noremap = true, silent = false, desc = "Make (+enter command)" })
-vim.keymap.set("n", "<leader>M<CR>", ":Make<CR>", { noremap = true, silent = false, desc = "Make<CR>" })
-vim.keymap.set("n", "<leader>M!", ":Make!<CR>", { noremap = true, silent = false, desc = "Make!<CR>" })
-vim.keymap.set("n", "<leader>ms", ":setlocal<Space>makeprg=", { noremap = true, silent = false, desc = "Set makeprg localy" })
-vim.keymap.set("n", "<leader>mS", ":set<Space>makeprg=", { noremap = true, silent = false, desc = "Set makeprg globaly" })
-vim.keymap.set("n", "<leader>mb", ":set<Space>makeprg=make\\ -C\\ build\\ -j10", { noremap = true, silent = false, desc = "Set makeprg to make -C build" })
+-- vim.keymap.set("n", "<leader>mm", ":make!<Space>", { noremap = true, silent = false, desc = "make! (+enter command)" })
+-- vim.keymap.set("n", "<leader>m<CR>", ":make<CR>", { desc = "make<CR>", opts.args })
+-- vim.keymap.set("n", "<leader>m!<CR>", ":make!<CR>", { desc = "make!<CR>", opts.args })
+-- vim.keymap.set("n", "<leader>mM", ":Make<Space>", { noremap = true, silent = false, desc = "Make (+enter command)" })
+-- vim.keymap.set("n", "<leader>M<CR>", ":Make<CR>", { noremap = true, silent = false, desc = "Make<CR>" })
+-- vim.keymap.set("n", "<leader>M!", ":Make!<CR>", { noremap = true, silent = false, desc = "Make!<CR>" })
+-- vim.keymap.set("n", "<leader>ms", ":setlocal<Space>makeprg=", { noremap = true, silent = false, desc = "Set makeprg localy" })
+-- vim.keymap.set("n", "<leader>mS", ":set<Space>makeprg=", { noremap = true, silent = false, desc = "Set makeprg globaly" })
+-- vim.keymap.set("n", "<leader>mb", ":set<Space>makeprg=make\\ -C\\ build\\ -j10", { noremap = true, silent = false, desc = "Set makeprg to make -C build" })
 -- Example: `:setlocal makeprg=python \%` or `:setlocal makeprg=make` or `:setlocal makeprg=clang++ \-Wall \-Wextra % -o %<`
-vim.keymap.set("n", "<leader>ml", ":let<Space>&makeprg='", { noremap = true, silent = false, desc = "Let makeprg" })
-vim.keymap.set("n", "<leader>mc", ":setlocal<Space>makeprg=clang++\\ -Wall\\ -Wextra\\ %\\ -o\\ %<", { noremap = true, silent = false, desc = "Set makeprg clang" })
-vim.keymap.set("n", "<leader>mt", ":Make!<Space>test", { noremap = true, silent = false, desc = "Make! test" })
+-- vim.keymap.set("n", "<leader>ml", ":let<Space>&makeprg='", { noremap = true, silent = false, desc = "Let makeprg" })
+-- vim.keymap.set("n", "<leader>mc", ":setlocal<Space>makeprg=clang++\\ -Wall\\ -Wextra\\ %\\ -o\\ %<", { noremap = true, silent = false, desc = "Set makeprg clang" })
+-- vim.keymap.set("n", "<leader>mt", ":Make!<Space>test", { noremap = true, silent = false, desc = "Make! test" })
 
 -- File exploration
 vim.keymap.set("n", "<leader>2", ":Explore<CR>", { desc = "Explore", opts.args })

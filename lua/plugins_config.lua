@@ -1216,10 +1216,6 @@ wk.register({
     name = "Git"
   },
   --
-  m = {
-    name = "Make"
-  },
-  --
   P = {
     name = "Packer"
   },
