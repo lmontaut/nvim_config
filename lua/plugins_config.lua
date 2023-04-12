@@ -287,7 +287,7 @@ local on_attach = function(_, bufnr)
   -- nmap('<leader>wa', vim.lsp.buf.add_workspace_folder, '[W]orkspace [A]dd Folder')
   -- nmap('<leader>wr', vim.lsp.buf.remove_workspace_folder, '[W]orkspace [R]emove Folder')
   -- nmap('<leader>wl', function()
-    -- print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+  -- print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
   -- end, '[W]orkspace [L]ist Folders')
 
   -- Create a command `:Format` local to the LSP buffer
@@ -929,11 +929,11 @@ dap.configurations.cpp = {
     request = 'launch',
     program = function()
       return vim.fn.input({
-      prompt = "[Path to executable] > ",
-      default = vim.fn.getcwd() .. '/',
-      completion = "file",
-      cancelreturn = ""
-    })
+        prompt = "[Path to executable] > ",
+        default = vim.fn.getcwd() .. '/',
+        completion = "file",
+        cancelreturn = ""
+      })
     end,
     cwd = '${workspaceFolder}',
     stopOnEntry = false,
@@ -1084,20 +1084,20 @@ require("dapui").setup({
   },
   layouts = {
     { elements = {
-        { id = "scopes", size = 0.8 }, -- Variables of the program
-        { id = "console", size = 0.2 },
-        -- { id = "stacks", size = 0.4 },
-        -- { id = "breakpoints", size = 0.25 },
-      },
+      { id = "scopes", size = 0.8 }, -- Variables of the program
+      { id = "console", size = 0.2 },
+      -- { id = "stacks", size = 0.4 },
+      -- { id = "breakpoints", size = 0.25 },
+    },
       position = "right",
       size = 60
     },
     { elements = {
-        -- { id = "console", size = 0.5 },
-        { id = "stacks", size = 0.4 },
-        { id = "watches", size = 0.6 }, -- Keep track of expressions
-        -- { id = "repl", size = 0.35 }
-      },
+      -- { id = "console", size = 0.5 },
+      { id = "stacks", size = 0.4 },
+      { id = "watches", size = 0.6 }, -- Keep track of expressions
+      -- { id = "repl", size = 0.35 }
+    },
       position = "bottom",
       size = 15
     }
@@ -1147,7 +1147,7 @@ end, { desc = "Toggle DAP UI", dapopts.args })
 require("cmp").setup({
   enabled = function()
     return vim.api.nvim_buf_get_option(0, "buftype") ~= "prompt"
-        or require("cmp_dap").is_dap_buffer()
+      or require("cmp_dap").is_dap_buffer()
   end
 })
 
@@ -1158,12 +1158,12 @@ require("cmp").setup.filetype({ "dap-repl", "dapui_watches", "dapui_hover" }, {
 })
 
 vim.api.nvim_create_autocmd("BufEnter", {
-    pattern = "*",
-    callback = function()
-      if vim.api.nvim_buf_get_option(0, "buftype") == "prompt" then
-        vim.api.nvim_buf_set_keymap(0, 'i', "<C-w>", "<cmd>norm ciw<cr>", { silent = true, noremap = true })
-      end
-    end,
+  pattern = "*",
+  callback = function()
+    if vim.api.nvim_buf_get_option(0, "buftype") == "prompt" then
+      vim.api.nvim_buf_set_keymap(0, 'i', "<C-w>", "<cmd>norm ciw<cr>", { silent = true, noremap = true })
+    end
+  end,
 })
 
 ---------------------------
@@ -1185,20 +1185,22 @@ vim.cmd[[
 -- [[ Configure neorg ]] --
 ---------------------------
 require('neorg').setup {
-    load = {
-        ["core.defaults"] = {}, -- Loads default behaviour
-        ["core.norg.concealer"] = {}, -- Adds pretty icons to your documents
-        ["core.norg.dirman"] = { -- Manages Neorg workspaces
-            config = {
-                workspaces = {
-                    notes = "~/notes",
-                    research = "~/notes/research",
-                    programming = "~/notes/programming",
-                    perso = "~/notes/perso",
-                },
-            },
+  load = {
+    ["core.defaults"] = {}, -- Loads default behaviour
+    ["core.norg.concealer"] = {
+
+    }, -- Adds pretty icons to your documents
+    ["core.norg.dirman"] = { -- Manages Neorg workspaces
+      config = {
+        workspaces = {
+          notes = "~/notes",
+          research = "~/notes/research",
+          programming = "~/notes/programming",
+          perso = "~/notes/perso",
         },
+      },
     },
+  },
 }
 vim.keymap.set("n", "<leader>nw", ":Neorg workspace<space>", { noremap = true, silent = false, desc = "Neorg workspace" })
 
