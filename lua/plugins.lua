@@ -118,8 +118,8 @@ require('packer').startup(function(use)
 
   -- Neorg
   use { "nvim-neorg/neorg",
-      run = ":Neorg sync-parsers",
-      requires = "nvim-lua/plenary.nvim",
+    run = ":Neorg sync-parsers",
+    requires = "nvim-lua/plenary.nvim",
   }
 
   -- Add custom plugins to packer from ~/.config/nvim/lua/custom/plugins.lua
