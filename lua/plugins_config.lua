@@ -1189,22 +1189,38 @@ require('neorg').setup {
     ["core.defaults"] = {}, -- Loads default behaviour
     ["core.norg.concealer"] = {
       config = {
-        folds = false
+        folds = false,
+        icon_preset = "diamond",
+        icons = {
+          todo = {
+            undone = { icon = "◌" },
+            pending = { icon = "◔" },
+            done = { icon = "✓" },
+            on_hold = { icon = "◫" },
+            urgent = { icon = "" },
+            cancelled = { icon = "✕" },
+          },
+        }
       }
     }, -- Adds pretty icons to your documents
     ["core.norg.dirman"] = { -- Manages Neorg workspaces
       config = {
         workspaces = {
-          notes = "~/notes",
           research = "~/notes/research",
-          programming = "~/notes/programming",
           perso = "~/notes/perso",
         },
+        default_workspace = "research"
       },
     },
   },
 }
-vim.keymap.set("n", "<leader>nw", ":Neorg workspace<space>", { noremap = true, silent = false, desc = "Neorg workspace" })
+vim.keymap.set("n", "<leader>nw", ":Neorg workspace<space>", { noremap = true, silent = false, desc = "Set neorg workspace" })
+vim.keymap.set("n", "<leader>ni", ":Neorg index<CR>", { noremap = true, silent = true, desc = "Go to workspace index" })
+vim.keymap.set("n", "<leader>nr", ":Neorg return<CR>", { noremap = true, silent = true, desc = "Return to code" })
+vim.keymap.set("n", "<leader>nj", ":Neorg journal today<CR>", { noremap = true, silent = true, desc = "Journal today" })
+vim.keymap.set("n", "<leader>nJj", ":Neorg journal today<CR>", { noremap = true, silent = true, desc = "Journal today" })
+vim.keymap.set("n", "<leader>nJt", ":Neorg journal tomorrow<CR>", { noremap = true, silent = true, desc = "Journal tomorrow" })
+vim.keymap.set("n", "<leader>nJy", ":Neorg journal yesterday<CR>", { noremap = true, silent = true, desc = "Journal yesterday" })
 
 -------------------------------
 -- [[ Configure Which-key ]] --
@@ -1238,7 +1254,10 @@ wk.register({
   },
   --
   n = {
-    name = "Neorg"
+    name = "Neorg",
+    j = {
+      name = "Journal"
+    }
   },
   --
   g = {
