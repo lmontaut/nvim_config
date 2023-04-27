@@ -1187,7 +1187,7 @@ vim.cmd[[
 require('neorg').setup {
   load = {
     ["core.defaults"] = {}, -- Loads default behaviour
-    ["core.norg.concealer"] = {
+    ["core.concealer"] = {
       config = {
         folds = false,
         icon_preset = "diamond",
@@ -1200,16 +1200,17 @@ require('neorg').setup {
             urgent = { icon = "" },
             cancelled = { icon = "✕" },
           },
+        },
+        dim_code_blocks = {
+          conceal = false,
         }
       }
     }, -- Adds pretty icons to your documents
-    ["core.norg.dirman"] = { -- Manages Neorg workspaces
+    ["core.dirman"] = { -- Manages Neorg workspaces
       config = {
         workspaces = {
-          research = "~/notes/research",
-          perso = "~/notes/perso",
+          research = "~/notes",
         },
-        default_workspace = "research"
       },
     },
   },

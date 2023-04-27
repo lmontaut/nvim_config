@@ -33,7 +33,9 @@ vim.o.updatetime = 500
 vim.o.timeoutlen = 500
 vim.o.smartindent = true
 vim.wo.signcolumn = 'yes'
-vim.o.showbreak = ">>"
+vim.o.showbreak = "  "
+vim.o.linebreak = true -- so that wrapping does not occur in middle of word
+vim.o.nolist = true -- same as above
 
 -- Modify jumplist behavior -> much better
 vim.cmd [[
@@ -68,7 +70,7 @@ vim.o.clipboard = "unnamedplus"
 -- Maximum height of the completion window
 vim.o.pumheight = 15
 
-vim.o.conceallevel = 2
+vim.o.conceallevel = 1
 
 -- Indent default
 vim.o.expandtab = true
