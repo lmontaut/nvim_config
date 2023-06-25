@@ -391,6 +391,35 @@ mason_lspconfig.setup_handlers {
   end,
 }
 
+local pid = vim.fn.getpid()
+local omnisharp_bin = "/Users/louis/code/misc/omnisharp-osx/run"
+require'lspconfig'.omnisharp.setup {
+    cmd = { omnisharp_bin, "--languageserver" , "--hostPID", tostring(pid) };
+    on_attach = function(client)
+        require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+    end
+}
+
+vim.api.nvim_create_autocmd("LspAttach", {
+  callback = function(ev)
+    local client = vim.lsp.get_client_by_id(ev.data.client_id)
+    local function toSnakeCase(str)
+      return string.gsub(str, "%s*[- ]%s*", "_")
+    end
+
+    if client.name == 'omnisharp' then
+      local tokenModifiers = client.server_capabilities.semanticTokensProvider.legend.tokenModifiers
+      for i, v in ipairs(tokenModifiers) do
+        tokenModifiers[i] = toSnakeCase(v)
+      end
+      local tokenTypes = client.server_capabilities.semanticTokensProvider.legend.tokenTypes
+      for i, v in ipairs(tokenTypes) do
+        tokenTypes[i] = toSnakeCase(v)
+      end
+    end
+  end,
+})
+
 ----------------------------
 -- [[ Configure fidget ]] --
 ----------------------------
@@ -917,7 +946,7 @@ vim.fn.sign_define("DapBreakpointRejected", dap_breakpoint.rejected)
 local dap = require('dap')
 dap.adapters.lldb = {
   type = "executable",
-  command = "/opt/homebrew/Cellar/llvm/15.0.7_1/bin/lldb-vscode", -- Adjust depdending on llvm version
+  command = "/opt/homebrew/Cellar/llvm/16.0.2/bin/lldb-vscode", -- Adjust depdending on llvm version
   name = "lldb"
 }
 
@@ -1185,6 +1214,7 @@ vim.cmd[[
   let g:netrw_liststyle = 1
   let g:netrw_keepdir = 0
   let g:netrw_localcopydircmd = 'cp -r'
+  let g:netrw_dynamic_maxfilenamelen = 1
 ]]
 
 ---------------------------
