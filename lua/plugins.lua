@@ -105,7 +105,7 @@ require('packer').startup(function(use)
   use { "mbbill/undotree" }
 
   -- My Pap
-  use { "~/code/nvim/nvim-pap" }
+  use { "~/software/misc/nvim/nvim-pap" }
 
   -- Debugger
   use { "mfussenegger/nvim-dap",
