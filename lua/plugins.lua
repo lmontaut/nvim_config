@@ -42,6 +42,9 @@ require('packer').startup(function(use)
     'hrsh7th/cmp-buffer', 'hrsh7th/cmp-path', 'hrsh7th/cmp-cmdline' },
   }
 
+  -- Cycle overloads
+  use { 'Issafalcon/lsp-overloads.nvim' }
+
   use { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
     run = function()

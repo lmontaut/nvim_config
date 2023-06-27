@@ -240,10 +240,23 @@ vim.keymap.set('n', "gl", vim.diagnostic.open_float, { desc = 'LSP: Open diagnos
 -- [[ Configure LSP ]] --
 -------------------------
 --  This function gets run when an LSP connects to a particular buffer.
-local on_attach = function(_, bufnr)
+local on_attach = function(client, bufnr)
   -- NOTE: Remember that lua is a real programming language, and as such it is possible
   -- to define small helper and utility functions so you don't have to repeat yourself
   -- many times.
+  if client.server_capabilities.signatureHelpProvider then
+    require('lsp-overloads').setup(client, {
+        keymaps = {
+          next_signature = "<C-j>",
+          previous_signature = "<C-k>",
+          next_parameter = "<C-l>",
+          previous_parameter = "<C-h>",
+          close_signature = "<C-s>"
+        },
+    })
+    vim.api.nvim_set_keymap("n", "<C-s>", ":LspOverloadsSignature<CR>", { noremap = true, silent = true })
+    vim.api.nvim_set_keymap("i", "<C-s>", "<cmd>LspOverloadsSignature<CR>", { noremap = true, silent = true })
+  end
   --
   -- In this case, we create a function that lets us more easily define mappings specific
   -- for LSP related items. It sets the mode, buffer and description for us each time.
