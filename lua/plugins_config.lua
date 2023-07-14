@@ -405,7 +405,7 @@ mason_lspconfig.setup_handlers {
 }
 
 local pid = vim.fn.getpid()
-local omnisharp_bin = "/Users/louis/code/misc/omnisharp-osx/run"
+local omnisharp_bin = "/Users/louis/software/misc/omnisharp-osx/run"
 
 require'lspconfig'.omnisharp.setup {
     cmd = { omnisharp_bin, "--languageserver" , "--hostPID", tostring(pid) };
@@ -994,7 +994,7 @@ vim.fn.sign_define("DapBreakpointRejected", dap_breakpoint.rejected)
 local dap = require('dap')
 dap.adapters.lldb = {
   type = "executable",
-  command = "/opt/homebrew/Cellar/llvm/16.0.2/bin/lldb-vscode", -- Adjust depdending on llvm version
+  command = "/opt/homebrew/Cellar/llvm/16.0.6/bin/lldb-vscode", -- Adjust depdending on llvm version
   name = "lldb"
 }
 
