@@ -97,8 +97,11 @@ vim.keymap.set("n", "<leader>qP", ":clast<CR>", { desc = "Quicklist last", opts.
 -- vim.keymap.set("n", "<leader>mt", ":Make!<Space>test", { noremap = true, silent = false, desc = "Make! test" })
 
 -- File exploration
-vim.keymap.set("n", "<leader>2", ":Explore<CR>", { desc = "Explore", opts.args })
-vim.keymap.set("n", "<leader>3", ":Rexplore<CR>", { desc = "Rexplore", opts.args })
+-- vim.keymap.set("n", "<leader>2", ":Explore<CR>", { desc = "Explore", opts.args })
+-- vim.keymap.set("n", "<leader>2", ":Fern . -reveal=%<CR>", { desc = "Rexplore", opts.args })
+-- vim.keymap.set("n", "<leader>3", ":Rexplore<CR>", { desc = "Rexplore", opts.args })
+-- vim.keymap.set("n", "<leader>3", "gq", { desc = "Rexplore", noremap = false, silent = true })
+
 
 -- Wrap/unwrap
 vim.keymap.set("n", "<leader>vw", ":setlocal wrap<CR>", { desc = "Wrap text", opts.args })

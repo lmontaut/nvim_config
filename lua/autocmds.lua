@@ -27,12 +27,13 @@ vim.cmd [[
   autocmd FileType python setlocal expandtab shiftwidth=4 softtabstop=4
 ]]
 
-vim.cmd [[
-  augroup InitNetrw
-      autocmd!
-      autocmd VimEnter * if argc() == 0 | Explore! | endif
-  augroup END
-]]
+-- vim.cmd [[
+  -- augroup InitNetrw
+  --     autocmd!
+  --     autocmd VimEnter * if argc() == 0 | Explore! | endif
+  -- augroup END
+  -- let g:dirvish_relative_paths = 1
+-- ]]
 
 -- No smart indent in python please
 vim.cmd [[
