@@ -114,6 +114,9 @@ require('packer').startup(function(use)
     requires = { "nvim-telescope/telescope-dap.nvim" },
   }
 
+  -- Align stuff
+  use { "godlygeek/tabular" }
+
   -- Dap-ui
   use { "rcarriga/nvim-dap-ui",
     requires = { "mfussenegger/nvim-dap", "rcarriga/cmp-dap" }
