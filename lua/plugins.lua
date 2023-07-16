@@ -131,6 +131,12 @@ require('packer').startup(function(use)
     requires = "nvim-lua/plenary.nvim",
   }
 
+  -- Obsidian
+  use { "epwalsh/obsidian.nvim" }
+
+  -- Mardown preview
+  use({ "iamcco/markdown-preview.nvim", run = "cd app && npm install", setup = function() vim.g.mkdp_filetypes = { "markdown" } end, ft = { "markdown" }, })
+
   -- C# dev
   -- use { 'OmniSharp/omnisharp-vim' }
   -- use { "Decodetalkers/csharpls-extended-lsp.nvim" }

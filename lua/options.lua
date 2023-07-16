@@ -70,7 +70,7 @@ vim.o.clipboard = "unnamedplus"
 -- Maximum height of the completion window
 vim.o.pumheight = 15
 
-vim.o.conceallevel = 1
+-- vim.o.conceallevel = 1
 
 -- Indent default
 vim.o.expandtab = true

@@ -1307,6 +1307,13 @@ vim.keymap.set("n", "<leader>nJj", ":Neorg journal today<CR>", { noremap = true,
 vim.keymap.set("n", "<leader>nJt", ":Neorg journal tomorrow<CR>", { noremap = true, silent = true, desc = "Journal tomorrow" })
 vim.keymap.set("n", "<leader>nJy", ":Neorg journal yesterday<CR>", { noremap = true, silent = true, desc = "Journal yesterday" })
 
+-----------------------------------
+-- [[ Configure obsidian.nvim ]] --
+-----------------------------------
+require("obsidian").setup({
+  dir = "~/louis_notes",
+})
+
 -------------------------------
 -- [[ Configure Which-key ]] --
 -------------------------------

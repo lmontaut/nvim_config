@@ -28,12 +28,18 @@ vim.cmd [[
 ]]
 
 -- vim.cmd [[
-  -- augroup InitNetrw
-  --     autocmd!
-  --     autocmd VimEnter * if argc() == 0 | Explore! | endif
-  -- augroup END
-  -- let g:dirvish_relative_paths = 1
+--   augroup InitNetrw
+--   augroup InitDirvish
+--       autocmd!
+--       autocmd VimEnter * if argc() == 0 | Dirvish | endif
+--   augroup END
+--   let g:dirvish_relative_paths = 1
 -- ]]
+
+vim.cmd[[
+  let g:loaded_netrwPlugin = 1
+]]
+vim.api.nvim_create_autocmd("VimEnter", { command = "Dirvish" })
 
 -- No smart indent in python please
 vim.cmd [[
