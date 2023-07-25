@@ -39,7 +39,7 @@ vim.cmd [[
 vim.cmd[[
   let g:loaded_netrwPlugin = 1
 ]]
-vim.api.nvim_create_autocmd("VimEnter", { command = "Dirvish" })
+vim.api.nvim_create_autocmd("VimEnter * if argc() == 0", { command = "Dirvish" })
 
 -- No smart indent in python please
 vim.cmd [[
