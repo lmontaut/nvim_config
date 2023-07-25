@@ -40,7 +40,19 @@ require('gitsigns').setup {
 -------------------------------
 -- See `:help telescope` and `:help telescope.setup()`
 local actions = require "telescope.actions"
-require('telescope').setup {
+local telescope = require("telescope")
+local telescopeConfig = require("telescope.config")
+
+-- Clone the default Telescope configuration
+local vimgrep_arguments = { unpack(telescopeConfig.values.vimgrep_arguments) }
+-- I want to search in hidden/dot files.
+table.insert(vimgrep_arguments, "--files")
+table.insert(vimgrep_arguments, "--hidden")
+-- I don't want to search in the `.git` directory.
+table.insert(vimgrep_arguments, "--glob")
+table.insert(vimgrep_arguments, "!**/.git/*")
+local action_layout = require("telescope.actions.layout")
+telescope.setup {
   defaults = {
     mappings = {
       i = {
@@ -71,9 +83,20 @@ require('telescope').setup {
         ["<C-]>"] = actions.smart_send_to_qflist,
         ["<C-c>"] = actions.edit_command_line,
         -- ["<M-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
+
+        ["<C-x>"] = actions.delete_buffer + actions.move_to_top,
+        ["<C-i>"] = action_layout.toggle_preview,
+
+        -- Git related
+        ["<C-g>"] = actions.cycle_previewers_prev,
+        ["<C-h>"] = actions.cycle_previewers_next,
+      },
+      n = {
+        ["<C-i>"] = action_layout.toggle_preview,
       },
     },
   },
+  vimgrep_arguments = vimgrep_arguments,
   pickers = {
     buffers = {
       theme = "ivy",
@@ -115,7 +138,9 @@ require('telescope').setup {
       theme = "ivy",
     },
     find_files = { -- Search ALL files, even if not tracked by git
-      find_command = { "rg", "--files", "--hidden", },
+      -- find_command = { "rg", "--files", "--hidden", },
+      -- `hidden = true` will still show the inside of `.git/` as it's not `.gitignore`d.
+			find_command = { "rg", "--files", "--hidden", "--glob", "!**/.git/*" },
       theme = "ivy",
     },
     git_files = {
