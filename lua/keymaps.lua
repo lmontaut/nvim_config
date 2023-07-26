@@ -129,9 +129,9 @@ vim.keymap.set("n", "<leader>1", "<CMD>b#<CR>", { desc = "Last buffer", opts.arg
 
 -- Quit window, except if it is the last one (ie does not quit vim)!
 vim.keymap.set("n", "<C-c>", ":close<CR>", { desc = "Quit window", opts.args })
-
 vim.keymap.set("n", "<C-w>o", "<CMD>only<CR>", { desc = "Quit other windows", opts.args })
 
+-- Command history
 vim.keymap.set("n", "<C-f>", ":<C-f>", { desc = "Command history", opts.args })
 
 -- Buffer close
@@ -166,9 +166,6 @@ vim.keymap.set("n", "<leader>[", ":tabprevious<CR>", { desc = "Tab previous", op
 -- Location list navigation
 vim.keymap.set("n", "<leader>qj", ":lnext<CR>", { desc = "Location next", opts.args })
 vim.keymap.set("n", "<leader>qk", ":lprevious<CR>", { desc = "Location previous", opts.args })
-
--- Set (local) folding
-vim.keymap.set("n", "<leader>z", ":setlocal foldmethod=indent<CR>" , { desc = "Fold w.r.t indent", opts.args })
 
 -----------------------
 -- -- INSERT MODE -- --
