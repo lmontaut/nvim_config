@@ -62,3 +62,9 @@ vim.cmd [[
   autocmd BufEnter *.rs compiler rust
   autocmd BufEnter *.py compiler python
 ]]
+
+-- Saving/Loading folds
+vim.cmd[[
+  autocmd BufWinEnter *.* silent! loadview
+  autocmd BufWinLeave *.* silent! mkview
+]]

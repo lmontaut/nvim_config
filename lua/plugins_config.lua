@@ -277,8 +277,8 @@ if has_treesitter then
   }
 
   -- needs treesitter to be installed
-  vim.opt.foldmethod = "expr"
-  vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
+  -- vim.opt.foldmethod = "expr"
+  -- vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
 end
 
 -------------------------
@@ -396,10 +396,10 @@ local has_cmp_lsp, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
 if has_cmp_lsp then
   capabilities = cmp_nvim_lsp.default_capabilities(capabilities)
 end
-capabilities.textDocument.foldingRange = {
-  dynamicRegistration = false,
-  lineFoldingOnly = true
-}
+-- capabilities.textDocument.foldingRange = {
+--   dynamicRegistration = false,
+--   lineFoldingOnly = true
+-- }
 
 -- Looks of the LSP
 local signs = {
