@@ -9,11 +9,11 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   pattern = '*',
 })
 
-vim.cmd[[
-  highlight ExtraWhitespace ctermbg=red guibg=red
-  au InsertEnter *.vim,*.lua,*.c,*.cpp,*.h,*.hpp,*.hxx,*.txx,*.py,*.txt,*.tex,*.md,*.rs match ExtraWhitespace /\s\+\%#\@<!$/
-  au InsertLeave *.vim,*.lua,*.c,*.cpp,*.h,*.hpp,*.hxx,*.txx,*.py,*.txt,*.tex,*.md,*.rs match ExtraWhitespace /\s\+$/
-]]
+-- vim.cmd[[
+--   highlight ExtraWhitespace ctermbg=red guibg=red
+--   au InsertEnter *.vim,*.lua,*.c,*.cpp,*.h,*.hpp,*.hxx,*.txx,*.py,*.txt,*.tex,*.md,*.rs match ExtraWhitespace /\s\+\%#\@<!$/
+--   au InsertLeave *.vim,*.lua,*.c,*.cpp,*.h,*.hpp,*.hxx,*.txx,*.py,*.txt,*.tex,*.md,*.rs match ExtraWhitespace /\s\+$/
+-- ]]
 
 -- vim undo dir
 vim.cmd [[
