@@ -18,6 +18,12 @@ vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
 -- Available keymaps: | ) ( ] [ "
 vim.keymap.set("n", "<leader>4", ":e %<CR>", { desc = "Vim reload current file", opts.args })
 
+-- Diagnostic keymaps
+vim.keymap.set('n', "<leader>lk", vim.diagnostic.goto_prev, { desc = 'LSP: Previous diagnostic' })
+vim.keymap.set('n', "<leader>lj", vim.diagnostic.goto_next, { desc = 'LSP: Next diagnostic' })
+vim.keymap.set('n', "gl", vim.diagnostic.open_float, { desc = 'LSP: Open diagnostic under cursor' })
+-- vim.keymap.set('n', '<leader>qq', vim.diagnostic.setloclist)
+
 -- Keep cursor middle screen when scrolling and jumping around
 vim.keymap.set("n", "<C-d>", "<C-d>zz", { desc = "Scroll down", opts.args })
 vim.keymap.set("n", "<C-u>", "<C-u>zz", { desc = "Scroll up", opts.args })

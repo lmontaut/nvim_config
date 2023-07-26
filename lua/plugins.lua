@@ -36,28 +36,32 @@ require('packer').startup(function(use)
     },
   }
 
-  use { -- Autocompletion
+  -- Autocompletion
+  use {
     'hrsh7th/nvim-cmp',
     requires = { 'hrsh7th/cmp-nvim-lsp', 'L3MON4D3/LuaSnip', 'saadparwaiz1/cmp_luasnip',
     'hrsh7th/cmp-buffer', 'hrsh7th/cmp-path', 'hrsh7th/cmp-cmdline' },
   }
 
-  -- Cycle overloads
+  -- Cycle functions overloads
   use { 'Issafalcon/lsp-overloads.nvim' }
 
-  use { -- Highlight, edit, and navigate code
+  -- Highlight, edit, and navigate code
+  use {
     'nvim-treesitter/nvim-treesitter',
     run = function()
       pcall(require('nvim-treesitter.install').update { with_sync = true })
     end,
   }
 
+  -- fzf
   use {'junegunn/fzf', run = function()
       vim.fn['fzf#install']()
   end
   }
 
-  use { -- Additional text objects via treesitter
+  -- Additional text objects via treesitter
+  use {
     'nvim-treesitter/nvim-treesitter-textobjects',
     after = 'nvim-treesitter',
   }
@@ -98,7 +102,7 @@ require('packer').startup(function(use)
   use { "ahmedkhalf/project.nvim" }
 
   -- Buffer line
-  use { "akinsho/bufferline.nvim" }
+  -- use { "akinsho/bufferline.nvim" }
 
   -- symbol outline
   use { "simrat39/symbols-outline.nvim" }
@@ -126,10 +130,10 @@ require('packer').startup(function(use)
   use {'NoahTheDuke/vim-just' }
 
   -- Neorg
-  use { "nvim-neorg/neorg",
-    run = ":Neorg sync-parsers",
-    requires = "nvim-lua/plenary.nvim",
-  }
+  -- use { "nvim-neorg/neorg",
+    -- run = ":Neorg sync-parsers",
+    -- requires = "nvim-lua/plenary.nvim",
+  -- }
 
   -- Obsidian
   -- use { "epwalsh/obsidian.nvim" }
@@ -140,6 +144,13 @@ require('packer').startup(function(use)
   -- C# dev
   -- use { 'OmniSharp/omnisharp-vim' }
   -- use { "Decodetalkers/csharpls-extended-lsp.nvim" }
+
+  -- fold-cycle
+  -- use { 'jghauser/fold-cycle.nvim',
+  --   config = function()
+  --     require('fold-cycle').setup()
+  --   end
+  -- }
 
   -- Add custom plugins to packer from ~/.config/nvim/lua/custom/plugins.lua
   local has_plugins, plugins = pcall(require, 'custom.plugins')
