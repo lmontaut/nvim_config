@@ -1048,9 +1048,6 @@ if has_pap then
   vim.keymap.set("n", "<leader>ph", ":PapSetHorizontal<CR>",  { noremap = true, silent = true, desc = "Pap set horizontal mode" })
 
   -- CMake building/compiling
-  -- Do this manually:
-  -- set(CMAKE_INSTALL_PREFIX "CONDA_PREFIX" CACHE STRING "")
-  -- set(CMAKE_SYSTEM_PREFIX_PATH "CONDA_PREFIX" CACHE STRING "")
   vim.keymap.set("n", "<leader>cr", ":!rm build/CMakeCache.txt", { noremap = true, silent = false, desc = "Delete cmake cache" })
   vim.keymap.set("n", "<leader>cbr", ":Paprun cmake -S . -G Ninja -C ~/.config/cmake/release_config.cmake -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX -DCMAKE_SYSTEM_PREFIX_PATH=$CONDA_PREFIX -B build", { noremap = true, silent = false, desc = "Build release" })
   vim.keymap.set("n", "<leader>cbd", ":Paprun cmake -S . -G Ninja -C ~/.config/cmake/debug_config.cmake -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX -DCMAKE_SYSTEM_PREFIX_PATH=$CONDA_PREFIX -B build", { noremap = true, silent = false, desc = "Build debug" })
