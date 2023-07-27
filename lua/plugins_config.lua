@@ -1046,6 +1046,23 @@ if has_pap then
   vim.keymap.set("n", "<leader>pp", ":Pap<space>",  { noremap = true, silent = false, desc = "Pap (prefix default cmd)" })
   vim.keymap.set("n", "<leader>pv", ":PapSetVertical<CR>",  { noremap = true, silent = true, desc = "Pap set vertical mode" })
   vim.keymap.set("n", "<leader>ph", ":PapSetHorizontal<CR>",  { noremap = true, silent = true, desc = "Pap set horizontal mode" })
+
+  -- CMake building/compiling
+  -- Do this manually:
+  -- set(CMAKE_INSTALL_PREFIX "CONDA_PREFIX" CACHE STRING "")
+  -- set(CMAKE_SYSTEM_PREFIX_PATH "CONDA_PREFIX" CACHE STRING "")
+  vim.keymap.set("n", "<leader>cr", ":!rm build/CMakeCache.txt", { noremap = true, silent = false, desc = "Delete cmake cache" })
+  vim.keymap.set("n", "<leader>cbr", ":Paprun cmake -S . -G Ninja -C ~/.config/cmake/release_config.cmake -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX -DCMAKE_SYSTEM_PREFIX_PATH=$CONDA_PREFIX -B build", { noremap = true, silent = false, desc = "Build release" })
+  vim.keymap.set("n", "<leader>cbd", ":Paprun cmake -S . -G Ninja -C ~/.config/cmake/debug_config.cmake -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX -DCMAKE_SYSTEM_PREFIX_PATH=$CONDA_PREFIX -B build", { noremap = true, silent = false, desc = "Build debug" })
+  vim.keymap.set("n", "<leader>cc", ":Paprun cmake --build build --target all -j10", { noremap = true, silent = false, desc = "Compile all" })
+  vim.keymap.set("n", "<leader>ci", ":Paprun cmake --build build --target install -j10", { noremap = true, silent = false, desc = "Install" })
+
+  -- Link compile commands
+  vim.keymap.set("n", "<leader>cl", ":!ln -sf build/compile_commands.json ./", { noremap = true, silent = false, desc = "Link compile_commands.json" })
+
+  -- Ctest
+  vim.keymap.set("n", "<leader>ct", ":Paprun ctest --output-on-failure -j10 --test-dir build", { noremap = true, silent = false, desc = "Run tests" })
+  vim.keymap.set("n", "<leader>cT", ":Paprun ctest --output-on-failure -j10 --test-dir build --rerun-failed", { noremap = true, silent = false, desc = "Rerun failed tests" })
 end
 
 -------------------------
@@ -1448,6 +1465,12 @@ if has_wk then
   wk.register({
     b = {
       name = "Buffers"
+    },
+    c = {
+      name = "CMake",
+      b = {
+        name = "Build",
+      }
     },
     d = {
       name = "Debbuger",
