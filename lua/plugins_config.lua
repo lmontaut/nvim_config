@@ -1049,8 +1049,8 @@ if has_pap then
 
   -- CMake building/compiling
   vim.keymap.set("n", "<leader>cr", ":!rm build/CMakeCache.txt", { noremap = true, silent = false, desc = "Delete cmake cache" })
-  vim.keymap.set("n", "<leader>cbr", ":Paprun cmake -S . -G Ninja -C ~/.config/cmake/release_config.cmake -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX -DCMAKE_SYSTEM_PREFIX_PATH=$CONDA_PREFIX -B build", { noremap = true, silent = false, desc = "Build release" })
-  vim.keymap.set("n", "<leader>cbd", ":Paprun cmake -S . -G Ninja -C ~/.config/cmake/debug_config.cmake -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX -DCMAKE_SYSTEM_PREFIX_PATH=$CONDA_PREFIX -B build", { noremap = true, silent = false, desc = "Build debug" })
+  vim.keymap.set("n", "<leader>cbr", ":Paprun cmake -S . -C ~/.config/cmake/release_config.cmake -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX -DCMAKE_SYSTEM_PREFIX_PATH=$CONDA_PREFIX -B build", { noremap = true, silent = false, desc = "Build release" })
+  vim.keymap.set("n", "<leader>cbd", ":Paprun cmake -S . -C ~/.config/cmake/debug_config.cmake -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX -DCMAKE_SYSTEM_PREFIX_PATH=$CONDA_PREFIX -B build", { noremap = true, silent = false, desc = "Build debug" })
   vim.keymap.set("n", "<leader>cc", ":Paprun cmake --build build --target all -j10", { noremap = true, silent = false, desc = "Compile all" })
   vim.keymap.set("n", "<leader>ci", ":Paprun cmake --build build --target install -j10", { noremap = true, silent = false, desc = "Install" })
 
