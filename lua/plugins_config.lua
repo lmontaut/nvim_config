@@ -23,11 +23,11 @@ end
 -- See `:help indent_blankline.txt`
 local has_indent_blankline, indent_blankline = pcall(require, 'indent_blankline')
 if has_indent_blankline then
-  indent_blankline.setup{
+  indent_blankline.setup({
     char = '┊',
     show_trailing_blankline_indent = true,
     indent_blankline_use_treesitter = true,
-  }
+  })
 end
 
 ------------------------------
@@ -36,7 +36,7 @@ end
 -- See `:help gitsigns.txt`
 local has_gitsigns, gitsigns = pcall(require, 'gitsigns')
 if has_gitsigns then
-  gitsigns.setup{
+  gitsigns.setup({
     signs = {
       add = { text = '+' },
       change = { text = '~' },
@@ -44,7 +44,7 @@ if has_gitsigns then
       topdelete = { text = '‾' },
       changedelete = { text = '~' },
     },
-  }
+  })
 end
 
 -------------------------------
@@ -66,7 +66,7 @@ if has_telescope then
   table.insert(vimgrep_arguments, "--glob")
   table.insert(vimgrep_arguments, "!**/.git/*")
   local action_layout = require("telescope.actions.layout")
-  telescope.setup {
+  telescope.setup({
     defaults = {
       mappings = {
         i = {
@@ -162,7 +162,7 @@ if has_telescope then
         theme = "ivy",
       },
     },
-  }
+  })
 
   -- Enable telescope fzf native, if installed
   pcall(require('telescope').load_extension, 'fzf')
@@ -215,7 +215,7 @@ end
 -- See `:help nvim-treesitter`
 local has_treesitter, treesitter_configs = pcall(require, "nvim-treesitter.configs")
 if has_treesitter then
-  treesitter_configs.setup {
+  treesitter_configs.setup({
     -- Add languages to be installed here that you want installed for treesitter
     ensure_installed = { 'c', 'cpp', 'cmake', 'lua', 'python', 'rust', 'help', 'vim' },
 
@@ -274,7 +274,7 @@ if has_treesitter then
       --   },
       -- },
     },
-  }
+  })
 
   -- needs treesitter to be installed
   -- vim.opt.foldmethod = "expr"
@@ -459,11 +459,11 @@ if has_mason then
   mason_lspconfig.setup_handlers {
     function(server_name)
       if has_lspconfig then
-        lspconfig[server_name].setup {
+        lspconfig[server_name].setup({
           capabilities = capabilities,
           on_attach = on_attach,
           settings = servers[server_name],
-        }
+        })
       end
     end,
   }
@@ -473,7 +473,7 @@ if has_lspconfig then
   local pid = vim.fn.getpid()
   local omnisharp_bin = "/Users/louis/software/misc/omnisharp-osx/run"
 
-  lspconfig.omnisharp.setup {
+  lspconfig.omnisharp.setup({
       cmd = { omnisharp_bin, "--languageserver" , "--hostPID", tostring(pid) };
       on_attach = on_attach;
       capabilities = capabilities;
@@ -512,7 +512,7 @@ if has_lspconfig then
       -- Only run analyzers against open files when 'enableRoslynAnalyzers' is
       -- true
       analyze_open_documents_only = false;
-  }
+  })
 
   vim.api.nvim_create_autocmd("LspAttach", {
     callback = function(ev)
@@ -727,7 +727,7 @@ end
 -----------------------------
 local has_project, project = pcall(require, "project_nvim")
 if has_project then
-  project.setup {
+  project.setup({
     -- Manual mode doesn't automatically change your root directory, so you have
     -- the option to manually do so using `:ProjectRoot` command.
     manual_mode = false,
@@ -752,7 +752,7 @@ if has_project then
     -- When set to false, you will get a message when project.nvim changes your
     -- directory.
     silent_chdir = true,
-  }
+  })
 
   -- Telescope integration
   if has_telescope then
@@ -1379,7 +1379,7 @@ vim.cmd[[
 ---------------------------
 local has_neorg, neorg = pcall(require, "neorg")
 if has_neorg then
-  neorg.setup {
+  neorg.setup({
     load = {
       ["core.defaults"] = {}, -- Loads default behaviour
       ["core.concealer"] = {
@@ -1409,7 +1409,7 @@ if has_neorg then
         },
       },
     },
-  }
+  })
   vim.keymap.set("n", "<leader>nw", ":Neorg workspace<space>", { noremap = true, silent = false, desc = "Set neorg workspace" })
   vim.keymap.set("n", "<leader>ni", ":Neorg index<CR>", { noremap = true, silent = true, desc = "Go to workspace index" })
   vim.keymap.set("n", "<leader>nr", ":Neorg return<CR>", { noremap = true, silent = true, desc = "Return to code" })
