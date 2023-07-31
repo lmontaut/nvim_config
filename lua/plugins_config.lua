@@ -94,7 +94,6 @@ if has_telescope then
           ["<C-d>"] = actions.preview_scrolling_down,
 
           ["<C-q>"] = actions.smart_send_to_qflist + actions.open_qflist,
-          ["<C-]>"] = actions.smart_send_to_qflist,
           ["<C-c>"] = actions.edit_command_line,
           -- ["<M-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
 
@@ -768,8 +767,8 @@ end
 local has_bufferline, bufferline = pcall(require, "bufferline")
 if has_bufferline then
   bufferline.setup()
-  vim.keymap.set('n', '<C-]>', "<CMD>BufferLineCycleNext<CR>", { desc = 'Next buffer' })
-  vim.keymap.set('n', '<C-[>', "<CMD>BufferLineCyclePrev<CR>", { desc = 'Previous buffer' })
+  -- vim.keymap.set('n', '<C-]>', "<CMD>BufferLineCycleNext<CR>", { desc = 'Next buffer' })
+  -- vim.keymap.set('n', '<C-[>', "<CMD>BufferLineCyclePrev<CR>", { desc = 'Previous buffer' })
 end
 
 -----------------------------

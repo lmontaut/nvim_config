@@ -76,8 +76,6 @@ vim.keymap.set("n", "<leader>wK", "<C-w>K", { desc = "Send window far up", opts.
 -- Even if the quicklist is not open, you can navigate with :cn and :cp
 vim.keymap.set("n", "<C-n>", ":cn<CR>zz", { desc = "Quicklist next", opts.args })
 vim.keymap.set("n", "<C-p>", ":cp<CR>zz", { desc = "Quicklist prev", opts.args })
-vim.keymap.set("n", "<leader>ln", ":lnext<CR>zz", { desc = "Location list next", opts.args })
-vim.keymap.set("n", "<leader>lp", ":lprev<CR>zz", { desc = "Location list prev", opts.args })
 vim.keymap.set("n", "<leader>qn", ":cn<CR>zz", { desc = "Quicklist next", opts.args })
 vim.keymap.set("n", "<leader>qp", ":cp<CR>zz", { desc = "Quicklist prev", opts.args })
 vim.keymap.set("n", "<leader>qo", ":copen 15<CR>", { desc = "Quicklist open", opts.args })
@@ -87,6 +85,14 @@ vim.keymap.set("n", "<leader>qi", ":cclose<CR>", { desc = "Quicklist close", opt
 vim.keymap.set("n", "<leader>qq", ":cc<CR>zz", { desc = "Quicklist show current", opts.args })
 vim.keymap.set("n", "<leader>qN", ":cfirst<CR>", { desc = "Quicklist first", opts.args })
 vim.keymap.set("n", "<leader>qP", ":clast<CR>", { desc = "Quicklist last", opts.args })
+
+-- Loclist navigation
+vim.keymap.set("n", "<leader>ln", ":lnext<CR>zz", { desc = "Location list next", opts.args })
+vim.keymap.set("n", "<leader>lp", ":lprev<CR>zz", { desc = "Location list prev", opts.args })
+vim.keymap.set("n", "<leader>lo", ":lopen<CR>", { desc = "Location list open", opts.args })
+vim.keymap.set("n", "<leader>lq", ":lclose<CR>", { desc = "Location list close", opts.args })
+vim.keymap.set("n", "<C-]>", ":lnext<CR>zz", { desc = "Location list next", opts.args })
+vim.keymap.set("n", "<C-[>", ":lprev<CR>zz", { desc = "Location list prev", opts.args })
 
 -- Make
 -- vim.keymap.set("n", "<leader>mm", function() return ":make<Space>" end, { noremap = true, silent = false, desc = "make", expr = true })
