@@ -98,7 +98,7 @@ if has_telescope then
           ["<C-c>"] = actions.edit_command_line,
           -- ["<M-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
 
-          ["<C-x>"] = actions.delete_buffer + actions.move_to_top,
+          ["<C-x>"] = actions.delete_buffer,
           ["<C-i>"] = action_layout.toggle_preview,
 
           -- Git related
@@ -107,6 +107,7 @@ if has_telescope then
         },
         n = {
           ["<C-i>"] = action_layout.toggle_preview,
+          ["<C-q>"] = actions.smart_send_to_loclist + actions.open_loclist,
         },
       },
     },
@@ -1480,7 +1481,7 @@ if has_wk then
     },
     --
     l = {
-      name = "LSP"
+      name = "LSP/Loclist"
     },
     --
     n = {

@@ -76,6 +76,8 @@ vim.keymap.set("n", "<leader>wK", "<C-w>K", { desc = "Send window far up", opts.
 -- Even if the quicklist is not open, you can navigate with :cn and :cp
 vim.keymap.set("n", "<C-n>", ":cn<CR>zz", { desc = "Quicklist next", opts.args })
 vim.keymap.set("n", "<C-p>", ":cp<CR>zz", { desc = "Quicklist prev", opts.args })
+vim.keymap.set("n", "<leader>ln", ":lnext<CR>zz", { desc = "Location list next", opts.args })
+vim.keymap.set("n", "<leader>lp", ":lprev<CR>zz", { desc = "Location list prev", opts.args })
 vim.keymap.set("n", "<leader>qn", ":cn<CR>zz", { desc = "Quicklist next", opts.args })
 vim.keymap.set("n", "<leader>qp", ":cp<CR>zz", { desc = "Quicklist prev", opts.args })
 vim.keymap.set("n", "<leader>qo", ":copen 15<CR>", { desc = "Quicklist open", opts.args })
