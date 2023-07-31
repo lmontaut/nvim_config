@@ -91,8 +91,8 @@ vim.keymap.set("n", "<leader>ln", ":lnext<CR>zz", { desc = "Location list next",
 vim.keymap.set("n", "<leader>lp", ":lprev<CR>zz", { desc = "Location list prev", opts.args })
 vim.keymap.set("n", "<leader>lo", ":lopen<CR>", { desc = "Location list open", opts.args })
 vim.keymap.set("n", "<leader>lq", ":lclose<CR>", { desc = "Location list close", opts.args })
-vim.keymap.set("n", "<C-]>", ":lnext<CR>zz", { desc = "Location list next", opts.args })
-vim.keymap.set("n", "<C-[>", ":lprev<CR>zz", { desc = "Location list prev", opts.args })
+vim.keymap.set("n", "<C-}>", ":lnext<CR>zz", { desc = "Location list next", opts.args })
+vim.keymap.set("n", "<C-{>", ":lprev<CR>zz", { desc = "Location list prev", opts.args })
 
 -- Make
 -- vim.keymap.set("n", "<leader>mm", function() return ":make<Space>" end, { noremap = true, silent = false, desc = "make", expr = true })
