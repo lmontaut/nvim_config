@@ -736,11 +736,11 @@ if has_project then
     -- order matters: if one is not detected, the other is used as fallback. You
     -- can also delete or rearangne the detection methods.
     -- detection_methods = { "lsp", "pattern" },
-    detection_methods = { "lsp", "pattern" },
+    detection_methods = { "pattern" },
     -- All the patterns used to detect root dir, when **"pattern"** is in
     -- detection_methods
     -- patterns = { ".git", "_darcs", ".hg", ".bzr", ".svn", "Makefile", "package.json" },
-    patterns = { ".git" },
+    patterns = { ".git", "package.json" },
     -- Table of lsp clients to ignore by name
     -- eg: { "efm", ... }
     -- ignore_lsp = {},
@@ -1451,7 +1451,7 @@ end
 ------------------------------
 local has_anyjump, _ = pcall(require, "any-jump")
 if has_anyjump then
-  vim.keymap.set("n", "<leader><CR>", ":AnyJump<CR>", { desc = "Jump to tag under cursor", opts.args })
+  vim.keymap.set("n", "<leader><CR>", ":AnyJump<CR>", { desc = "Jump to tag under cursor", remap = true, silent = true })
 end
 
 -------------------------------
