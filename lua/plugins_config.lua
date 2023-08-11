@@ -736,7 +736,7 @@ if has_project then
     -- order matters: if one is not detected, the other is used as fallback. You
     -- can also delete or rearangne the detection methods.
     -- detection_methods = { "lsp", "pattern" },
-    detection_methods = { "pattern" },
+    detection_methods = { "lsp", "pattern" },
     -- All the patterns used to detect root dir, when **"pattern"** is in
     -- detection_methods
     -- patterns = { ".git", "_darcs", ".hg", ".bzr", ".svn", "Makefile", "package.json" },
@@ -1051,11 +1051,12 @@ if has_pap then
   vim.keymap.set("n", "<leader>cr", ":!rm build/CMakeCache.txt", { noremap = true, silent = false, desc = "Delete cmake cache" })
   vim.keymap.set("n", "<leader>cbr", ":Paprun cmake -S . -C ~/.config/cmake/release_config.cmake -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX -DCMAKE_SYSTEM_PREFIX_PATH=$CONDA_PREFIX -B build", { noremap = true, silent = false, desc = "Build release" })
   vim.keymap.set("n", "<leader>cbd", ":Paprun cmake -S . -C ~/.config/cmake/debug_config.cmake -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX -DCMAKE_SYSTEM_PREFIX_PATH=$CONDA_PREFIX -B build", { noremap = true, silent = false, desc = "Build debug" })
+  vim.keymap.set("n", "<leader>cl", ":Paprun cmake --build build --target help", { noremap = true, silent = false, desc = "List targets" })
   vim.keymap.set("n", "<leader>cc", ":Paprun cmake --build build --target all -j10", { noremap = true, silent = false, desc = "Compile all" })
   vim.keymap.set("n", "<leader>ci", ":Paprun cmake --build build --target install -j10", { noremap = true, silent = false, desc = "Install" })
 
   -- Link compile commands
-  vim.keymap.set("n", "<leader>cl", ":!ln -sf build/compile_commands.json ./", { noremap = true, silent = false, desc = "Link compile_commands.json" })
+  vim.keymap.set("n", "<leader>cL", ":!ln -sf build/compile_commands.json ./", { noremap = true, silent = false, desc = "Link compile_commands.json" })
 
   -- Ctest
   vim.keymap.set("n", "<leader>ct", ":Paprun ctest --output-on-failure -j10 --test-dir build", { noremap = true, silent = false, desc = "Run tests" })
@@ -1327,7 +1328,7 @@ if has_dapui and has_dap then
     dapui.close()
     vim.cmd("stopinsert")
   end, { desc = "Close DAP UI (no quit)", dapopts.args })
-  vim.keymap.set("n", "<leader><CR>", function()
+  vim.keymap.set("n", "<leader>d<CR>", function()
     dapui.toggle()
     vim.cmd("stopinsert")
   end, { desc = "Toggle DAP UI", dapopts.args })
