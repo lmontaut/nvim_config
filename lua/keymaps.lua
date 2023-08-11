@@ -92,9 +92,6 @@ vim.keymap.set("n", "<leader>lp", ":lprev<CR>zz", { desc = "Location list prev",
 vim.keymap.set("n", "<leader>lo", ":lopen<CR>", { desc = "Location list open", opts.args })
 vim.keymap.set("n", "<leader>lq", ":lclose<CR>", { desc = "Location list close", opts.args })
 
--- Navigate tags
-vim.keymap.set("n", "<leader><CR>", 'yiw:tag <C-R>"<CR>', { desc = "Jump to tag under cursor", opts.args })
-
 -- Make
 -- vim.keymap.set("n", "<leader>mm", function() return ":make<Space>" end, { noremap = true, silent = false, desc = "make", expr = true })
 -- vim.keymap.set("n", "<leader>mm", ":make!<Space>", { noremap = true, silent = false, desc = "make! (+enter command)" })

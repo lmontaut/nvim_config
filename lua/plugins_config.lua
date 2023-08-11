@@ -1446,6 +1446,14 @@ if has_foldcycle then
     {remap = true, silent = true, desc = 'Fold-cycle: close all folds'})
 end
 
+------------------------------
+-- [[ Configure Any-jump ]] --
+------------------------------
+local has_anyjump, _ = pcall(require, "any-jump")
+if has_anyjump then
+  vim.keymap.set("n", "<leader><CR>", ":AnyJump<CR>", { desc = "Jump to tag under cursor", opts.args })
+end
+
 -------------------------------
 -- [[ Configure Which-key ]] --
 -------------------------------
@@ -1461,6 +1469,9 @@ if has_wk then
   })
 
   wk.register({
+    a = {
+      name = "AnyJump"
+    },
     b = {
       name = "Buffers"
     },
