@@ -105,7 +105,8 @@ require('packer').startup(function(use)
   -- use { "akinsho/bufferline.nvim" }
 
   -- symbol outline
-  use { "simrat39/symbols-outline.nvim" }
+  -- use { "simrat39/symbols-outline.nvim" }
+  use { "lmontaut/symbols-outline.nvim" }
 
   -- undo tree
   use { "mbbill/undotree" }

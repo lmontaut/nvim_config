@@ -470,6 +470,25 @@ if has_mason then
 end
 
 if has_lspconfig then
+  local util = require("lspconfig.util")
+  lspconfig.ccls.setup({
+    on_attach = on_attach,
+    capabilities = capabilities,
+    filetypes = { "c", "cpp" },
+    root_dir = util.root_pattern('package.json', 'compile_commands.json', '.git', '.ccls'),
+    init_options = {
+      index = {
+        threads = 0;
+      };
+      clang = {
+        excludeArgs = { "-frounding-math" },
+      },
+    }
+  })
+end
+
+
+if has_lspconfig then
   local pid = vim.fn.getpid()
   local omnisharp_bin = "/Users/louis/software/misc/omnisharp-osx/run"
 
@@ -740,7 +759,7 @@ if has_project then
     -- All the patterns used to detect root dir, when **"pattern"** is in
     -- detection_methods
     -- patterns = { ".git", "_darcs", ".hg", ".bzr", ".svn", "Makefile", "package.json" },
-    patterns = { ".git", "package.json" },
+    patterns = { ".git" },
     -- Table of lsp clients to ignore by name
     -- eg: { "efm", ... }
     -- ignore_lsp = {},
@@ -751,7 +770,7 @@ if has_project then
     show_hidden = true,
     -- When set to false, you will get a message when project.nvim changes your
     -- directory.
-    silent_chdir = true,
+    silent_chdir = false,
   })
 
   -- Telescope integration
