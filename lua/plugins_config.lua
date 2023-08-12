@@ -759,7 +759,7 @@ if has_project then
     -- All the patterns used to detect root dir, when **"pattern"** is in
     -- detection_methods
     -- patterns = { ".git", "_darcs", ".hg", ".bzr", ".svn", "Makefile", "package.json" },
-    patterns = { ".git" },
+    patterns = { ".git", "package.json" },
     -- Table of lsp clients to ignore by name
     -- eg: { "efm", ... }
     -- ignore_lsp = {},
