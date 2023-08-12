@@ -475,7 +475,7 @@ if has_lspconfig then
     on_attach = on_attach,
     capabilities = capabilities,
     filetypes = { "c", "cpp" },
-    root_dir = util.root_pattern('package.json', 'compile_commands.json', '.git', '.ccls'),
+    root_dir = util.root_pattern('compile_commands.json', '.git', '.ccls'),
     init_options = {
       index = {
         threads = 0;
