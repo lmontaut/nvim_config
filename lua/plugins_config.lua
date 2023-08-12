@@ -1071,7 +1071,8 @@ if has_pap then
   vim.keymap.set("n", "<leader>cbr", ":Paprun cmake -S . -C ~/.config/cmake/release_config.cmake -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX -DCMAKE_SYSTEM_PREFIX_PATH=$CONDA_PREFIX -B build", { noremap = true, silent = false, desc = "Build release" })
   vim.keymap.set("n", "<leader>cbd", ":Paprun cmake -S . -C ~/.config/cmake/debug_config.cmake -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX -DCMAKE_SYSTEM_PREFIX_PATH=$CONDA_PREFIX -B build", { noremap = true, silent = false, desc = "Build debug" })
   vim.keymap.set("n", "<leader>cl", ":Paprun cmake --build build --target help", { noremap = true, silent = false, desc = "List targets" })
-  vim.keymap.set("n", "<leader>cc", ":Paprun cmake --build build --target all -j10", { noremap = true, silent = false, desc = "Compile all" })
+  vim.keymap.set("n", "<leader>cc", ":Paprun cmake --build build --target  -j10<left><left><left><left><left>", { noremap = true, silent = false, desc = "Compile target" })
+  vim.keymap.set("n", "<leader>ca", ":Paprun cmake --build build --target all -j10", { noremap = true, silent = false, desc = "Compile all" })
   vim.keymap.set("n", "<leader>ci", ":Paprun cmake --build build --target install -j10", { noremap = true, silent = false, desc = "Install" })
 
   -- Link compile commands
