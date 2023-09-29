@@ -244,6 +244,7 @@ end
 -- [[ Configure LSP ]] --
 -------------------------
 --  This function gets run when an LSP connects to a particular buffer.
+local util = require("lspconfig.util")
 local on_attach = function(client, bufnr)
   -- NOTE: Remember that lua is a real programming language, and as such it is possible
   -- to define small helper and utility functions so you don't have to repeat yourself
@@ -323,8 +324,9 @@ end
 --  the `settings` field of the server config. You must look up that documentation yourself.
 local pythonpath = os.getenv("CONDA_PREFIX") .. "/bin/python"
 local servers = {
-  -- clangd = {},
-  -- ccls = {},
+  -- clangd = {
+    -- arguments = {"--compile-commands-dir=./build"}
+  -- },
   lua_ls = {},
   -- cmake = {},
   neocmake = {},
@@ -415,7 +417,7 @@ if has_mason then
     ensure_installed = vim.tbl_keys(servers),
   }
 
-  mason_lspconfig.setup_handlers {
+  mason_lspconfig.setup_handlers({
     function(server_name)
       if has_lspconfig then
         lspconfig[server_name].setup({
@@ -425,11 +427,21 @@ if has_mason then
         })
       end
     end,
-  }
+  })
 end
 
-if has_lspconfig then
-  local util = require("lspconfig.util")
+if has_lspconfig and false then
+  lspconfig.clangd.setup({
+    on_attach = on_attach,
+    capabilities = capabilities,
+    filetypes = { "c", "cpp" },
+    cmd = { "/usr/bin/clangd --compile-commands-dir=./build" },
+    -- cmd = { "/usr/bin/clangd" },
+    root_dir = util.root_pattern('compile_commands.json', '.git', '.clangd'),
+  })
+end
+
+if has_lspconfig and false then
   lspconfig.ccls.setup({
     on_attach = on_attach,
     capabilities = capabilities,
@@ -958,6 +970,15 @@ if has_symbols_outline then
   })
   vim.keymap.set('n', '<leader>i', "<CMD>SymbolsOutline<CR>", { desc = 'Symbols outline' })
 end
+
+-------------------------------
+-- [[ Configure vim-ccls ]] --
+-------------------------------
+-- vim.keymap.set('n', "<leader>ed", ":CclsDerivedHierarchy -float<CR>", { desc = "Derived hierarchy" })
+-- vim.keymap.set('n', "<leader>eb", ":CclsBaseHierarchy -float<CR>", { desc = "Base hierarchy" })
+-- vim.keymap.set('n', "<leader>ec", ":CclsCallHierarchy -float<CR>", { desc = "Functions calling the item under cursor" })
+-- vim.keymap.set('n', "<leader>eC", ":CclsCalleeHierarchy -float<CR>", { desc = "Functions called by item under cursor" })
+-- vim.keymap.set('n', "<leader>ef", ":CclsMemberFunctions<CR>", { desc = "Functions members of item under cursor" })
 
 ------------------------------
 -- [[ Configure fugitive ]] --
