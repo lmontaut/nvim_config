@@ -53,7 +53,6 @@ vim.o.splitright = false
 -- Set colorscheme
 vim.o.termguicolors = true
 -- vim.cmd [[colorscheme onedark]]
-vim.cmd [[colorscheme catppuccin-frappe]]
 
 -- Don't wrap please
 vim.o.wrap = false

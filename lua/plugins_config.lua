@@ -1466,13 +1466,25 @@ if has_foldcycle then
     {remap = true, silent = true, desc = 'Fold-cycle: close all folds'})
 end
 
-------------------------------
--- [[ Configure Any-jump ]] --
-------------------------------
-local has_anyjump, _ = pcall(require, "any-jump")
-if has_anyjump then
-  vim.keymap.set("n", "<leader><CR>", ":AnyJump<CR>", { desc = "Jump to tag under cursor", remap = true, silent = true })
+---------------------------------
+-- [[ Configure colorscheme ]] --
+---------------------------------
+local catppuccin_name = "catppuccin"
+local has_catppuccin, catppuccin = pcall(require, catppuccin_name)
+if has_catppuccin then
+  catppuccin.setup({
+    highlight_overrides = {
+      frappe = function(frappe)
+        return {
+          Comment = { fg = frappe.flamingo, bg = frappe.crust, style = { "bold" } }
+        }
+      end,
+    },
+  })
+else
+  print("Could not find module " .. catppuccin_name)
 end
+vim.cmd.colorscheme "catppuccin-frappe"
 
 -------------------------------
 -- [[ Configure Which-key ]] --
