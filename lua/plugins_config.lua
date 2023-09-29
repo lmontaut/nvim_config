@@ -68,6 +68,9 @@ if has_telescope then
   local action_layout = require("telescope.actions.layout")
   telescope.setup({
     defaults = {
+      layout_strategy = "vertical",
+      layout_config = { width = 0.95 },
+      path_display = { "truncate" },
       mappings = {
         i = {
           ["jk"] = { "<cmd>startinsert<cr>j<cmd>startinsert<cr>k", type = "command" },
@@ -112,54 +115,10 @@ if has_telescope then
     },
     vimgrep_arguments = vimgrep_arguments,
     pickers = {
-      buffers = {
-        theme = "ivy",
-      },
-      command_history = {
-        theme = "ivy",
-      },
-      live_grep = {
-        theme = "ivy",
-      },
-      grep_string = {
-        theme = "ivy",
-      },
-      quickfix = {
-        theme = "ivy",
-      },
-      lsp_references = {
-        theme = "ivy",
-      },
-      lsp_document_symbols = {
-        theme = "ivy",
-      },
-      lsp_dynamic_workspace_symbols = {
-        theme = "ivy",
-      },
-      lsp_definitions = {
-        theme = "ivy",
-      },
-      lsp_implementations = {
-        theme = "ivy",
-      },
-      lsp_type_definitions = {
-        theme = "ivy",
-      },
-      lsp_workspace_symbols = {
-        theme = "ivy",
-      },
-      diagnostics = {
-        theme = "ivy",
-      },
       find_files = { -- Search ALL files, even if not tracked by git
         -- find_command = { "rg", "--files", "--hidden", },
         -- `hidden = true` will still show the inside of `.git/` as it's not `.gitignore`d.
                           find_command = { "rg", "--files", "--hidden", "--glob", "!**/.git/*" },
-        theme = "ivy",
-      },
-      git_files = {
-        -- find_command = { "rg", "--files", "--hidden", },
-        theme = "ivy",
       },
     },
   })
