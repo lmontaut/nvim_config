@@ -1046,16 +1046,22 @@ if has_pap then
   vim.keymap.set("n", "<leader>pv", ":PapSetVertical<CR>",  { noremap = true, silent = false, desc = "Pap set vertical mode" })
   vim.keymap.set("n", "<leader>ph", ":PapSetHorizontal<CR>",  { noremap = true, silent = false, desc = "Pap set horizontal mode" })
 
+  --
   -- CMake related
-  vim.keymap.set("n", "<leader>cmr", ":rightbelow 180 vsplit | terminal ccmake builds/build-release-$(echo $CONDA_DEFAULT_ENV)/*", { noremap = true, silent = false, desc = "Delete release build folder" })
-  vim.keymap.set("n", "<leader>cmd", ":rightbelow 180 vsplit | terminal ccmake builds/build-debug-$(echo $CONDA_DEFAULT_ENV)/*", { noremap = true, silent = false, desc = "Delete debug build folder" })
-  -- Deleting build folder
+  --
+  -- Cmake cache
+  vim.keymap.set("n", "<leader>cmr", ":rightbelow 180 vsplit | terminal ccmake builds/build-release-$(echo $CONDA_DEFAULT_ENV)/*", { noremap = true, silent = false, desc = "Change release CMakeCache" })
+  vim.keymap.set("n", "<leader>cmd", ":rightbelow 180 vsplit | terminal ccmake builds/build-debug-$(echo $CONDA_DEFAULT_ENV)/*", { noremap = true, silent = false, desc = "Change debug CMakeCache" })
+  -- Create build folders
+  vim.keymap.set("n", "<leader>cBr", ":Paprun mkdir builds/build-release-$(echo $CONDA_DEFAULT_ENV)", { noremap = true, silent = false, desc = "Create release build folder" })
+  vim.keymap.set("n", "<leader>cBd", ":Paprun mkdir builds/build-debug-$(echo $CONDA_DEFAULT_ENV)", { noremap = true, silent = false, desc = "Create debug build folder" })
+  -- Deleting build folders
   vim.keymap.set("n", "<leader>crr", ":Paprun rm -rf builds/build-release-$(echo $CONDA_DEFAULT_ENV)/*", { noremap = true, silent = false, desc = "Delete release build folder" })
   vim.keymap.set("n", "<leader>crd", ":Paprun rm -rf builds/build-debug-$(echo $CONDA_DEFAULT_ENV)/*", { noremap = true, silent = false, desc = "Delete debug build folder" })
-  -- Build
+  -- Build cmake files
   vim.keymap.set("n", "<leader>cbr", ":Paprun cmake -S . -C ~/.config/cmake/release_config.cmake -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX -DCMAKE_SYSTEM_PREFIX_PATH=$CONDA_PREFIX -B builds/build-release-$(echo $CONDA_DEFAULT_ENV)", { noremap = true, silent = false, desc = "Build release" })
   vim.keymap.set("n", "<leader>cbd", ":Paprun cmake -S . -C ~/.config/cmake/debug_config.cmake -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX -DCMAKE_SYSTEM_PREFIX_PATH=$CONDA_PREFIX -B builds/build-debug-$(echo $CONDA_DEFAULT_ENV)", { noremap = true, silent = false, desc = "Build debug" })
-  -- List targets
+  -- List cmake targets
   vim.keymap.set("n", "<leader>clr", ":Paprun cmake --build builds/build-release-$(echo $CONDA_DEFAULT_ENV) --target help", { noremap = true, silent = false, desc = "List targets release" })
   vim.keymap.set("n", "<leader>cld", ":Paprun cmake --build builds/build-debug-$(echo $CONDA_DEFAULT_ENV) --target help", { noremap = true, silent = false, desc = "List targets debug" })
   -- Compile target
@@ -1073,7 +1079,7 @@ if has_pap then
   -- Ctest
   vim.keymap.set("n", "<leader>ctr", ":Paprun ctest --output-on-failure -j10 --test-dir builds/build-release-$(echo $CONDA_DEFAULT_ENV)", { noremap = true, silent = false, desc = "Run release tests" })
   vim.keymap.set("n", "<leader>ctd", ":Paprun ctest --output-on-failure -j10 --test-dir builds/build-debug-$(echo $CONDA_DEFAULT_ENV)", { noremap = true, silent = false, desc = "Run debug tests" })
-  --
+  -- Ctest rerun failed
   vim.keymap.set("n", "<leader>cTr", ":Paprun ctest --output-on-failure -j10 --test-dir builds/build-release-$(echo $CONDA_DEFAULT_ENV) --rerun-failed", { noremap = true, silent = false, desc = "Rerun failed release tests" })
   vim.keymap.set("n", "<leader>cTd", ":Paprun ctest --output-on-failure -j10 --test-dir builds/build-debug-$(echo $CONDA_DEFAULT_ENV) --rerun-failed", { noremap = true, silent = false, desc = "Rerun failed release tests" })
 end
