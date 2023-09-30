@@ -1477,7 +1477,7 @@ if has_catppuccin then
     highlight_overrides = {
       frappe = function(frappe)
         return {
-          Comment = { fg = frappe.flamingo, bg = frappe.crust, style = { "bold" } }
+          Comment = { fg = frappe.flamingo, bg = frappe.surface1, style = { "bold" } }
         }
       end,
     },
