@@ -54,8 +54,8 @@ vim.o.splitright = false
 vim.o.termguicolors = true
 -- vim.cmd [[colorscheme onedark]]
 
--- Don't wrap please
-vim.o.wrap = false
+-- Do wrap please
+vim.o.wrap = true
 
 -- Relative line numbers
 vim.o.relativenumber = true
