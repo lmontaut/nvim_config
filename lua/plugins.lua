@@ -156,8 +156,12 @@ require('packer').startup(function(use)
   -- Any jump
   use { "pechorin/any-jump.vim" }
 
+  -- Vim dispatch
+  -- use { "tpope/vim-dispatch" }
+  -- use { "sheerun/vim-polyglot" }
+
   -- vim-ccls
-  use { "m-pilia/vim-ccls" }
+  -- use { "m-pilia/vim-ccls" }
 
   -- Add custom plugins to packer from ~/.config/nvim/lua/custom/plugins.lua
   local has_plugins, plugins = pcall(require, 'custom.plugins')

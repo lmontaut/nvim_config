@@ -29,9 +29,9 @@ vim.keymap.set("n", "<C-d>", "<C-d>zz", { desc = "Scroll down", opts.args })
 vim.keymap.set("n", "<C-u>", "<C-u>zz", { desc = "Scroll up", opts.args })
 vim.keymap.set("n", "<C-o>", "<C-o>zz", { desc = "Previous mark", opts.args })
 vim.keymap.set("n", "<C-i>", "<C-i>zz", { desc = "Next mark", opts.args })
-vim.keymap.set("n", "n", "nzzzv", { desc = "Next search", opts.args })
-vim.keymap.set("n", "N", "Nzzzv", { desc = "Previous search", opts.args })
-vim.keymap.set("n", "J", "mzJ`z", { desc = "Concatenate prev line", opts.args })
+-- vim.keymap.set("n", "n", "nzzzv", { desc = "Next search", opts.args })
+-- vim.keymap.set("n", "N", "Nzzzv", { desc = "Previous search", opts.args })
+-- vim.keymap.set("n", "J", "mzJ`z", { desc = "Concatenate prev line", opts.args })
 vim.keymap.set("n", "Q", "<nop>")
 
 -- When opening a window, cursor on it
