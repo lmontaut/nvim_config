@@ -1036,13 +1036,16 @@ if has_pap then
   vim.api.nvim_create_user_command('PapSetVertical', function() pap.set_vertical_window() end, {})
   vim.api.nvim_create_user_command('Paprun', function(command) pap.run_custom_cmd(command.args, false) end, { nargs = "*" })
   vim.api.nvim_create_user_command('Par', function(command) pap.run_custom_cmd(command.args, false) end, { nargs = "*" })
+  vim.api.nvim_create_user_command('Paprerun', function() pap.run_custom_cmd("_last", false) end, { nargs = "*" })
   vim.api.nvim_create_user_command('Papa', function(command) pap.run_custom_cmd(command.args, false) end, { nargs = "*" })
-  vim.keymap.set("n", "<leader>qe", ":cg<Space>~/.cache/nvim/out.txt<CR>:cc<CR>", { noremap = true, silent = true, desc = "Load error file into quickfix" })
+  vim.keymap.set("n", "<leader>qe", ":cg<Space>~/.cache/nvim/pap_output.txt<CR>:cc<CR>", { noremap = true, silent = true, desc = "Load error file into quickfix" })
   vim.keymap.set("n", "<leader>psh", ":Paphsize<CR>", { noremap = true, silent = true, desc = "Set pap horizontal window size" })
   vim.keymap.set("n", "<leader>psv", ":Papvsize<CR>", { noremap = true, silent = true, desc = "Set pap vertical window size" })
   vim.keymap.set("n", "<leader>pr", ":Paprun<CR>",  { noremap = true, silent = true, desc = "Paprun (any cmd)" })
+  vim.keymap.set("n", "<leader>pR", ":Paprerun<CR>",  { noremap = true, silent = true, desc = "Pap rerun last cmd" })
   vim.keymap.set("n", "<leader>pc", ":Papcmd<CR>",  { noremap = true, silent = true, desc = "Set pap default cmd" })
   vim.keymap.set("n", "<leader>pp", ":Pap<space>",  { noremap = true, silent = false, desc = "Pap (prefix default cmd)" })
+  vim.keymap.set("n", "<leader>pl", ":!just --list<CR>", { noremap = true, silent = false, desc = "List Just recipes" })
   vim.keymap.set("n", "<leader>pv", ":PapSetVertical<CR>",  { noremap = true, silent = false, desc = "Pap set vertical mode" })
   vim.keymap.set("n", "<leader>ph", ":PapSetHorizontal<CR>",  { noremap = true, silent = false, desc = "Pap set horizontal mode" })
 
@@ -1541,6 +1544,9 @@ if has_wk then
       name = "CMake",
       b = {
         name = "Build",
+      },
+      B = {
+        name = "Create build folder",
       },
       r = {
         name = "Clean",
