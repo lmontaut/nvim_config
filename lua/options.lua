@@ -50,9 +50,11 @@ vim.o.jumpoptions=""
 vim.o.splitbelow = false
 vim.o.splitright = false
 
--- Set colorscheme
+-- Set colorscheme (actually it's in plugin_config.lua)
 vim.o.termguicolors = true
--- vim.cmd [[colorscheme onedark]]
+-- vim.o.colorcolumn = "0"
+vim.keymap.set("n", "<leader>vc", ":set colorcolumn=100",
+  { noremap = true, silent = false, desc = "Set colorcolumn" })
 
 -- Do wrap please
 vim.o.wrap = true

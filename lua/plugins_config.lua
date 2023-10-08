@@ -1473,11 +1473,39 @@ end
 local catppuccin_name = "catppuccin"
 local has_catppuccin, catppuccin = pcall(require, catppuccin_name)
 if has_catppuccin then
+  local latte_clrs = {
+    base     = "#fbf1c7",
+    mantle   = "#f9ebaf",
+    crust    = "#e0d39d",
+    pink     = "#bd5fa3",
+    mauve    = "#7a33d7",
+    green    = "#338022",
+    teal     = "#148389",
+    yellow   = "#a06514",
+    peach    = "#e45a09",
+    text     = "#2d2018",
+    subtext1 = "#4b3628",
+    subtext0 = "#5d4a3d",
+    overlay2 = "#6e5e52",
+    overlay1 = "#817268",
+    overlay0 = "#93867e",
+    surface2 = "#a59a93",
+    surface1 = "#b7aea9",
+    surface0 = "#c9c2be",
+  }
   catppuccin.setup({
+    color_overrides = {
+      latte = latte_clrs,
+    },
     highlight_overrides = {
       frappe = function(frappe)
         return {
-          Comment = { fg = frappe.flamingo, bg = frappe.surface1, style = { "bold" } }
+          Comment = { fg = frappe.flamingo, bg = frappe.surface1, style = { "italic" } }
+        }
+      end,
+      latte = function(latte)
+        return {
+          Comment = { fg = latte.green, bg = latte.crust, style = { "italic" } }
         }
       end,
     },
@@ -1486,6 +1514,7 @@ else
   print("Could not find module " .. catppuccin_name)
 end
 vim.cmd.colorscheme "catppuccin-frappe"
+-- vim.cmd.colorscheme "catppuccin-latte"
 
 -------------------------------
 -- [[ Configure Which-key ]] --

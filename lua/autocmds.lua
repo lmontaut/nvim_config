@@ -2,13 +2,19 @@
 vim.cmd[[
   autocmd FileType fugitive nnoremap <buffer> q :close<CR>
   autocmd FileType fugitive nnoremap <buffer> + <nop>
+  autocmd FileType fugitive setlocal colorcolumn=0
   autocmd FileType qf nnoremap <buffer> q :close<CR>
+  autocmd FileType qf setlocal colorcolumn=0
   autocmd FileType git nnoremap <buffer> q :close<CR>
+  autocmd FileType git setlocal colorcolumn=0
   " autocmd FileType vim nnoremap <buffer> q :close<CR>
   autocmd FileType vimcmake nnoremap <buffer> q :close<CR>
   autocmd FileType lspinfo nnoremap <buffer> q :close<CR>
+  autocmd FileType lspinfo setlocal colorcolumn=0
   autocmd FileType help nnoremap <buffer> q :close<CR>
+  autocmd FileType help setlocal colorcolumn=0
   autocmd FileType dap-float nnoremap <buffer> q :close<CR>
+  autocmd FileType dap-float setlocal colorcolumn=0
   autocmd FileType netrw nnoremap <buffer> q :Rexplore<CR>
 ]]
 
