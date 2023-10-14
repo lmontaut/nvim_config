@@ -27,6 +27,7 @@ if has_indent_blankline then
     char = '┊',
     show_trailing_blankline_indent = true,
     indent_blankline_use_treesitter = true,
+    show_current_context = true,
   })
 end
 
@@ -1188,7 +1189,7 @@ if has_dap then
   -- keymaps
   -- TODO: attach to running debugger
   --
-  vim.keymap.set('n', "<F5>", function() dap.continue() end, { desc = "Launch/continue", dapopts.args })
+  -- vim.keymap.set('n', "<F5>", function() dap.continue() end, { desc = "Launch/continue", dapopts.args })
   vim.keymap.set('n', "<leader>dl", function() dap.continue() end, { desc = "Launch/continue", dapopts.args })
   vim.keymap.set('n', "<leader>dL", function() dap.reverse_continue() end, { desc = "Reverse continue", dapopts.args })
   --
@@ -1201,27 +1202,27 @@ if has_dap then
   --
   -- vim.keymap.set('n', "<leader>dL", function() dap.run_last() end, { desc = "Run last", dapopts.args }) -- possibly needed if using .json configs
   --
-  vim.keymap.set('n', "<F9>", function() dap.step_over() end, { desc = "Step over", dapopts.args })
-  vim.keymap.set('n', 'L', function() dap.step_over() end, { desc = "Step over (or L)", nowait = true, dapopts.args })
+  -- vim.keymap.set('n', "<F9>", function() dap.step_over() end, { desc = "Step over", dapopts.args })
+  -- vim.keymap.set('n', 'L', function() dap.step_over() end, { desc = "Step over (or L)", nowait = true, dapopts.args })
   vim.keymap.set('n', "<leader>dsj", function() dap.step_over() end, { desc = "Step over", dapopts.args })
   --
-  vim.keymap.set('n', "<F7>", function() dap.step_back() end, { desc = "Step back", dapopts.args })
-  vim.keymap.set('n', 'H', function() dap.step_back() end, { desc = "Step back (or H)", nowait = true, dapopts.args })
+  -- vim.keymap.set('n', "<F7>", function() dap.step_back() end, { desc = "Step back", dapopts.args })
+  -- vim.keymap.set('n', 'H', function() dap.step_back() end, { desc = "Step back (or H)", nowait = true, dapopts.args })
   vim.keymap.set('n', "<leader>dsk", function() dap.step_back() end, { desc = "Step back", dapopts.args })
   --
-  vim.keymap.set('n', "<F8>", function() dap.step_into() end, { desc = "Step into", dapopts.args })
-  vim.keymap.set('n', '}', function() dap.step_into() end, { desc = "Step into", dapopts.args })
+  -- vim.keymap.set('n', "<F8>", function() dap.step_into() end, { desc = "Step into", dapopts.args })
+  -- vim.keymap.set('n', '}', function() dap.step_into() end, { desc = "Step into", dapopts.args })
   vim.keymap.set('n', "<leader>dsi", function() dap.step_into() end, { desc = "Step into (or '}')", dapopts.args })
   --
-  vim.keymap.set('n', "<F10>", function() dap.step_out() end, { desc = "Step out", dapopts.args })
-  vim.keymap.set('n', '{', function() dap.step_out() end, { desc = "Step out", dapopts.args })
+  -- vim.keymap.set('n', "<F10>", function() dap.step_out() end, { desc = "Step out", dapopts.args })
+  -- vim.keymap.set('n', '{', function() dap.step_out() end, { desc = "Step out", dapopts.args })
   vim.keymap.set('n', "<leader>dso", function() dap.step_out() end, { desc = "Step out (or '{')", dapopts.args })
   --
   vim.keymap.set('n', "<leader>dn", function() dap.run_to_cursor() end, { desc = "Debug until cursor", dapopts.args })
   --
-  vim.keymap.set('n', ')', function() dap.down() end, { desc = "Down stacktrace", dapopts.args })
+  -- vim.keymap.set('n', ')', function() dap.down() end, { desc = "Down stacktrace", dapopts.args })
   --
-  vim.keymap.set('n', '(', function() dap.up() end, { desc = "Up stacktrace", dapopts.args })
+  -- vim.keymap.set('n', '(', function() dap.up() end, { desc = "Up stacktrace", dapopts.args })
   --
   vim.keymap.set('n', "<Leader>dp", function() dap.pause() end, { desc = "Pause", dapopts.args })
   --
@@ -1237,7 +1238,7 @@ if has_dap then
   --
   vim.keymap.set('n', "<Leader>dr", function() dap.repl.toggle() end, { desc = "REPL toggle", dapopts.args })
   --
-  vim.keymap.set({'n', 'v'}, "|", "<CMD>lua require('dapui').eval()<CR>", { desc = "DAP variable value", dapopts.args })
+  -- vim.keymap.set({'n', 'v'}, "|", "<CMD>lua require('dapui').eval()<CR>", { desc = "DAP variable value", dapopts.args })
   --
   vim.keymap.set('n', "<Leader>dsf", function()
     local widgets = require("dap.ui.widgets")
@@ -1477,8 +1478,9 @@ local catppuccin_name = "catppuccin"
 local has_catppuccin, catppuccin = pcall(require, catppuccin_name)
 if has_catppuccin then
   local latte_clrs = {
-    base     = "#fbf1c7",
-    mantle   = "#f9ebaf",
+    base     = "#f7f1ed",
+    -- mantle   = "#f9ebaf",
+    mantle   = "#ebddce",
     crust    = "#e0d39d",
     pink     = "#bd5fa3",
     mauve    = "#7a33d7",
@@ -1508,7 +1510,7 @@ if has_catppuccin then
       end,
       latte = function(latte)
         return {
-          Comment = { fg = latte.green, bg = latte.crust, style = { "italic" } }
+          Comment = { fg = latte.green, style = { "italic" } }
         }
       end,
     },
@@ -1516,8 +1518,10 @@ if has_catppuccin then
 else
   print("Could not find module " .. catppuccin_name)
 end
-vim.cmd.colorscheme "catppuccin-frappe"
--- vim.cmd.colorscheme "catppuccin-latte"
+-- Dark theme
+-- vim.cmd.colorscheme "catppuccin-frappe"
+-- Light theme
+vim.cmd.colorscheme "catppuccin-latte"
 
 -------------------------------
 -- [[ Configure Which-key ]] --

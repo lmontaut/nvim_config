@@ -173,6 +173,9 @@ vim.keymap.set("n", "<leader>[", ":tabprevious<CR>", { desc = "Tab previous", op
 vim.keymap.set("n", "<leader>qj", ":lnext<CR>", { desc = "Location next", opts.args })
 vim.keymap.set("n", "<leader>qk", ":lprevious<CR>", { desc = "Location previous", opts.args })
 
+-- Center window around cursor
+vim.keymap.set("n", "L", "zz", { desc = "Center window around cursor", opts.args })
+
 -----------------------
 -- -- INSERT MODE -- --
 -----------------------
