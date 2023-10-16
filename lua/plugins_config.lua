@@ -1503,16 +1503,19 @@ if has_catppuccin then
   catppuccin.setup({
     color_overrides = {
       latte = latte_clrs,
+      frappe = {
+        base = "#292e36"
+      }
     },
     highlight_overrides = {
-      frappe = function(frappe)
-        return {
-          Comment = { fg = frappe.flamingo, bg = frappe.surface1, style = { "italic" } }
-        }
-      end,
       latte = function(latte)
         return {
           Comment = { fg = latte.green, style = { "italic" } }
+        }
+      end,
+      frappe = function(frappe)
+        return {
+          Comment = { fg = "#3b9c7b", style = { "italic" } }
         }
       end,
     },
@@ -1521,9 +1524,10 @@ else
   print("Could not find module " .. catppuccin_name)
 end
 -- Dark theme
--- vim.cmd.colorscheme "catppuccin-frappe"
+vim.cmd.colorscheme "catppuccin-frappe"
 -- Light theme
-vim.cmd.colorscheme "catppuccin-latte"
+-- vim.cmd.colorscheme "catppuccin-latte"
+
 
 ---------------------------
 -- [[ Configure Dired ]] --
