@@ -1523,6 +1523,20 @@ end
 -- Light theme
 vim.cmd.colorscheme "catppuccin-latte"
 
+---------------------------
+-- [[ Configure Dired ]] --
+---------------------------
+local has_dired, dired = pcall(require, "dired")
+if has_dired then
+  dired.setup ({
+    path_separator = "/",
+    show_banner = false,
+    show_hidden = true
+  })
+else
+  print("No module named dired")
+end
+
 -------------------------------
 -- [[ Configure Which-key ]] --
 -------------------------------

@@ -74,7 +74,7 @@ require('packer').startup(function(use)
   -- Better netrw
   -- use { 'tpope/vim-vinegar' }
   use { 'tpope/vim-eunuch' }
-  use { 'justinmk/vim-dirvish' }
+  -- use { 'justinmk/vim-dirvish' }
 
   -- use { 'navarasu/onedark.nvim' } -- Theme inspired by Atom
   use { "catppuccin/nvim", as = "catppuccin" }
@@ -159,6 +159,20 @@ require('packer').startup(function(use)
   -- Vim dispatch
   -- use { "tpope/vim-dispatch" }
   -- use { "sheerun/vim-polyglot" }
+  -- Dired
+  use {
+    "X3eRo0/dired.nvim",
+    requires = "MunifTanjim/nui.nvim",
+    config = function()
+      require("dired").setup {
+        path_separator = "/",
+        show_banner = false,
+        show_hidden = true,
+        show_dot_dirs = true,
+        show_colors = true,
+      }
+    end
+  }
 
   -- vim-ccls
   -- use { "m-pilia/vim-ccls" }
