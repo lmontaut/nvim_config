@@ -1543,6 +1543,18 @@ else
   print("No module named dired")
 end
 
+---------------------------------
+-- [[ Configure Multicursor ]] --
+---------------------------------
+local has_mc, mc = pcall(require, "multicursors")
+if has_mc then
+  mc.setup ({})
+  vim.keymap.set('n', '<leader>m', '<CMD>MCstart<CR>', { desc = "Multicursors start" })
+else
+  print("No module named multicursors")
+end
+
+
 -------------------------------
 -- [[ Configure Which-key ]] --
 -------------------------------

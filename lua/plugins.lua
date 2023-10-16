@@ -164,6 +164,14 @@ require('packer').startup(function(use)
     end
   }
 
+  -- Multicursors
+  use {
+    "smoka7/multicursors.nvim",
+    requires = {
+      "smoka7/hydra.nvim"
+    }
+  }
+
 
   -- Add custom plugins to packer from ~/.config/nvim/lua/custom/plugins.lua
   local has_plugins, plugins = pcall(require, 'custom.plugins')
