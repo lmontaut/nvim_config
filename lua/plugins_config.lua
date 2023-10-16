@@ -39,15 +39,7 @@ end
 -- See `:help gitsigns.txt`
 local has_gitsigns, gitsigns = pcall(require, 'gitsigns')
 if has_gitsigns then
-  gitsigns.setup({
-    signs = {
-      add = { text = '+' },
-      change = { text = '~' },
-      delete = { text = '_' },
-      topdelete = { text = '‾' },
-      changedelete = { text = '~' },
-    },
-  })
+  gitsigns.setup({})
 end
 
 -------------------------------
