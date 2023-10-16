@@ -1528,6 +1528,14 @@ vim.cmd.colorscheme "catppuccin-frappe"
 -- Light theme
 -- vim.cmd.colorscheme "catppuccin-latte"
 
+----------------------------
+-- [[ Configure Neogit ]] --
+----------------------------
+local has_neogit, neogit = pcall(require, "neogit")
+if has_neogit then
+  neogit.setup({})
+  vim.keymap.set('n', '<leader>gn', '<CMD>Neogit<CR>', { desc = 'Neogit' })
+end
 
 ---------------------------
 -- [[ Configure Dired ]] --
