@@ -172,6 +172,9 @@ require('packer').startup(function(use)
     }
   }
 
+  -- tpope's unimpaired (bunch of usefull ]-... stuff)
+  use { "tpope/vim-unimpaired" }
+
   -- Neogit
   use {
     "NeogitOrg/neogit",
