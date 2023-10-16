@@ -19,7 +19,9 @@ if has_comment then
   vim.keymap.set("v", "\\", "<ESC><CMD>lua require(\"Comment.api\").toggle.linewise(vim.fn.visualmode())<CR>", { desc = "Comment" })
 end
 
--- [[ Configure `lukas-reineke/indent-blankline.nvim` ]]
+--------------------------------------
+-- [[ Configure indent-blankline ]] --
+--------------------------------------
 -- See `:help indent_blankline.txt`
 local has_indent_blankline, indent_blankline = pcall(require, 'indent_blankline')
 if has_indent_blankline then

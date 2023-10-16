@@ -146,19 +146,9 @@ require('packer').startup(function(use)
   -- use { 'OmniSharp/omnisharp-vim' }
   -- use { "Decodetalkers/csharpls-extended-lsp.nvim" }
 
-  -- fold-cycle
-  -- use { 'jghauser/fold-cycle.nvim',
-  --   config = function()
-  --     require('fold-cycle').setup()
-  --   end
-  -- }
-
   -- Any jump
   use { "pechorin/any-jump.vim" }
 
-  -- Vim dispatch
-  -- use { "tpope/vim-dispatch" }
-  -- use { "sheerun/vim-polyglot" }
   -- Dired
   use {
     "X3eRo0/dired.nvim",
@@ -174,8 +164,6 @@ require('packer').startup(function(use)
     end
   }
 
-  -- vim-ccls
-  -- use { "m-pilia/vim-ccls" }
 
   -- Add custom plugins to packer from ~/.config/nvim/lua/custom/plugins.lua
   local has_plugins, plugins = pcall(require, 'custom.plugins')
