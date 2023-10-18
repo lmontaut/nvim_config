@@ -63,9 +63,19 @@ if has_telescope then
   local action_layout = require("telescope.actions.layout")
   telescope.setup({
     defaults = {
+      layout_config = {
+        vertical = {
+          width = 0.9
+        },
+        horizontal = {
+          width = 0.9
+        },
+      },
+      path_display = {
+        "truncate"
+      },
+      dynamic_preview_title = true,
       layout_strategy = "vertical",
-      layout_config = { width = 0.95 },
-      path_display = { "truncate" },
       mappings = {
         i = {
           ["jk"] = { "<cmd>startinsert<cr>j<cmd>startinsert<cr>k", type = "command" },
@@ -110,6 +120,9 @@ if has_telescope then
     },
     vimgrep_arguments = vimgrep_arguments,
     pickers = {
+      lsp_references = {
+        fname_width = 150,
+      },
       find_files = { -- Search ALL files, even if not tracked by git
         -- find_command = { "rg", "--files", "--hidden", },
         -- `hidden = true` will still show the inside of `.git/` as it's not `.gitignore`d.
@@ -1516,9 +1529,9 @@ else
   print("Could not find module " .. catppuccin_name)
 end
 -- Dark theme
-vim.cmd.colorscheme "catppuccin-frappe"
+-- vim.cmd.colorscheme "catppuccin-frappe"
 -- Light theme
--- vim.cmd.colorscheme "catppuccin-latte"
+vim.cmd.colorscheme "catppuccin-latte"
 
 ----------------------------
 -- [[ Configure Neogit ]] --
