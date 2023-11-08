@@ -45,7 +45,8 @@ vim.cmd [[
 vim.cmd[[
   let g:loaded_netrwPlugin = 1
 ]]
-vim.api.nvim_create_autocmd("VimEnter * if argc() == 0", { command = "Dired" })
+vim.api.nvim_create_autocmd("VimEnter * if argc() == 0", { command = "Dirvish" })
+-- vim.api.nvim_create_autocmd("VimEnter * if argc() == 0", { command = "Dired" })
 
 -- No smart indent in python please
 vim.cmd [[

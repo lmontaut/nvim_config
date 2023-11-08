@@ -123,6 +123,9 @@ if has_telescope then
       lsp_references = {
         fname_width = 150,
       },
+      lsp_definitions = {
+        fname_width = 150,
+      },
       find_files = { -- Search ALL files, even if not tracked by git
         -- find_command = { "rg", "--files", "--hidden", },
         -- `hidden = true` will still show the inside of `.git/` as it's not `.gitignore`d.
@@ -975,6 +978,36 @@ if has_symbols_outline then
       unfold_all = "L",
       fold_reset = "R",
     },
+    symbols = {
+      File = { icon = "", hl = "@text.uri" },
+      Module = { icon = "", hl = "@namespace" },
+      Namespace = { icon = "", hl = "@namespace" },
+      Package = { icon = "", hl = "@namespace" },
+      Class = { icon = "𝓒", hl = "@type" },
+      Method = { icon = "ƒ", hl = "@method" },
+      Property = { icon = "", hl = "@method" },
+      Field = { icon = "ғ", hl = "@field" },
+      Constructor = { icon = "", hl = "@constructor" },
+      Enum = { icon = "ℰ", hl = "@type" },
+      Interface = { icon = "ﰮ", hl = "@type" },
+      Function = { icon = "", hl = "@function" },
+      Variable = { icon = "", hl = "@constant" },
+      Constant = { icon = "", hl = "@constant" },
+      String = { icon = "𝓐", hl = "@string" },
+      Number = { icon = "#", hl = "@number" },
+      Boolean = { icon = "⊨", hl = "@boolean" },
+      Array = { icon = "", hl = "@constant" },
+      Object = { icon = "⦿", hl = "@type" },
+      Key = { icon = "🔐", hl = "@type" },
+      Null = { icon = "NULL", hl = "@type" },
+      EnumMember = { icon = "", hl = "@field" },
+      Struct = { icon = "𝓢", hl = "@type" },
+      Event = { icon = "є", hl = "@type" },
+      Operator = { icon = "+", hl = "@operator" },
+      TypeParameter = { icon = "𝙏", hl = "@parameter" },
+      Component = { icon = "к", hl = "@function" },
+      Fragment = { icon = "Ґ", hl = "@constant" },
+    },
   })
   vim.keymap.set('n', '<leader>i', "<CMD>SymbolsOutline<CR>", { desc = 'Symbols outline' })
 end
@@ -991,8 +1024,8 @@ end
 ------------------------------
 -- [[ Configure fugitive ]] --
 ------------------------------
-vim.keymap.set('n', '<leader>gg', '<CMD>vertical rightbelow Git<CR>', { desc = 'Git status' })
-vim.keymap.set('n', '<leader>gG', '<CMD>vertical rightbelow Git<CR>:vertical resize 80<CR>', { desc = 'Git status (half screen)' })
+vim.keymap.set('n', '<leader>gG', '<CMD>vertical rightbelow Git<CR>', { desc = 'Git status fugitive' })
+-- vim.keymap.set('n', '<leader>gG', '<CMD>vertical rightbelow Git<CR>:vertical resize 80<CR>', { desc = 'Git status (half screen)' })
 vim.keymap.set('n', '<leader>gC', '<CMD>vertical rightbelow Git log --oneline<CR>', { desc = 'Git short log' })
 vim.keymap.set('n', '<leader>gL', '<CMD>rightbelow vsplit | Gclog<CR>', { desc = 'Git log (fugitive)' })
 vim.keymap.set('n', '<leader>gj', '<CMD>Gitsigns next_hunk<CR>', { desc = 'Next hunk' })
@@ -1529,9 +1562,9 @@ else
   print("Could not find module " .. catppuccin_name)
 end
 -- Dark theme
--- vim.cmd.colorscheme "catppuccin-frappe"
+vim.cmd.colorscheme "catppuccin-frappe"
 -- Light theme
-vim.cmd.colorscheme "catppuccin-latte"
+-- vim.cmd.colorscheme "catppuccin-latte"
 
 ----------------------------
 -- [[ Configure Neogit ]] --
@@ -1539,7 +1572,7 @@ vim.cmd.colorscheme "catppuccin-latte"
 local has_neogit, neogit = pcall(require, "neogit")
 if has_neogit then
   neogit.setup({})
-  vim.keymap.set('n', '<leader>gn', '<CMD>Neogit<CR>', { desc = 'Neogit' })
+  vim.keymap.set('n', '<leader>gg', '<CMD>Neogit<CR>', { desc = 'Neogit' })
 end
 
 ---------------------------
@@ -1552,8 +1585,6 @@ if has_dired then
     show_banner = false,
     show_hidden = true
   })
-else
-  print("No module named dired")
 end
 
 ---------------------------------
@@ -1562,9 +1593,8 @@ end
 local has_mc, mc = pcall(require, "multicursors")
 if has_mc then
   mc.setup ({})
-  vim.keymap.set('n', '<leader>m', '<CMD>MCstart<CR>', { desc = "Multicursors start" })
-else
-  print("No module named multicursors")
+  vim.keymap.set('n', '<leader>m', '<CMD>MCstart<CR>', { desc = "Multicursors start word" })
+  vim.keymap.set('n', '<leader>M', '<CMD>MCunderCursor<CR>', { desc = "Multicursors start cursor" })
 end
 
 

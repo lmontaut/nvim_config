@@ -74,12 +74,12 @@ require('packer').startup(function(use)
   -- Better netrw
   -- use { 'tpope/vim-vinegar' }
   use { 'tpope/vim-eunuch' }
-  -- use { 'justinmk/vim-dirvish' }
+  use { 'justinmk/vim-dirvish' }
 
   -- use { 'navarasu/onedark.nvim' } -- Theme inspired by Atom
   use { "catppuccin/nvim", as = "catppuccin" }
   use { 'nvim-lualine/lualine.nvim' } -- Fancier statusline
-  use { 'lukas-reineke/indent-blankline.nvim' } -- Add indentation guides even on blank lines
+  -- use { 'lukas-reineke/indent-blankline.nvim' } -- Add indentation guides even on blank lines
   use { 'numToStr/Comment.nvim' } -- "gc" to comment visual regions/lines
   use { 'tpope/vim-sleuth' } -- Detect tabstop and shiftwidth automatically
 
@@ -107,6 +107,15 @@ require('packer').startup(function(use)
   -- symbol outline
   -- use { "simrat39/symbols-outline.nvim" }
   use { "lmontaut/symbols-outline.nvim" }
+
+  -- LSP saga
+  -- use ({
+  --   'nvimdev/lspsaga.nvim',
+  --   after = 'nvim-lspconfig',
+  --   config = function()
+  --     require('lspsaga').setup({})
+  --   end,
+  -- })
 
   -- undo tree
   use { "mbbill/undotree" }
@@ -150,19 +159,19 @@ require('packer').startup(function(use)
   use { "pechorin/any-jump.vim" }
 
   -- Dired
-  use {
-    "X3eRo0/dired.nvim",
-    requires = "MunifTanjim/nui.nvim",
-    config = function()
-      require("dired").setup {
-        path_separator = "/",
-        show_banner = false,
-        show_hidden = true,
-        show_dot_dirs = true,
-        show_colors = true,
-      }
-    end
-  }
+  -- use {
+  --   "X3eRo0/dired.nvim",
+  --   requires = "MunifTanjim/nui.nvim",
+  --   config = function()
+  --     require("dired").setup {
+  --       path_separator = "/",
+  --       show_banner = false,
+  --       show_hidden = true,
+  --       show_dot_dirs = true,
+  --       show_colors = true,
+  --     }
+  --   end
+  -- }
 
   -- Multicursors
   use {
