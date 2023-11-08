@@ -153,8 +153,8 @@ vim.keymap.set("n", "<leader>S", ":%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left>
 -- vim.keymap.set("n", "L", ">>", { desc = "", opts.args })
 vim.keymap.set("n", "<C-h>", "<<", { desc = "Indent", opts.args })
 vim.keymap.set("n", "<C-l>", ">>", { desc = "Unindent", opts.args })
-vim.keymap.set('n', "<C-k>", "<Esc>mzO<Esc>`z", { desc = "Insert line above", noremap = true, silent = true })
-vim.keymap.set('n', "<C-j>", "<Esc>mzo<Esc>`z", { desc = "Insert line below", noremap = true, silent = true })
+vim.keymap.set('n', "<C-K>", "<Esc>mzO<Esc>`z", { desc = "Insert line above", noremap = true, silent = true })
+vim.keymap.set('n', "<C-J>", "<Esc>mzo<Esc>`z", { desc = "Insert line below", noremap = true, silent = true })
 -- Deprectated because same can be done by simply selecting the line and doing C-j/C-k
 -- vim.keymap.set("n", "<C-k>", "ddkP==", { desc = "Move line up", opts.args })
 -- vim.keymap.set("n", "<C-j>", "ddp==", { desc = "Move line down", opts.args })
@@ -186,7 +186,7 @@ vim.keymap.set("n", "L", "zz", { desc = "Center window around cursor", opts.args
 
 -- Escape from INSERT mode
 vim.keymap.set('i', "jk", "<ESC>", { desc = "Escape INSERT mode", noremap = true, silent = true })
-vim.keymap.set('i', "<S-TAB>", "<C-d>", { desc = "Unindent INSERT mode", noremap = true, silent = true })
+-- vim.keymap.set('i', "<S-TAB>", "<C-d>", { desc = "Unindent INSERT mode", noremap = true, silent = true })
 
 -- Insert line above in insert mode
 -- WARNING: only works if tpope/unimpaired is installed
@@ -198,7 +198,7 @@ vim.keymap.set("i", "<C-l>", "<C-t>", { desc = "Indent", opts.args })
 vim.keymap.set("i", "<C-h>", "<C-d>", { desc = "Unindent", opts.args })
 
 -- Delete in front of cursor in insert mode
-vim.keymap.set("i", "<C-u>", "<space><Esc>ce", { desc = "Delete after cursor", opts.args })
+vim.keymap.set("i", "<C-d>", "<space><Esc>ce", { desc = "Delete after cursor", opts.args })
 
 -- Automatic bracket closing
 -- vim.keymap.set("i", '"', '""<left>', opts)
