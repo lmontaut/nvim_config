@@ -55,6 +55,8 @@ vim.keymap.set("n", "<C-w>ql", "<C-w>l:close<CR>", { desc = "Kill window right",
 vim.keymap.set("n", "<C-w>qh", "<C-w>h:close<CR>", { desc = "Kill window left", opts.args })
 
 -- Window navigation with leader key
+vim.keymap.set("n", "<leader>ww", "<C-w>w", { desc = "Cycle windows", opts.args })
+vim.keymap.set("n", "<leader>wp", "<C-w>p", { desc = "Previous window", opts.args })
 vim.keymap.set("n", "<leader>wl", "<C-w>l", { desc = "Nav window right", opts.args })
 vim.keymap.set("n", "<leader>wh", "<C-w>h", { desc = "Nav window left", opts.args })
 vim.keymap.set("n", "<leader>wk", "<C-w>k", { desc = "Nav window up", opts.args })

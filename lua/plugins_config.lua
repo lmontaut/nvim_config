@@ -1069,6 +1069,10 @@ vim.keymap.set('n', "<leader>u", vim.cmd.UndotreeToggle, { desc = "Undo history"
 -------------------------
 local has_pap, pap = pcall(require, "pap")
 if has_pap then
+  vim.cmd("autocmd Filetype pap-output nnoremap <silent> <buffer> <CR> :cg<Space>".. pap.dumpfile .. "<CR>'B")
+  vim.cmd("autocmd Filetype pap-output nnoremap <silent> <buffer> q :cg<Space>".. pap.dumpfile .. "<CR>'B")
+  vim.cmd("autocmd Filetype pap-output nnoremap <silent> <buffer> <leader>qq :cg<Space>" .. pap.dumpfile .. "<CR>:cc<CR>")
+
   vim.api.nvim_create_user_command('Papcmd', function(command) pap.set_cmd(command.args) end, { nargs = "*" })
   vim.api.nvim_create_user_command('Pap', function(command) pap.run_cmd(command.args) end, { nargs = "*" })
   vim.api.nvim_create_user_command('Paphsize', function(command) pap.set_window_hsize(command.args) end, { nargs = "*" })
@@ -1551,7 +1555,7 @@ if has_catppuccin then
           Comment = { fg = latte.green, style = { "italic" } }
         }
       end,
-      frappe = function(frappe)
+      frappe = function() --frappe)
         return {
           Comment = { fg = "#3b9c7b", style = { "italic" } }
         }
