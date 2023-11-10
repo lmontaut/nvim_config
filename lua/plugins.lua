@@ -72,9 +72,10 @@ require('packer').startup(function(use)
   use { 'lewis6991/gitsigns.nvim' }
 
   -- Better netrw
-  -- use { 'tpope/vim-vinegar' }
   use { 'tpope/vim-eunuch' }
-  use { 'justinmk/vim-dirvish' }
+  -- use { 'tpope/vim-vinegar' }
+  -- use { 'justinmk/vim-dirvish' }
+  use{ 'stevearc/oil.nvim' }
 
   -- use { 'navarasu/onedark.nvim' } -- Theme inspired by Atom
   use { "catppuccin/nvim", as = "catppuccin" }

@@ -1560,6 +1560,16 @@ if has_mc then
   vim.keymap.set('n', '<leader>M', '<CMD>MCunderCursor<CR>', { desc = "Multicursors start cursor" })
 end
 
+---------------------------------
+-- [[ Configure oil.nvim ]] --
+---------------------------------
+-- Oil will take over directory buffers (e.g. `vim .` or `:e src/`)
+local has_oil, oil = pcall(require, "oil")
+if has_oil then
+  oil.setup({})
+  vim.keymap.set('n', '-', "<CMD>Oil<CR>", { desc = "Open parent directory" })
+end
+
 
 -------------------------------
 -- [[ Configure Which-key ]] --
