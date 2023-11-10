@@ -197,10 +197,9 @@ if has_treesitter then
     incremental_selection = {
       enable = true,
       keymaps = {
-        init_selection = '<C-space>',
-        node_incremental = '<C-space>',
-        scope_incremental = '<TAB>',
-        node_decremental = '<S-TAB>',
+        init_selection = '<leader>ee',
+        node_incremental = '<leader>en',
+        node_decremental = '<leader>ep',
       },
     },
     textobjects = {
@@ -1577,93 +1576,49 @@ if has_wk then
   })
 
   wk.register({
-    a = {
-      name = "AnyJump"
-    },
-    b = {
-      name = "Buffers"
-    },
-    c = {
-      name = "CMake",
-      b = {
-        name = "Build",
-      },
-      B = {
-        name = "Create build folder",
-      },
-      r = {
-        name = "Clean",
-      },
-      l = {
-        name = "List targets",
-      },
-      c = {
-        name = "Compile target",
-      },
-      a = {
-        name = "Compile all",
-      },
-      m = {
-        name = "Ccmake",
-      },
-      i = {
-        name = "Install",
-      },
-      L = {
-        name = "Link compile_commands.json",
-      },
-      t = {
-        name = "Test all",
-      },
-      T = {
-        name = "Rerun failed tests",
-      },
+    a = { name = "AnyJump" },
+    b = { name = "Buffers" },
+    c = { name = "CMake", b = { name = "Build", },
+      B = { name = "Create build folder", },
+      r = { name = "Clean", },
+      l = { name = "List targets", },
+      c = { name = "Compile target", },
+      a = { name = "Compile all", },
+      m = { name = "Ccmake", },
+      i = { name = "Install", },
+      L = { name = "Link compile_commands.json", },
+      t = { name = "Test all", },
+      T = { name = "Rerun failed tests", },
     },
     d = {
       name = "Debbuger",
-      t = {
-        name = "Search with Telescope"
-      },
-      s = {
-        name = "Step/show"
-      }
+      t = { name = "Search with Telescope" },
+      s = { name = "Step/show" }
+    },
+    e = {
+      name = "Treesitter select",
+      e = { name = "Start selection" },
+      n = { name = "Increment node" },
+      p = { name = "Decrement node" },
     },
     --
-    l = {
-      name = "LSP/Loclist"
-    },
+    l = { name = "LSP/Loclist" },
     --
     n = {
       name = "Neorg",
-      j = {
-        name = "Journal"
-      }
+      j = { name = "Journal" }
     },
     --
-    g = {
-      name = "Git"
-    },
+    g = { name = "Git" },
     --
-    P = {
-      name = "Packer"
-    },
+    P = { name = "Packer" },
     --
-    p = {
-      name = "Pap"
-    },
+    p = { name = "Pap" },
     --
-    q = {
-      name = "Quicklist"
-    },
+    q = { name = "Quicklist" },
     --
-    s = {
-      name = "Search"
-    },
-    v = {
-      name = "Vim"
-    },
-    w = {
-      name = "Window"
-    }
+    s = { name = "Search" },
+    v = { name = "Vim" },
+    w = { name = "Window" }
   }, { prefix = "<leader>" })
 end
