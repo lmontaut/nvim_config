@@ -71,6 +71,7 @@ if has_telescope then
           width = 0.9
         },
       },
+      theme = "dropdown",
       path_display = {
         "truncate"
       },
@@ -249,6 +250,140 @@ if has_treesitter then
   -- needs treesitter to be installed
   -- vim.opt.foldmethod = "expr"
   -- vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
+end
+
+-- [[ Configure nvim-cmp ]]
+local has_cmp, cmp = pcall(require, 'cmp')
+local has_luasnip, luasnip = pcall(require, 'luasnip')
+
+-- cmp_is_on = false
+if has_cmp then
+  local ELLIPSIS_CHAR = '…'
+  local MAX_LABEL_WIDTH = 30
+
+  local get_ws = function (max, len)
+    return (" "):rep(max - len)
+  end
+
+  local format = function(_, item)
+    local content = item.abbr
+    if #content > MAX_LABEL_WIDTH then
+      item.abbr = vim.fn.strcharpart(content, 0, MAX_LABEL_WIDTH) .. ELLIPSIS_CHAR
+    else
+      item.abbr = content .. get_ws(MAX_LABEL_WIDTH, #content)
+    end
+
+    return item
+  end
+
+  vim.cmd[[
+    highlight GhostText gui=bold guifg=#282c34 guibg=#98c379
+  ]]
+
+  local cmp_mappings = {
+    -- Scroll docs down
+    ['<C-d>'] = cmp.mapping(function(fallback)
+      if cmp.visible() then
+        return cmp.scroll_docs(4)
+      end
+        fallback()
+      end, { 'i' }),
+    -- Scroll docs up
+    ['<C-u>'] = cmp.mapping(function(fallback)
+      if cmp.visible() then
+        return cmp.scroll_docs(-4)
+      end
+        fallback()
+      end, { 'i' }),
+    -- Abort completion
+    ['<C-e>'] = cmp.mapping(function(fallback)
+      if cmp.visible() then
+        return cmp.abort()
+      end
+        fallback()
+      end, { 'i', 'c' }),
+    -- Invoke completion
+    ['<Tab>'] = cmp.mapping(function()
+        cmp.complete()
+      end, { 'i', 'c' }),
+    -- Close completion window
+    ['<S-Tab>'] = cmp.mapping(function()
+      cmp.close()
+      end, { 'i', 'c' }),
+    -- Next completion item
+    ['<C-n>'] = cmp.mapping(function(fallback)
+      if cmp.visible() then
+        return cmp.select_next_item()
+      end
+        fallback()
+      end, { 'i', 'c' }),
+    -- Previous completion item
+    ['<C-p>'] = cmp.mapping(function(fallback)
+      if cmp.visible() then
+        return cmp.select_prev_item()
+      end
+        fallback()
+      end, { 'i', 'c' }),
+    -- Confirm completion
+    ['<CR>'] = cmp.mapping(function(fallback)
+      if cmp.visible() then
+        return cmp.confirm({ select = true })
+      end
+        fallback()
+      end, { 'i', 'c' }),
+  }
+  cmp.setup({
+    completion = {
+      autocomplete = false -- autocomplete will only appear when I ask it to
+    },
+    snippet = {
+      expand = function(args)
+        if has_luasnip then
+          luasnip.lsp_expand(args.body)
+        end
+      end,
+    },
+    mapping = cmp_mappings,
+    formatting = {
+      format = format,
+    },
+    sources = cmp.config.sources({
+      { name = 'nvim_lsp' },
+      { name = 'luasnip' }, -- For luasnip users.
+    }, {
+        { name = 'buffer' },
+        { name = 'path' },
+        { name = 'cmdline' },
+      }),
+    experimental = {
+      ghost_text = { hl_group = 'GhostText' }
+    }
+  })
+
+  cmp.setup.cmdline({ '/', '?' }, {
+    mapping = cmp_mappings,
+    sources = {
+      { name = 'buffer' }
+    }
+  })
+
+  cmp.setup.cmdline(':', {
+    mapping = cmp_mappings,
+    sources = cmp.config.sources({
+      { name = 'path' }
+    }, {
+        { name = 'cmdline' }
+      })
+  })
+
+  cmp.setup.filetype('vim', {
+    mapping = cmp_mappings,
+    sources = cmp.config.sources({
+      { name = 'path' }
+    }, {
+        { name = 'cmdline' }
+      })
+  })
 end
 
 -------------------------
@@ -543,184 +678,6 @@ end
 local has_fidget, _ = pcall(require, "fidget")
 if has_fidget then
   require('fidget').setup()
-end
-
--- [[ Configure nvim-cmp ]]
-local has_cmp, cmp = pcall(require, 'cmp')
-local has_luasnip, luasnip = pcall(require, 'luasnip')
-
-if has_cmp then
-  local cmp_toggle = function()
-    if cmp.visible() then
-      cmp.close()
-      cmp.setup({ enabled = false })
-    else
-      cmp.setup({ enabled = true })
-      cmp.complete()
-    end
-  end
-
-  local cmp_abort = function(fallback)
-    if cmp.visible() then
-      cmp.abort()
-      cmp.setup({ enabled = false })
-    else
-      fallback()
-    end
-  end
-
-  local cmp_confirm = function(fallback)
-    if cmp.visible() then
-      cmp.confirm({
-          behavior = cmp.ConfirmBehavior.Replace,
-          select = true,
-        })
-      cmp.setup({ enabled = false })
-    else
-      fallback()
-    end
-  end
-
-  -- local cmp_confirm_command = function(fallback)
-  --     if cmp.visible() then
-  --       cmp.confirm({
-  --           behavior = cmp.ConfirmBehavior.Replace,
-  --           select = true,
-  --         })
-  --       cmp.complete()
-  --   else
-  --     cmp.setup({ enabled = false })
-  --     fallback()
-  --   end
-  -- end
-
-  local cmp_tab = function()
-    if cmp.visible() then
-      cmp.select_next_item()
-    elseif luasnip.expand_or_jumpable() and has_luasnip then
-      luasnip.expand_or_jump()
-    else
-      cmp_toggle()
-    end
-  end
-
-  local cmp_scroll = function(fallback)
-    if cmp.visible() then
-      cmp.scroll_docs(4)
-    else
-      fallback()
-    end
-  end
-
-  local cmp_scroll_back = function(fallback)
-    if cmp.visible() then
-      cmp.scroll_docs(-4)
-    else
-      fallback()
-    end
-  end
-
-  -- local cmp_tab_command = function()
-  --   if cmp.visible() then
-  --     cmp.select_next_item()
-  --   elseif luasnip.expand_or_jumpable() then
-  --     luasnip.expand_or_jump()
-  --   else
-  --     cmp_toggle()
-  --     cmp.select_next_item()
-  --   end
-  -- end
-
-  local cmp_s_tab = function()
-    if cmp.visible() then
-      cmp.select_prev_item()
-    elseif luasnip.jumpable(-1) and has_luasnip then
-      luasnip.jump(-1)
-    else
-      cmp_toggle()
-    end
-  end
-
-  local ELLIPSIS_CHAR = '…'
-  local MAX_LABEL_WIDTH = 30
-
-  local get_ws = function (max, len)
-    return (" "):rep(max - len)
-  end
-
-  local format = function(_, item)
-    local content = item.abbr
-    if #content > MAX_LABEL_WIDTH then
-      item.abbr = vim.fn.strcharpart(content, 0, MAX_LABEL_WIDTH) .. ELLIPSIS_CHAR
-    else
-      item.abbr = content .. get_ws(MAX_LABEL_WIDTH, #content)
-    end
-
-    return item
-  end
-
-  vim.cmd[[
-    highlight GhostText gui=bold guifg=#282c34 guibg=#98c379
-  ]]
-
-  cmp.setup({
-    completion = {
-      autocomplete = false -- autocomplete will only appear when I ask it to
-    },
-    snippet = {
-      expand = function(args)
-        if has_luasnip then
-          luasnip.lsp_expand(args.body)
-        end
-      end,
-    },
-    mapping = {
-      ['<C-d>'] = cmp.mapping({ i = cmp_scroll }),
-      ['<C-u>'] = cmp.mapping({ i = cmp_scroll_back }),
-      ['<C-e>'] = cmp.mapping(cmp_abort, { 'i', 's', 'c' }),
-      ['<Esc>'] = cmp.mapping(cmp_abort, { 'i', 's' }),
-      ['<C-Space>'] = cmp.mapping(cmp_toggle, { 'i', 's', 'c' }),
-      ['<CR>'] = cmp.mapping({ i=cmp_confirm, s=cmp_confirm, c=cmp_confirm }),
-      ['<Tab>'] = cmp.mapping({ i=cmp_tab, s=cmp_tab, c=cmp_tab }),
-      ['<S-Tab>'] = cmp.mapping(cmp_s_tab, { 'i', 's', 'c' }),
-      ['<C-n>'] = cmp.mapping(cmp_tab, { 'i', 's' }),
-      ['<C-p>'] = cmp.mapping(cmp_s_tab, { 'i', 's' }),
-    },
-    formatting = {
-      format = format,
-    },
-    sources = {
-      { name = 'nvim_lsp' },
-      { name = 'luasnip' },
-      { name = 'buffer' },
-      { name = 'path' },
-      -- { name = 'file' },
-    },
-    -- window = {
-      -- completion = cmp.config.window.bordered(),
-      -- documentation = cmp.config.window.bordered(),
-    -- },
-    experimental = {
-      ghost_text = { hl_group = 'GhostText' }
-    }
-  })
-
-  cmp.setup.cmdline({ '/', '?' }, {
-    -- mapping = cmp.mapping.preset.cmdline(),
-    sources = {
-      { name = 'buffer' }
-    }
-  })
-
-  -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
-  cmp.setup.cmdline(':', {
-    -- mapping = cmp.mapping.preset.cmdline(),
-    sources = cmp.config.sources({
-      { name = 'path' },
-    }, {
-      { name = 'cmdline' }
-    })
-  })
 end
 
 -----------------------------
