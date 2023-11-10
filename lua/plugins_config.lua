@@ -81,11 +81,13 @@ if has_telescope then
         i = {
           ["jk"] = { "<cmd>startinsert<cr>j<cmd>startinsert<cr>k", type = "command" },
           ["kj"] = { "<cmd>stopinsert<cr>", type = "command" },
-          ["<C-n>"] = actions.cycle_history_next,
-          ["<C-p>"] = actions.cycle_history_prev,
+          ["<C-h>"] = actions.cycle_history_next,
+          ["<C-l>"] = actions.cycle_history_prev,
 
           ["<C-j>"] = actions.move_selection_next,
           ["<C-k>"] = actions.move_selection_previous,
+          ["<C-n>"] = actions.move_selection_next,
+          ["<C-p>"] = actions.move_selection_previous,
 
           ["<esc>"] = actions.close,
 
@@ -110,8 +112,8 @@ if has_telescope then
           ["<C-i>"] = action_layout.toggle_preview,
 
           -- Git related
-          ["<C-g>"] = actions.cycle_previewers_prev,
-          ["<C-h>"] = actions.cycle_previewers_next,
+          ["<C-H>"] = actions.cycle_previewers_prev,
+          ["<C-L>"] = actions.cycle_previewers_next,
         },
         n = {
           ["<C-i>"] = action_layout.toggle_preview,
@@ -332,6 +334,7 @@ if has_cmp then
         fallback()
       end, { 'i', 'c' }),
   }
+
   cmp.setup({
     completion = {
       autocomplete = false -- autocomplete will only appear when I ask it to
