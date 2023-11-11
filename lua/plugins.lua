@@ -196,6 +196,11 @@ require('packer').startup(function(use)
     }
   }
 
+  -- Find and replace (a wrapper around sad terminal utility)
+  use { "ray-x/sad.nvim",
+    requires = { "ray-x/guihua.lua", run = "cd lua/fzy && make" }
+  }
+
   -- Add custom plugins to packer from ~/.config/nvim/lua/custom/plugins.lua
   local has_plugins, plugins = pcall(require, 'custom.plugins')
   if has_plugins then
