@@ -1057,38 +1057,38 @@ if has_pap then
   -- CMake related
   --
   -- Cmake cache
-  vim.keymap.set("n", "<leader>cmr", ":rightbelow 180 vsplit | terminal ccmake builds/build-release-$(echo $CONDA_DEFAULT_ENV)/*", { noremap = true, silent = false, desc = "Change release CMakeCache" })
-  vim.keymap.set("n", "<leader>cmd", ":rightbelow 180 vsplit | terminal ccmake builds/build-debug-$(echo $CONDA_DEFAULT_ENV)/*", { noremap = true, silent = false, desc = "Change debug CMakeCache" })
-  -- Create build folders
-  vim.keymap.set("n", "<leader>cBr", ":Paprun mkdir builds/build-release-$(echo $CONDA_DEFAULT_ENV)", { noremap = true, silent = false, desc = "Create release build folder" })
-  vim.keymap.set("n", "<leader>cBd", ":Paprun mkdir builds/build-debug-$(echo $CONDA_DEFAULT_ENV)", { noremap = true, silent = false, desc = "Create debug build folder" })
-  -- Deleting build folders
-  vim.keymap.set("n", "<leader>crr", ":Paprun rm -rf builds/build-release-$(echo $CONDA_DEFAULT_ENV)/*", { noremap = true, silent = false, desc = "Delete release build folder" })
-  vim.keymap.set("n", "<leader>crd", ":Paprun rm -rf builds/build-debug-$(echo $CONDA_DEFAULT_ENV)/*", { noremap = true, silent = false, desc = "Delete debug build folder" })
-  -- Build cmake files
-  vim.keymap.set("n", "<leader>cbr", ":Paprun cmake -S . -C ~/.config/cmake/release_config.cmake -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX -DCMAKE_SYSTEM_PREFIX_PATH=$CONDA_PREFIX -B builds/build-release-$(echo $CONDA_DEFAULT_ENV)", { noremap = true, silent = false, desc = "Build release" })
-  vim.keymap.set("n", "<leader>cbd", ":Paprun cmake -S . -C ~/.config/cmake/debug_config.cmake -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX -DCMAKE_SYSTEM_PREFIX_PATH=$CONDA_PREFIX -B builds/build-debug-$(echo $CONDA_DEFAULT_ENV)", { noremap = true, silent = false, desc = "Build debug" })
-  -- List cmake targets
-  vim.keymap.set("n", "<leader>clr", ":Paprun cmake --build builds/build-release-$(echo $CONDA_DEFAULT_ENV) --target help", { noremap = true, silent = false, desc = "List targets release" })
-  vim.keymap.set("n", "<leader>cld", ":Paprun cmake --build builds/build-debug-$(echo $CONDA_DEFAULT_ENV) --target help", { noremap = true, silent = false, desc = "List targets debug" })
-  -- Compile target
-  vim.keymap.set("n", "<leader>ccr", ":Paprun cmake --build builds/build-release-$(echo $CONDA_DEFAULT_ENV) --target  -j10<left><left><left><left><left>", { noremap = true, silent = false, desc = "Compile release target" })
-  vim.keymap.set("n", "<leader>ccd", ":Paprun cmake --build builds/build-debug-$(echo $CONDA_DEFAULT_ENV) --target  -j10<left><left><left><left><left>", { noremap = true, silent = false, desc = "Compile debug target" })
-  -- Compile all
-  vim.keymap.set("n", "<leader>car", ":Paprun cmake --build builds/build-release-$(echo $CONDA_DEFAULT_ENV) --target all -j10", { noremap = true, silent = false, desc = "Compile all (release)" })
-  vim.keymap.set("n", "<leader>cad", ":Paprun cmake --build builds/build-debug-$(echo $CONDA_DEFAULT_ENV) --target all -j10", { noremap = true, silent = false, desc = "Compile all (debug)" })
-  -- Install
-  vim.keymap.set("n", "<leader>cir", ":Paprun cmake --build builds/build-release-$(echo $CONDA_DEFAULT_ENV) --target install -j10", { noremap = true, silent = false, desc = "Install (release)" })
-  vim.keymap.set("n", "<leader>cid", ":Paprun cmake --build builds/build-debug-$(echo $CONDA_DEFAULT_ENV) --target install -j10", { noremap = true, silent = false, desc = "Install (debug)" })
-  -- Link compile commands
-  vim.keymap.set("n", "<leader>cLr", ":Paprun ln -sf builds/build-release-$(echo $CONDA_DEFAULT_ENV)/compile_commands.json ./", { noremap = true, silent = false, desc = "Link release compile_commands.json" })
-  vim.keymap.set("n", "<leader>cLd", ":Paprun ln -sf builds/build-debug-$(echo $CONDA_DEFAULT_ENV)/compile_commands.json ./", { noremap = true, silent = false, desc = "Link debug compile_commands.json" })
-  -- Ctest
-  vim.keymap.set("n", "<leader>ctr", ":Paprun ctest --output-on-failure -j10 --test-dir builds/build-release-$(echo $CONDA_DEFAULT_ENV)", { noremap = true, silent = false, desc = "Run release tests" })
-  vim.keymap.set("n", "<leader>ctd", ":Paprun ctest --output-on-failure -j10 --test-dir builds/build-debug-$(echo $CONDA_DEFAULT_ENV)", { noremap = true, silent = false, desc = "Run debug tests" })
-  -- Ctest rerun failed
-  vim.keymap.set("n", "<leader>cTr", ":Paprun ctest --output-on-failure -j10 --test-dir builds/build-release-$(echo $CONDA_DEFAULT_ENV) --rerun-failed", { noremap = true, silent = false, desc = "Rerun failed release tests" })
-  vim.keymap.set("n", "<leader>cTd", ":Paprun ctest --output-on-failure -j10 --test-dir builds/build-debug-$(echo $CONDA_DEFAULT_ENV) --rerun-failed", { noremap = true, silent = false, desc = "Rerun failed release tests" })
+  -- vim.keymap.set("n", "<leader>cmr", ":rightbelow 180 vsplit | terminal ccmake builds/build-release-$(echo $CONDA_DEFAULT_ENV)/*", { noremap = true, silent = false, desc = "Change release CMakeCache" })
+  -- vim.keymap.set("n", "<leader>cmd", ":rightbelow 180 vsplit | terminal ccmake builds/build-debug-$(echo $CONDA_DEFAULT_ENV)/*", { noremap = true, silent = false, desc = "Change debug CMakeCache" })
+  -- -- Create build folders
+  -- vim.keymap.set("n", "<leader>cBr", ":Paprun mkdir builds/build-release-$(echo $CONDA_DEFAULT_ENV)", { noremap = true, silent = false, desc = "Create release build folder" })
+  -- vim.keymap.set("n", "<leader>cBd", ":Paprun mkdir builds/build-debug-$(echo $CONDA_DEFAULT_ENV)", { noremap = true, silent = false, desc = "Create debug build folder" })
+  -- -- Deleting build folders
+  -- vim.keymap.set("n", "<leader>crr", ":Paprun rm -rf builds/build-release-$(echo $CONDA_DEFAULT_ENV)/*", { noremap = true, silent = false, desc = "Delete release build folder" })
+  -- vim.keymap.set("n", "<leader>crd", ":Paprun rm -rf builds/build-debug-$(echo $CONDA_DEFAULT_ENV)/*", { noremap = true, silent = false, desc = "Delete debug build folder" })
+  -- -- Build cmake files
+  -- vim.keymap.set("n", "<leader>cbr", ":Paprun cmake -S . -C ~/.config/cmake/release_config.cmake -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX -DCMAKE_SYSTEM_PREFIX_PATH=$CONDA_PREFIX -B builds/build-release-$(echo $CONDA_DEFAULT_ENV)", { noremap = true, silent = false, desc = "Build release" })
+  -- vim.keymap.set("n", "<leader>cbd", ":Paprun cmake -S . -C ~/.config/cmake/debug_config.cmake -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX -DCMAKE_SYSTEM_PREFIX_PATH=$CONDA_PREFIX -B builds/build-debug-$(echo $CONDA_DEFAULT_ENV)", { noremap = true, silent = false, desc = "Build debug" })
+  -- -- List cmake targets
+  -- vim.keymap.set("n", "<leader>clr", ":Paprun cmake --build builds/build-release-$(echo $CONDA_DEFAULT_ENV) --target help", { noremap = true, silent = false, desc = "List targets release" })
+  -- vim.keymap.set("n", "<leader>cld", ":Paprun cmake --build builds/build-debug-$(echo $CONDA_DEFAULT_ENV) --target help", { noremap = true, silent = false, desc = "List targets debug" })
+  -- -- Compile target
+  -- vim.keymap.set("n", "<leader>ccr", ":Paprun cmake --build builds/build-release-$(echo $CONDA_DEFAULT_ENV) --target  -j10<left><left><left><left><left>", { noremap = true, silent = false, desc = "Compile release target" })
+  -- vim.keymap.set("n", "<leader>ccd", ":Paprun cmake --build builds/build-debug-$(echo $CONDA_DEFAULT_ENV) --target  -j10<left><left><left><left><left>", { noremap = true, silent = false, desc = "Compile debug target" })
+  -- -- Compile all
+  -- vim.keymap.set("n", "<leader>car", ":Paprun cmake --build builds/build-release-$(echo $CONDA_DEFAULT_ENV) --target all -j10", { noremap = true, silent = false, desc = "Compile all (release)" })
+  -- vim.keymap.set("n", "<leader>cad", ":Paprun cmake --build builds/build-debug-$(echo $CONDA_DEFAULT_ENV) --target all -j10", { noremap = true, silent = false, desc = "Compile all (debug)" })
+  -- -- Install
+  -- vim.keymap.set("n", "<leader>cir", ":Paprun cmake --build builds/build-release-$(echo $CONDA_DEFAULT_ENV) --target install -j10", { noremap = true, silent = false, desc = "Install (release)" })
+  -- vim.keymap.set("n", "<leader>cid", ":Paprun cmake --build builds/build-debug-$(echo $CONDA_DEFAULT_ENV) --target install -j10", { noremap = true, silent = false, desc = "Install (debug)" })
+  -- -- Link compile commands
+  -- vim.keymap.set("n", "<leader>cLr", ":Paprun ln -sf builds/build-release-$(echo $CONDA_DEFAULT_ENV)/compile_commands.json ./", { noremap = true, silent = false, desc = "Link release compile_commands.json" })
+  -- vim.keymap.set("n", "<leader>cLd", ":Paprun ln -sf builds/build-debug-$(echo $CONDA_DEFAULT_ENV)/compile_commands.json ./", { noremap = true, silent = false, desc = "Link debug compile_commands.json" })
+  -- -- Ctest
+  -- vim.keymap.set("n", "<leader>ctr", ":Paprun ctest --output-on-failure -j10 --test-dir builds/build-release-$(echo $CONDA_DEFAULT_ENV)", { noremap = true, silent = false, desc = "Run release tests" })
+  -- vim.keymap.set("n", "<leader>ctd", ":Paprun ctest --output-on-failure -j10 --test-dir builds/build-debug-$(echo $CONDA_DEFAULT_ENV)", { noremap = true, silent = false, desc = "Run debug tests" })
+  -- -- Ctest rerun failed
+  -- vim.keymap.set("n", "<leader>cTr", ":Paprun ctest --output-on-failure -j10 --test-dir builds/build-release-$(echo $CONDA_DEFAULT_ENV) --rerun-failed", { noremap = true, silent = false, desc = "Rerun failed release tests" })
+  -- vim.keymap.set("n", "<leader>cTd", ":Paprun ctest --output-on-failure -j10 --test-dir builds/build-debug-$(echo $CONDA_DEFAULT_ENV) --rerun-failed", { noremap = true, silent = false, desc = "Rerun failed release tests" })
 end
 
 -------------------------
@@ -1556,8 +1556,8 @@ end
 local has_mc, mc = pcall(require, "multicursors")
 if has_mc then
   mc.setup ({})
-  vim.keymap.set('n', '<leader>m', '<CMD>MCstart<CR>', { desc = "Multicursors start word" })
-  vim.keymap.set('n', '<leader>M', '<CMD>MCunderCursor<CR>', { desc = "Multicursors start cursor" })
+  vim.keymap.set('n', '<leader>cw', '<CMD>MCstart<CR>', { desc = "Multicursors start word" })
+  vim.keymap.set('n', '<leader>cc', '<CMD>MCunderCursor<CR>', { desc = "Multicursors start cursor" })
 end
 
 ------------------------------
@@ -1589,13 +1589,13 @@ end
 local has_grapple, grapple = pcall(require, "grapple")
 if has_grapple then
   grapple.setup({})
-  vim.keymap.set('n', "<leader>mm", "<CMD>GrappleToggle<CR>", { desc = "Toggle grapple tag" })
-  vim.keymap.set('n', "<leader>mp", "<CMD>GrapplePopup tags<CR>", { desc = "Grapple popup tags" })
+  vim.keymap.set('n', "<leader>mt", "<CMD>GrappleToggle<CR>", { desc = "Toggle grapple on file" })
+  vim.keymap.set('n', "<leader>mp", "<CMD>GrapplePopup tags<CR>", { desc = "Grapple popup files" })
 end
 
-----------------------------------
+---------------------------------
 -- [[ Configure portal.nvim ]] --
-----------------------------------
+---------------------------------
 local has_portal, portal = pcall(require, "portal")
 if has_portal then
   portal.setup({})
@@ -1605,6 +1605,14 @@ if has_portal then
     vim.keymap.set('n', "<leader>mo", "<CMD>Portal grapple backward<CR>", { desc = "Prev grapple" })
     vim.keymap.set('n', "<leader>mi", "<CMD>Portal grapple forward<CR>", { desc = "Next grapple" })
   end
+end
+
+--------------------------------
+-- [[ Configure marks.nvim ]] --
+--------------------------------
+local has_marks, marks = pcall(require, "marks")
+if has_marks then
+  marks.setup({})
 end
 
 -------------------------------
@@ -1624,18 +1632,7 @@ if has_wk then
   wk.register({
     a = { name = "AnyJump" },
     b = { name = "Buffers" },
-    c = { name = "CMake", b = { name = "Build", },
-      B = { name = "Create build folder", },
-      r = { name = "Clean", },
-      l = { name = "List targets", },
-      c = { name = "Compile target", },
-      a = { name = "Compile all", },
-      m = { name = "Ccmake", },
-      i = { name = "Install", },
-      L = { name = "Link compile_commands.json", },
-      t = { name = "Test all", },
-      T = { name = "Rerun failed tests", },
-    },
+    c = { name = "Multicursor" },
     d = {
       name = "Debbuger",
       t = { name = "Search with Telescope" },
@@ -1650,7 +1647,7 @@ if has_wk then
     --
     l = { name = "LSP/Loclist" },
     --
-    m = { name = "Grapple" },
+    m = { name = "Grapple/marks" },
     n = {
       name = "Neorg",
       j = { name = "Journal" }
