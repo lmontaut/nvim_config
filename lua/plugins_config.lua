@@ -1580,6 +1580,7 @@ end
 local has_sad, sad = pcall(require, "sad")
 if has_sad then
   sad.setup({})
+  vim.keymap.set('n', "<leader>sr", ":Sad<space>", { desc = "Search and replace", silent = false })
 end
 
 ----------------------------------
@@ -1590,6 +1591,20 @@ if has_grapple then
   grapple.setup({})
   vim.keymap.set('n', "<leader>mm", "<CMD>GrappleToggle<CR>", { desc = "Toggle grapple tag" })
   vim.keymap.set('n', "<leader>mp", "<CMD>GrapplePopup tags<CR>", { desc = "Grapple popup tags" })
+end
+
+----------------------------------
+-- [[ Configure portal.nvim ]] --
+----------------------------------
+local has_portal, portal = pcall(require, "portal")
+if has_portal then
+  portal.setup({})
+  vim.keymap.set('n', "<leader>o", "<CMD>Portal jumplist backward<CR>", { desc = "Prev portal" })
+  vim.keymap.set('n', "<leader>i", "<CMD>Portal jumplist forward<CR>", { desc = "Next portal" })
+  if has_grapple then
+    vim.keymap.set('n', "<leader>mo", "<CMD>Portal grapple backward<CR>", { desc = "Prev grapple" })
+    vim.keymap.set('n', "<leader>mi", "<CMD>Portal grapple forward<CR>", { desc = "Next grapple" })
+  end
 end
 
 -------------------------------
@@ -1635,6 +1650,7 @@ if has_wk then
     --
     l = { name = "LSP/Loclist" },
     --
+    m = { name = "Grapple" },
     n = {
       name = "Neorg",
       j = { name = "Journal" }
