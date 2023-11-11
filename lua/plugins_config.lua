@@ -1582,6 +1582,16 @@ if has_sad then
   sad.setup({})
 end
 
+----------------------------------
+-- [[ Configure grapple.nvim ]] --
+----------------------------------
+local has_grapple, grapple = pcall(require, "grapple")
+if has_grapple then
+  grapple.setup({})
+  vim.keymap.set('n', "<leader>mm", "<CMD>GrappleToggle<CR>", { desc = "Toggle grapple tag" })
+  vim.keymap.set('n', "<leader>mp", "<CMD>GrapplePopup tags<CR>", { desc = "Grapple popup tags" })
+end
+
 -------------------------------
 -- [[ Configure Which-key ]] --
 -------------------------------
