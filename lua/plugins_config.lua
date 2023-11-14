@@ -81,11 +81,9 @@ if has_telescope then
         i = {
           ["jk"] = { "<cmd>startinsert<cr>j<cmd>startinsert<cr>k", type = "command" },
           ["kj"] = { "<cmd>stopinsert<cr>", type = "command" },
-          ["<C-h>"] = actions.cycle_history_next,
-          ["<C-l>"] = actions.cycle_history_prev,
 
-          ["<C-j>"] = actions.move_selection_next,
-          ["<C-k>"] = actions.move_selection_previous,
+          ["<C-j>"] = actions.cycle_history_next,
+          ["<C-k>"] = actions.cycle_history_prev,
           ["<C-n>"] = actions.move_selection_next,
           ["<C-p>"] = actions.move_selection_previous,
 
@@ -968,7 +966,7 @@ if has_symbols_outline then
       Fragment = { icon = "Ґ", hl = "@constant" },
     },
   })
-  vim.keymap.set('n', '<leader>i', "<CMD>SymbolsOutline<CR>", { desc = 'Symbols outline' })
+  vim.keymap.set('n', '<leader>I', "<CMD>SymbolsOutline<CR>", { desc = 'Symbols outline' })
 end
 
 -------------------------------
