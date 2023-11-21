@@ -188,7 +188,8 @@ local has_treesitter, treesitter_configs = pcall(require, "nvim-treesitter.confi
 if has_treesitter then
   treesitter_configs.setup({
     -- Add languages to be installed here that you want installed for treesitter
-    ensure_installed = { 'c', 'cpp', 'cmake', 'lua', 'python', 'rust', 'help', 'vim' },
+    -- ensure_installed = { 'c', 'cpp', 'cmake', 'lua', 'python', 'rust', 'help', 'vim' },
+    ensure_installed = { 'c', 'cpp', 'cmake', 'lua', 'python', 'rust', 'vim' },
 
     highlight = { enable = true },
     indent = { enable = true, disable = { 'python' } },

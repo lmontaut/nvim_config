@@ -36,6 +36,8 @@ require('packer').startup(function(use)
     },
   }
 
+  use { 'nvim-tree/nvim-web-devicons' }
+
   -- Autocompletion
   use {
     'hrsh7th/nvim-cmp',
