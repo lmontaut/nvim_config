@@ -1612,6 +1612,8 @@ end
 local has_marks, marks = pcall(require, "marks")
 if has_marks then
   marks.setup({})
+  vim.keymap.set('n', "<leader>ml", "<CMD>MarksListBuf<CR>", { desc = "List buffer marks" })
+  vim.keymap.set('n', "<leader>mL", "<CMD>MarksListAll<CR>", { desc = "List all marks" })
 end
 
 -------------------------------
