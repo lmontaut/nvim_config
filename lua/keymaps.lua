@@ -155,8 +155,8 @@ vim.keymap.set("n", "<leader>S", ":%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left>
 -- vim.keymap.set("n", "L", ">>", { desc = "", opts.args })
 vim.keymap.set("n", "<C-h>", "<<", { desc = "Indent", opts.args })
 vim.keymap.set("n", "<C-l>", ">>", { desc = "Unindent", opts.args })
-vim.keymap.set('n', "<C-K>", "<Esc>mzO<Esc>`z", { desc = "Insert line above", noremap = true, silent = true })
-vim.keymap.set('n', "<C-J>", "<Esc>mzo<Esc>`z", { desc = "Insert line below", noremap = true, silent = true })
+vim.keymap.set('n', "<C-k>", "<Esc>mzO<Esc>`z", { desc = "Insert line above", noremap = true, silent = true })
+vim.keymap.set('n', "<C-j>", "<Esc>mzo<Esc>`z", { desc = "Insert line below", noremap = true, silent = true })
 -- Deprectated because same can be done by simply selecting the line and doing C-j/C-k
 -- vim.keymap.set("n", "<C-k>", "ddkP==", { desc = "Move line up", opts.args })
 -- vim.keymap.set("n", "<C-j>", "ddp==", { desc = "Move line down", opts.args })
