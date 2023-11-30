@@ -74,6 +74,11 @@ vim.keymap.set("n", "<leader>wH", "<C-w>H", { desc = "Send window far left", opt
 vim.keymap.set("n", "<leader>wJ", "<C-w>J", { desc = "Send window far down", opts.args })
 vim.keymap.set("n", "<leader>wK", "<C-w>K", { desc = "Send window far up", opts.args })
 vim.keymap.set("n", "<leader>wc", "<C-w>c", { desc = "Close window", opts.args })
+-- Kill windows
+vim.keymap.set("n", "<leader>wqh", "<C-w>qh", { desc = "Kill left window", opts.args })
+vim.keymap.set("n", "<leader>wql", "<C-w>ql", { desc = "Kill right window", opts.args })
+vim.keymap.set("n", "<leader>wqj", "<C-w>qj", { desc = "Kill lower window", opts.args })
+vim.keymap.set("n", "<leader>wqk", "<C-w>qk", { desc = "Kill upper window", opts.args })
 
 -- Quicklist navigation
 -- Even if the quicklist is not open, you can navigate with :cn and :cp

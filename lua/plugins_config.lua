@@ -1664,6 +1664,9 @@ if has_wk then
     --
     s = { name = "Search" },
     v = { name = "Vim" },
-    w = { name = "Window" }
+    w = {
+      name = "Window",
+      q = {name = "Kill a window"},
+    }
   }, { prefix = "<leader>" })
 end
