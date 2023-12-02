@@ -1515,7 +1515,7 @@ if has_catppuccin then
       end,
       frappe = function() --frappe)
         return {
-          Comment = { fg = "#3b9c7b", style = { "italic" } }
+          Comment = { fg = "#3b9c7b", style = { "bold" } }
         }
       end,
     },
