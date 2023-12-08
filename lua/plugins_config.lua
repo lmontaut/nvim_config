@@ -127,6 +127,9 @@ if has_telescope then
       lsp_definitions = {
         fname_width = 150,
       },
+      git_files = {
+      file_ignore_patterns = { "%.png", "%.jpg", "%.jpeg" },
+      },
       find_files = { -- Search ALL files, even if not tracked by git
         -- find_command = { "rg", "--files", "--hidden", },
         -- `hidden = true` will still show the inside of `.git/` as it's not `.gitignore`d.
