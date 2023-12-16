@@ -1130,7 +1130,7 @@ if has_dap then
 
   dap.adapters.lldb = {
     type = "executable",
-    command = "/opt/homebrew/Cellar/llvm/16.0.6/bin/lldb-vscode", -- Adjust depdending on llvm version
+    command = "/opt/homebrew/Cellar/llvm/17.0.6/bin/lldb-vscode", -- Adjust depdending on llvm version
     name = "lldb"
   }
 
