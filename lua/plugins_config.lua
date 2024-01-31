@@ -1210,6 +1210,7 @@ if has_dap then
   --
   -- vim.keymap.set('n', "<F9>", function() dap.step_over() end, { desc = "Step over", dapopts.args })
   -- vim.keymap.set('n', 'L', function() dap.step_over() end, { desc = "Step over (or L)", nowait = true, dapopts.args })
+  vim.keymap.set('n', "<leader>dj", function() dap.step_over() end, { desc = "Step over", dapopts.args })
   vim.keymap.set('n', "<leader>dsj", function() dap.step_over() end, { desc = "Step over", dapopts.args })
   --
   -- vim.keymap.set('n', "<F7>", function() dap.step_back() end, { desc = "Step back", dapopts.args })
@@ -1218,10 +1219,12 @@ if has_dap then
   --
   -- vim.keymap.set('n', "<F8>", function() dap.step_into() end, { desc = "Step into", dapopts.args })
   -- vim.keymap.set('n', '}', function() dap.step_into() end, { desc = "Step into", dapopts.args })
+  vim.keymap.set('n', "<leader>di", function() dap.step_into() end, { desc = "Step into (or '}')", dapopts.args })
   vim.keymap.set('n', "<leader>dsi", function() dap.step_into() end, { desc = "Step into (or '}')", dapopts.args })
   --
   -- vim.keymap.set('n', "<F10>", function() dap.step_out() end, { desc = "Step out", dapopts.args })
   -- vim.keymap.set('n', '{', function() dap.step_out() end, { desc = "Step out", dapopts.args })
+  vim.keymap.set('n', "<leader>do", function() dap.step_out() end, { desc = "Step out (or '{')", dapopts.args })
   vim.keymap.set('n', "<leader>dso", function() dap.step_out() end, { desc = "Step out (or '{')", dapopts.args })
   --
   vim.keymap.set('n', "<leader>dn", function() dap.run_to_cursor() end, { desc = "Debug until cursor", dapopts.args })
@@ -1351,7 +1354,7 @@ if has_dapui and has_dap then
     vim.cmd("stopinsert")
   end
 
-  vim.keymap.set("n", "<leader>do", function()
+  vim.keymap.set("n", "<leader>dO", function()
     dapui.open()
     vim.cmd("stopinsert")
   end, { desc = "Open DAP UI (no start)", dapopts.args })
