@@ -195,7 +195,7 @@ if has_treesitter then
     ensure_installed = { 'c', 'cpp', 'cmake', 'lua', 'python', 'rust', 'vim' },
 
     highlight = { enable = true },
-    indent = { enable = true, disable = { 'python' } },
+    indent = { enable = true },
     incremental_selection = {
       enable = true,
       keymaps = {
