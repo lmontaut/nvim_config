@@ -35,7 +35,6 @@ vim.o.smartindent = true
 vim.wo.signcolumn = 'yes'
 vim.o.showbreak = "    "
 vim.o.linebreak = true -- so that wrapping does not occur in middle of word
-vim.o.nolist = true -- same as above
 
 -- Modify jumplist behavior -> much better
 vim.cmd [[
