@@ -1658,6 +1658,24 @@ if has_noice then
   })
 end
 
+---------------------------------
+-- [[ Configure toggle term ]] --
+---------------------------------
+local has_toggleterm, toggleterm = pcall(require, "toggleterm")
+if has_toggleterm then
+  toggleterm.setup({
+    direction = "float",
+  })
+  -- By applying the mappings this way you can pass a count to your
+  -- mapping to open a specific window.
+  -- For example: 2<C-t> will open terminal 2
+  vim.keymap.set('n', "<c-t>", "<CMD>exe v:count1 . 'ToggleTerm'<CR>", { desc = "ToggleTerm" })
+  vim.keymap.set('i', "<c-t>", "<Esc><CMD>exe v:count1 . 'ToggleTerm'<CR>", { desc = "ToggleTerm" })
+  vim.cmd[[
+    autocmd TermEnter term://*toggleterm#* tnoremap <silent><c-t> <Cmd>exe v:count1 . "ToggleTerm"<CR>
+  ]]
+end
+
 -------------------------------
 -- [[ Configure Which-key ]] --
 -------------------------------
