@@ -17,6 +17,7 @@ vim.cmd[[
   autocmd FileType dap-float setlocal colorcolumn=0
   autocmd FileType netrw nnoremap <buffer> q :Rexplore<CR>
   autocmd FileType cpp TSDisable indent
+  autocmd FileType help TSDisable highlight
 ]]
 
 -- Stop from continuing comments when going to line with "o"
