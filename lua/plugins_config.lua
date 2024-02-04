@@ -393,105 +393,113 @@ end
 -------------------------
 -- [[ Configure LSP ]] --
 -------------------------
---  This function gets run when an LSP connects to a particular buffer.
-local util = require("lspconfig.util")
-local on_attach = function(client, bufnr)
-  -- NOTE: Remember that lua is a real programming language, and as such it is possible
-  -- to define small helper and utility functions so you don't have to repeat yourself
-  -- many times.
-  if client.server_capabilities.signatureHelpProvider then
-    local has_lspoverloads, lspoverloads = pcall(require, "lsp-overloads")
-    if has_lspoverloads then
-      lspoverloads.setup(client, {
-        keymaps = {
-          next_signature = "<C-j>",
-          previous_signature = "<C-k>",
-          next_parameter = "<C-l>",
-          previous_parameter = "<C-h>",
-          close_signature = "<C-s>"
-        },
-      })
-    end
-    vim.api.nvim_set_keymap("n", "<C-s>", ":LspOverloadsSignature<CR>", { noremap = true, silent = true })
-    vim.api.nvim_set_keymap("i", "<C-s>", "<cmd>LspOverloadsSignature<CR>", { noremap = true, silent = true })
-  end
-  --
-  -- In this case, we create a function that lets us more easily define mappings specific
-  -- for LSP related items. It sets the mode, buffer and description for us each time.
-  local nmap = function(keys, func, desc)
-    if desc then
-      desc = 'LSP: ' .. desc
-    end
-
-    vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
-  end
-
-  local imap = function(keys, func, desc)
-    if desc then
-      desc = 'LSP: ' .. desc
-    end
-
-    vim.keymap.set('i', keys, func, { buffer = bufnr, desc = desc })
-  end
-
-  nmap('<leader>lr', vim.lsp.buf.rename, 'Rename')
-  nmap('<leader>lc', vim.lsp.buf.code_action, 'Code action')
-
-  -- nmap('gd', vim.lsp.buf.definition, 'Goto Definition')
-  nmap('gd', require('telescope.builtin').lsp_definitions, 'Goto definition')
-  nmap('gD', require('telescope.builtin').lsp_implementations, 'Goto implementation')
-  nmap('gt', require('telescope.builtin').lsp_type_definitions, 'Goto type definitions')
-  nmap('gh', "<CMD>ClangdSwitchSourceHeader<CR>", 'Switch from source to header')
-  nmap('gr', require('telescope.builtin').lsp_references, 'Goto References')
-  -- nmap('gI', vim.lsp.buf.implementation, 'Goto Implementation')
-  nmap('<leader>ls', require('telescope.builtin').lsp_document_symbols, 'Document symbols')
-  nmap('<leader>lS', require('telescope.builtin').lsp_dynamic_workspace_symbols, 'Workspace symbols')
-  nmap('<leader>ld', require('telescope.builtin').diagnostics, 'Diagnostics')
-
-  -- See `:help K` for why this keymap
-  nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
-  nmap('<C-x>', vim.lsp.buf.signature_help, 'Signature Documentation')
-  imap('<C-x>', vim.lsp.buf.signature_help, 'Signature Documentation')
-
-  -- Lesser used LSP functionality
-  nmap('gD', vim.lsp.buf.declaration, 'Goto Declaration')
-  -- nmap('<leader>wa', vim.lsp.buf.add_workspace_folder, '[W]orkspace [A]dd Folder')
-  -- nmap('<leader>wr', vim.lsp.buf.remove_workspace_folder, '[W]orkspace [R]emove Folder')
-  -- nmap('<leader>wl', function()
-  -- print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-  -- end, '[W]orkspace [L]ist Folders')
-
-  -- Create a command `:Format` local to the LSP buffer
-  vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
-    vim.lsp.buf.format()
-  end, { desc = 'Format current buffer with LSP' })
+-- Needed at multiple places in this configuration
+local lsp_pythonpath = "$HOME/miniforge3/bin/python"
+if os.getenv("CONDA_PREFIX") then
+  lsp_pythonpath = os.getenv("CONDA_PREFIX") .. "/bin/python"
 end
+local on_attach = nil
+local servers = nil
+local has_lsp_util, util = pcall(require, "lspconfig.util")
+if has_lsp_util then
+    --  This function gets run when an LSP connects to a particular buffer.
+    on_attach = function(client, bufnr)
+    -- NOTE: Remember that lua is a real programming language, and as such it is possible
+    -- to define small helper and utility functions so you don't have to repeat yourself
+    -- many times.
+    if client.server_capabilities.signatureHelpProvider then
+      local has_lspoverloads, lspoverloads = pcall(require, "lsp-overloads")
+      if has_lspoverloads then
+        lspoverloads.setup(client, {
+          keymaps = {
+            next_signature = "<C-j>",
+            previous_signature = "<C-k>",
+            next_parameter = "<C-l>",
+            previous_parameter = "<C-h>",
+            close_signature = "<C-s>"
+          },
+        })
+      end
+      vim.api.nvim_set_keymap("n", "<C-s>", ":LspOverloadsSignature<CR>", { noremap = true, silent = true })
+      vim.api.nvim_set_keymap("i", "<C-s>", "<cmd>LspOverloadsSignature<CR>", { noremap = true, silent = true })
+    end
+    --
+    -- In this case, we create a function that lets us more easily define mappings specific
+    -- for LSP related items. It sets the mode, buffer and description for us each time.
+    local nmap = function(keys, func, desc)
+      if desc then
+        desc = 'LSP: ' .. desc
+      end
 
--- Enable the following language servers
---  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
---
---  Add any additional override configuration in the following tables. They will be passed to
---  the `settings` field of the server config. You must look up that documentation yourself.
-local pythonpath = os.getenv("CONDA_PREFIX") .. "/bin/python"
-local servers = {
-  -- clangd = {
-    -- arguments = {"--compile-commands-dir=./build"}
-  -- },
-  lua_ls = {},
-  -- cmake = {},
-  neocmake = {},
-  rust_analyzer = {},
-  -- gopls = {},
-  pyright = {
-    python = {
-      pythonPath = pythonpath,
-      analysis = {
-        typeCheckingMode = "off",
+      vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
+    end
+
+    local imap = function(keys, func, desc)
+      if desc then
+        desc = 'LSP: ' .. desc
+      end
+
+      vim.keymap.set('i', keys, func, { buffer = bufnr, desc = desc })
+    end
+
+    nmap('<leader>lr', vim.lsp.buf.rename, 'Rename')
+    nmap('<leader>lc', vim.lsp.buf.code_action, 'Code action')
+
+    -- nmap('gd', vim.lsp.buf.definition, 'Goto Definition')
+    nmap('gd', require('telescope.builtin').lsp_definitions, 'Goto definition')
+    nmap('gD', require('telescope.builtin').lsp_implementations, 'Goto implementation')
+    nmap('gt', require('telescope.builtin').lsp_type_definitions, 'Goto type definitions')
+    nmap('gh', "<CMD>ClangdSwitchSourceHeader<CR>", 'Switch from source to header')
+    nmap('gr', require('telescope.builtin').lsp_references, 'Goto References')
+    -- nmap('gI', vim.lsp.buf.implementation, 'Goto Implementation')
+    nmap('<leader>ls', require('telescope.builtin').lsp_document_symbols, 'Document symbols')
+    nmap('<leader>lS', require('telescope.builtin').lsp_dynamic_workspace_symbols, 'Workspace symbols')
+    nmap('<leader>ld', require('telescope.builtin').diagnostics, 'Diagnostics')
+
+    -- See `:help K` for why this keymap
+    nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
+    nmap('<C-x>', vim.lsp.buf.signature_help, 'Signature Documentation')
+    imap('<C-x>', vim.lsp.buf.signature_help, 'Signature Documentation')
+
+    -- Lesser used LSP functionality
+    nmap('gD', vim.lsp.buf.declaration, 'Goto Declaration')
+    -- nmap('<leader>wa', vim.lsp.buf.add_workspace_folder, '[W]orkspace [A]dd Folder')
+    -- nmap('<leader>wr', vim.lsp.buf.remove_workspace_folder, '[W]orkspace [R]emove Folder')
+    -- nmap('<leader>wl', function()
+    -- print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+    -- end, '[W]orkspace [L]ist Folders')
+
+    -- Create a command `:Format` local to the LSP buffer
+    vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
+      vim.lsp.buf.format()
+    end, { desc = 'Format current buffer with LSP' })
+  end
+
+  -- Enable the following language servers
+  --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
+  --
+  --  Add any additional override configuration in the following tables. They will be passed to
+  --  the `settings` field of the server config. You must look up that documentation yourself.
+  servers = {
+    -- clangd = {
+      -- arguments = {"--compile-commands-dir=./build"}
+    -- },
+    lua_ls = {},
+    -- cmake = {},
+    neocmake = {},
+    rust_analyzer = {},
+    -- gopls = {},
+    pyright = {
+      python = {
+        pythonPath = lsp_pythonpath,
+        analysis = {
+          typeCheckingMode = "off",
+        }
       }
-    }
-  },
-  -- tsserver = {},
-}
+    },
+    -- tsserver = {},
+  }
+end
 
 -- Setup neovim lua configuration
 local has_neodev, neodev = pcall(require, "neodev")
@@ -567,17 +575,19 @@ if has_mason then
     ensure_installed = vim.tbl_keys(servers),
   }
 
-  mason_lspconfig.setup_handlers({
-    function(server_name)
-      if has_lspconfig then
-        lspconfig[server_name].setup({
-          capabilities = capabilities,
-          on_attach = on_attach,
-          settings = servers[server_name],
-        })
-      end
-    end,
-  })
+  if servers ~= nil then
+    mason_lspconfig.setup_handlers({
+      function(server_name)
+        if has_lspconfig then
+          lspconfig[server_name].setup({
+            capabilities = capabilities,
+            on_attach = on_attach,
+            settings = servers[server_name],
+          })
+        end
+      end,
+    })
+  end
 end
 
 if has_lspconfig and false then
@@ -1167,7 +1177,7 @@ if has_dap then
   -- Python config
   dap.adapters.python = {
     type = 'executable';
-    command = os.getenv("CONDA_PREFIX") .. "/bin/python", -- adjust as needed
+    command = lsp_pythonpath, -- adjust as needed
     args = { '-m', 'debugpy.adapter' };
   }
 
@@ -1181,7 +1191,7 @@ if has_dap then
       -- Options below are for debugpy, see https://github.com/microsoft/debugpy/wiki/Debug-configuration-settings for supported options
 
       program = "${file}"; -- This configuration will launch the current file if used.
-      pythonPath = os.getenv("CONDA_PREFIX") .. "/bin/python",
+      pythonPath = lsp_pythonpath,
       console="integratedTerminal", -- So that the program's output is displayed in console
       redirectOutput=true -- So that the program's output is displayed in console
     },
