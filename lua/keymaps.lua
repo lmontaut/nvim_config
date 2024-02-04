@@ -249,10 +249,6 @@ local topts = { silent = true }
 vim.keymap.set("t", "<ESC>", "<C-\\><C-n>", { desc = "Escape", topts.args })
 vim.keymap.set("t", "jk", "<C-\\><C-n>", { desc = "Escape", topts.args })
 
-vim.api.nvim_create_autocmd({ 'TermOpen' }, {
-    command = 'startinsert',
-})
-
 -- vim.cmd[[
 --   autocmd TermOpen * nnoremap <silent> <buffer> q :close<CR>
 -- ]]
