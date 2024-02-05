@@ -1084,24 +1084,37 @@ if has_dap then
   vim.fn.sign_define("DapStopped", dap_breakpoint.stopped)
   vim.fn.sign_define("DapBreakpointRejected", dap_breakpoint.rejected)
 
+  local function get_arguments()
+    return coroutine.create(function(dap_run_co)
+      local args = {}
+      vim.ui.input({ prompt = "[Executable arguments] > " }, function(input)
+        args = vim.split(input or "", " ")
+        coroutine.resume(dap_run_co, args)
+      end)
+    end)
+  end
+
+  ------------------------------------
+  -- C/C++/Rust configurations
+  ------------------------------------
+  -- local lldb_path = "/opt/homebrew/Cellar/llvm/17.0.6/bin/lldb-vscode"
+  local lldb_path = "/opt/homebrew/opt/llvm/bin/lldb-vscode"
   dap.adapters.lldb = {
     type = "executable",
-    command = "/opt/homebrew/Cellar/llvm/17.0.6/bin/lldb-vscode", -- Adjust depdending on llvm version
+    command = lldb_path, -- Adjust depdending on llvm version
     name = "lldb"
   }
-
   dap.adapters.codelldb = {
     type = 'server',
     host = '127.0.0.1',
     port = 13000
   }
 
-  -- C/C++/Rust config
   dap.configurations.cpp = {
     {
-      name = 'Launch',
-      type = 'lldb',
+      type = 'lldb', -- Name of the dap.adapter you want to use
       request = 'launch',
+      name = 'Debug C/C++/rust executable',
       program = function()
         local path = vim.fn.input({
           prompt = "[Path to executable] > ",
@@ -1112,7 +1125,7 @@ if has_dap then
       end,
       cwd = '${workspaceFolder}',
       stopOnEntry = false,
-      args = {},
+      args = get_arguments, -- select arguments to be passed to the executable
       reverseDebugging = true, -- Not available on bare metal
       runInTerminal=true -- So that the program's output is displayed in console
     },
@@ -1120,26 +1133,60 @@ if has_dap then
   dap.configurations.c = dap.configurations.cpp
   dap.configurations.rust = dap.configurations.cpp
 
+  ------------------------------------
   -- Python config
+  ------------------------------------
   dap.adapters.python = {
     type = 'executable';
     command = lsp_pythonpath, -- adjust as needed
     args = { '-m', 'debugpy.adapter' };
   }
 
+  -- Used to debug C++ code from python
+  dap.adapters.python_cpp = {
+    type = "executable",
+    command = lldb_path, -- Adjust depdending on llvm version
+    name = "lldb"
+  }
+
+  local function get_python_arguments()
+    return coroutine.create(function(dap_run_co)
+      local args = {}
+      vim.ui.input({ prompt = "[Python file to debug + arguments] > " }, function(input)
+        args = vim.split(input or "", " ")
+        coroutine.resume(dap_run_co, args)
+      end)
+    end)
+  end
+
   dap.configurations.python = {
     {
       -- The first three options are required by nvim-dap
       type = 'python'; -- the type here established the link to the adapter definition: `dap.adapters.python`
       request = 'launch';
-      name = "Launch file";
+      name = "Debug python file";
 
       -- Options below are for debugpy, see https://github.com/microsoft/debugpy/wiki/Debug-configuration-settings for supported options
-
       program = "${file}"; -- This configuration will launch the current file if used.
       pythonPath = lsp_pythonpath,
       console="integratedTerminal", -- So that the program's output is displayed in console
+      args = get_arguments,
       redirectOutput=true -- So that the program's output is displayed in console
+    },
+    {
+      -- The first three options are required by nvim-dap
+      type = 'python_cpp';
+      request = 'launch';
+      name = "Debug C++ from python";
+
+      -- Options below are for lldb
+      cwd = '${workspaceFolder}',
+      -- lldb will debug the `python` program and the `args` will be used to pass the name of the python program + the optional arguments.
+      program = "python";
+      stopOnEntry = false,
+      args = get_python_arguments, -- select arguments to be passed to the executable
+      reverseDebugging = true,
+      runInTerminal=true
     },
   }
 
@@ -1617,6 +1664,9 @@ if Has_lspsaga then
     outline = {
       win_width = 50,
       auto_preview = false,
+    },
+    lightbulb = {
+      sign = false
     }
   })
 end
