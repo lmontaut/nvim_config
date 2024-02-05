@@ -213,6 +213,9 @@ require('packer').startup(function(use)
   -- Toggle term -- multiple terminals in vim
   use { "akinsho/toggleterm.nvim" }
 
+  -- Automatic bracket closing
+  use { "windwp/nvim-autopairs" }
+
   -- Add custom plugins to packer from ~/.config/nvim/lua/custom/plugins.lua
   local has_plugins, plugins = pcall(require, 'custom.plugins')
   if has_plugins then

@@ -1622,6 +1622,14 @@ if Has_lspsaga then
 end
 
 -------------------------------
+-- [[ Configure autopairs ]] --
+-------------------------------
+local has_autopairs, autopairs = pcall(require, "nvim-autopairs")
+if has_autopairs then
+  autopairs.setup({})
+end
+
+-------------------------------
 -- [[ Configure Which-key ]] --
 -------------------------------
 local has_wk, wk = pcall(require, "which-key")
