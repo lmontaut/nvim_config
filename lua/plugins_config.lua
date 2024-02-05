@@ -1157,12 +1157,12 @@ if has_dap then
       type = 'lldb',
       request = 'launch',
       program = function()
-        return vim.fn.input({
+        local path = vim.fn.input({
           prompt = "[Path to executable] > ",
           default = vim.fn.getcwd() .. '/',
           completion = "file",
-          cancelreturn = ""
         })
+        return (path and path ~= "") and path or dap.ABORT
       end,
       cwd = '${workspaceFolder}',
       stopOnEntry = false,
