@@ -258,8 +258,6 @@ end
 -- [[ Configure nvim-cmp ]]
 local has_cmp, cmp = pcall(require, 'cmp')
 local has_luasnip, luasnip = pcall(require, 'luasnip')
-
--- cmp_is_on = false
 if has_cmp then
   local ELLIPSIS_CHAR = '…'
   local MAX_LABEL_WIDTH = 30
@@ -400,11 +398,15 @@ if os.getenv("CONDA_PREFIX") then
 end
 local on_attach = nil
 local servers = nil
-local use_lsp_mappings_telescope = false
-local use_lsp_mappings_lspsaga = true
+local use_lsp_mappings_telescope = true
+local use_lsp_mappings_lspsaga = true -- has precedence over telescope
 Has_lspsaga = nil -- will be modified once lspsagas is loaded
-local has_lsp_util, util = pcall(require, "lspconfig.util")
+local has_lsp_util, _ = pcall(require, "lspconfig.util")
+--
+-- This bit of code sets up the LSP servers used and their related keybindings.
+-- I don't do it here but in theory you can have different keybindings for each server.
 if has_lsp_util then
+  --
   --  This function gets run when an LSP connects to a particular buffer.
   on_attach = function(client, bufnr)
     -- NOTE: Remember that lua is a real programming language, and as such it is possible
@@ -469,7 +471,6 @@ if has_lsp_util then
 
     if use_lsp_mappings_telescope then
       nmap('gd', require('telescope.builtin').lsp_definitions, 'Goto definition')
-      nmap('gD', require('telescope.builtin').lsp_declaration, 'Goto declaration')
       nmap('gI', require('telescope.builtin').lsp_implementations, 'Goto implementation')
       nmap('gt', require('telescope.builtin').lsp_type_definitions, 'Goto type definitions')
       nmap('gr', require('telescope.builtin').lsp_references, 'Goto references')
@@ -487,6 +488,8 @@ if has_lsp_util then
       nmap('<leader>lD', ":Lspsaga show_workspace_diagnostics<CR>", 'Workspace diagnostics')
       -- Finder
       nmap('gr', ":Lspsaga finder tyd+def+ref+imp<CR>", 'Goto references')
+      nmap('gI', ":Lspsaga finder imp<CR>", 'Goto implementation')
+      nmap('gt', ":Lspsaga finder tyd<CR>", 'Goto type definitions')
       nmap('<leader>lfd', ":Lspsaga finder def<CR>", 'Find definitions')
       nmap('<leader>lfi', ":Lspsaga finder imp<CR>", 'Find implementations')
       nmap('<leader>lfr', ":Lspsaga finder ref<CR>", 'Find references')
@@ -501,20 +504,15 @@ if has_lsp_util then
     end, { desc = 'Format current buffer with LSP' })
   end
 
-  -- Enable the following language servers
-  --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
-  --
-  --  Add any additional override configuration in the following tables. They will be passed to
-  --  the `settings` field of the server config. You must look up that documentation yourself.
+  -- Have the following language servers enabled by default.
+  -- This bit of code is relatively useless as we use the 'Mason' plugin to automatically install and configure LSP servers.
+  --   Feel free to add/remove any LSPs that you want here. They will automatically be installed.
+  --   Add any additional override configuration in the following tables. They will be passed to
+  --   the `settings` field of the server config. You must look up that documentation yourself.
   servers = {
-    -- clangd = {
-    -- arguments = {"--compile-commands-dir=./build"}
-    -- },
     lua_ls = {},
-    -- cmake = {},
     neocmake = {},
     rust_analyzer = {},
-    -- gopls = {},
     pyright = {
       python = {
         pythonPath = lsp_pythonpath,
@@ -523,11 +521,10 @@ if has_lsp_util then
         }
       }
     },
-    -- tsserver = {},
   }
 end
 
--- Setup neovim lua configuration
+-- Neodev: better support for the signature, docs and completion.
 local has_neodev, neodev = pcall(require, "neodev")
 if has_neodev then
   neodev.setup({
@@ -535,7 +532,7 @@ if has_neodev then
   })
 end
 
--- nvim-cmp supports additional completion capabilities, so broadcast that to servers
+-- Nvim-cmp supports additional completion capabilities for LSP, so broadcast that to servers
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 local has_cmp_lsp, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
 if has_cmp_lsp then
@@ -558,14 +555,14 @@ for _, sign in ipairs(signs) do
   vim.fn.sign_define(sign.name, { texthl = sign.name, text = sign.text, numhl = "" })
 end
 
-local config = {
+local diagnostics_config = {
   -- disable virtual text
   virtual_text = false,
   -- show signs
   signs = {
     active = signs,
   },
-  update_in_insert = false,
+  update_in_insert = false, -- avoids being stressed by the LSP while typing...
   underline = false,
   severity_sort = true,
   float = {
@@ -578,12 +575,13 @@ local config = {
   },
 }
 
-vim.diagnostic.config(config)
-vim.lsp.diagnostics_config = config
+vim.diagnostic.config(diagnostics_config)
+vim.lsp.diagnostics_config = diagnostics_config
 
 ---------------------------
 -- [[ Configure Mason ]] --
 ---------------------------
+-- Mason allows to download an automatically setup LSP servers.
 -- Setup mason so it can manage external tooling
 local has_mason, mason = pcall(require, "mason")
 local has_lspconfig, lspconfig = pcall(require, "lspconfig")
@@ -593,6 +591,8 @@ if has_mason then
   -- Ensure the servers above are installed
   local mason_lspconfig = require 'mason-lspconfig'
 
+  -- Mason ensures the servers in `servers` are installed.
+  -- Go checkout the `servers` variable to see the options for each server.
   mason_lspconfig.setup {
     ensure_installed = vim.tbl_keys(servers),
   }
@@ -612,35 +612,7 @@ if has_mason then
   end
 end
 
-if has_lspconfig and false then
-  lspconfig.clangd.setup({
-    on_attach = on_attach,
-    capabilities = capabilities,
-    filetypes = { "c", "cpp" },
-    cmd = { "/usr/bin/clangd --compile-commands-dir=./build" },
-    -- cmd = { "/usr/bin/clangd" },
-    root_dir = util.root_pattern('compile_commands.json', '.git', '.clangd'),
-  })
-end
-
-if has_lspconfig and false then
-  lspconfig.ccls.setup({
-    on_attach = on_attach,
-    capabilities = capabilities,
-    filetypes = { "c", "cpp" },
-    root_dir = util.root_pattern('compile_commands.json', '.git'),
-    init_options = {
-      index = {
-        threads = 0;
-      };
-      clang = {
-        excludeArgs = { "-frounding-math" },
-      },
-    }
-  })
-end
-
-
+-- This bit of code is for C# only
 if has_lspconfig then
   local pid = vim.fn.getpid()
   local omnisharp_bin = "/Users/louis/software/misc/omnisharp-osx/run"
@@ -762,8 +734,6 @@ end
 local has_bufferline, bufferline = pcall(require, "bufferline")
 if has_bufferline then
   bufferline.setup()
-  -- vim.keymap.set('n', '<C-]>', "<CMD>BufferLineCycleNext<CR>", { desc = 'Next buffer' })
-  -- vim.keymap.set('n', '<C-[>', "<CMD>BufferLineCyclePrev<CR>", { desc = 'Previous buffer' })
 end
 
 -----------------------------
@@ -947,6 +917,7 @@ end
 -------------------------------------
 -- [[ Configure symbols outline ]] --
 -------------------------------------
+-- When lspsaga outline is turned off
 local has_symbols_outline, symbols_outline = pcall(require, "symbols-outline")
 if has_symbols_outline then
   symbols_outline.setup({
@@ -1006,20 +977,10 @@ if has_symbols_outline then
   vim.keymap.set('n', '<leader>I', "<CMD>SymbolsOutline<CR>", { desc = 'Symbols outline' })
 end
 
--------------------------------
--- [[ Configure vim-ccls ]] --
--------------------------------
--- vim.keymap.set('n', "<leader>ed", ":CclsDerivedHierarchy -float<CR>", { desc = "Derived hierarchy" })
--- vim.keymap.set('n', "<leader>eb", ":CclsBaseHierarchy -float<CR>", { desc = "Base hierarchy" })
--- vim.keymap.set('n', "<leader>ec", ":CclsCallHierarchy -float<CR>", { desc = "Functions calling the item under cursor" })
--- vim.keymap.set('n', "<leader>eC", ":CclsCalleeHierarchy -float<CR>", { desc = "Functions called by item under cursor" })
--- vim.keymap.set('n', "<leader>ef", ":CclsMemberFunctions<CR>", { desc = "Functions members of item under cursor" })
-
 ------------------------------
 -- [[ Configure fugitive ]] --
 ------------------------------
 vim.keymap.set('n', '<leader>gG', '<CMD>vertical rightbelow Git<CR>', { desc = 'Git status fugitive' })
--- vim.keymap.set('n', '<leader>gG', '<CMD>vertical rightbelow Git<CR>:vertical resize 80<CR>', { desc = 'Git status (half screen)' })
 vim.keymap.set('n', '<leader>gC', '<CMD>vertical rightbelow Git log --oneline<CR>', { desc = 'Git short log' })
 vim.keymap.set('n', '<leader>gL', '<CMD>rightbelow vsplit | Gclog<CR>', { desc = 'Git log (fugitive)' })
 vim.keymap.set('n', '<leader>gj', '<CMD>Gitsigns next_hunk<CR>', { desc = 'Next hunk' })
@@ -1087,43 +1048,6 @@ if has_pap then
   vim.keymap.set("n", "<leader>pl", ":!just --list<CR>", { noremap = true, silent = false, desc = "List Just recipes" })
   vim.keymap.set("n", "<leader>pv", ":PapSetVertical<CR>",  { noremap = true, silent = false, desc = "Pap set vertical mode" })
   vim.keymap.set("n", "<leader>ph", ":PapSetHorizontal<CR>",  { noremap = true, silent = false, desc = "Pap set horizontal mode" })
-
-  --
-  -- CMake related
-  --
-  -- Cmake cache
-  -- vim.keymap.set("n", "<leader>cmr", ":rightbelow 180 vsplit | terminal ccmake builds/build-release-$(echo $CONDA_DEFAULT_ENV)/*", { noremap = true, silent = false, desc = "Change release CMakeCache" })
-  -- vim.keymap.set("n", "<leader>cmd", ":rightbelow 180 vsplit | terminal ccmake builds/build-debug-$(echo $CONDA_DEFAULT_ENV)/*", { noremap = true, silent = false, desc = "Change debug CMakeCache" })
-  -- -- Create build folders
-  -- vim.keymap.set("n", "<leader>cBr", ":Paprun mkdir builds/build-release-$(echo $CONDA_DEFAULT_ENV)", { noremap = true, silent = false, desc = "Create release build folder" })
-  -- vim.keymap.set("n", "<leader>cBd", ":Paprun mkdir builds/build-debug-$(echo $CONDA_DEFAULT_ENV)", { noremap = true, silent = false, desc = "Create debug build folder" })
-  -- -- Deleting build folders
-  -- vim.keymap.set("n", "<leader>crr", ":Paprun rm -rf builds/build-release-$(echo $CONDA_DEFAULT_ENV)/*", { noremap = true, silent = false, desc = "Delete release build folder" })
-  -- vim.keymap.set("n", "<leader>crd", ":Paprun rm -rf builds/build-debug-$(echo $CONDA_DEFAULT_ENV)/*", { noremap = true, silent = false, desc = "Delete debug build folder" })
-  -- -- Build cmake files
-  -- vim.keymap.set("n", "<leader>cbr", ":Paprun cmake -S . -C ~/.config/cmake/release_config.cmake -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX -DCMAKE_SYSTEM_PREFIX_PATH=$CONDA_PREFIX -B builds/build-release-$(echo $CONDA_DEFAULT_ENV)", { noremap = true, silent = false, desc = "Build release" })
-  -- vim.keymap.set("n", "<leader>cbd", ":Paprun cmake -S . -C ~/.config/cmake/debug_config.cmake -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX -DCMAKE_SYSTEM_PREFIX_PATH=$CONDA_PREFIX -B builds/build-debug-$(echo $CONDA_DEFAULT_ENV)", { noremap = true, silent = false, desc = "Build debug" })
-  -- -- List cmake targets
-  -- vim.keymap.set("n", "<leader>clr", ":Paprun cmake --build builds/build-release-$(echo $CONDA_DEFAULT_ENV) --target help", { noremap = true, silent = false, desc = "List targets release" })
-  -- vim.keymap.set("n", "<leader>cld", ":Paprun cmake --build builds/build-debug-$(echo $CONDA_DEFAULT_ENV) --target help", { noremap = true, silent = false, desc = "List targets debug" })
-  -- -- Compile target
-  -- vim.keymap.set("n", "<leader>ccr", ":Paprun cmake --build builds/build-release-$(echo $CONDA_DEFAULT_ENV) --target  -j10<left><left><left><left><left>", { noremap = true, silent = false, desc = "Compile release target" })
-  -- vim.keymap.set("n", "<leader>ccd", ":Paprun cmake --build builds/build-debug-$(echo $CONDA_DEFAULT_ENV) --target  -j10<left><left><left><left><left>", { noremap = true, silent = false, desc = "Compile debug target" })
-  -- -- Compile all
-  -- vim.keymap.set("n", "<leader>car", ":Paprun cmake --build builds/build-release-$(echo $CONDA_DEFAULT_ENV) --target all -j10", { noremap = true, silent = false, desc = "Compile all (release)" })
-  -- vim.keymap.set("n", "<leader>cad", ":Paprun cmake --build builds/build-debug-$(echo $CONDA_DEFAULT_ENV) --target all -j10", { noremap = true, silent = false, desc = "Compile all (debug)" })
-  -- -- Install
-  -- vim.keymap.set("n", "<leader>cir", ":Paprun cmake --build builds/build-release-$(echo $CONDA_DEFAULT_ENV) --target install -j10", { noremap = true, silent = false, desc = "Install (release)" })
-  -- vim.keymap.set("n", "<leader>cid", ":Paprun cmake --build builds/build-debug-$(echo $CONDA_DEFAULT_ENV) --target install -j10", { noremap = true, silent = false, desc = "Install (debug)" })
-  -- -- Link compile commands
-  -- vim.keymap.set("n", "<leader>cLr", ":Paprun ln -sf builds/build-release-$(echo $CONDA_DEFAULT_ENV)/compile_commands.json ./", { noremap = true, silent = false, desc = "Link release compile_commands.json" })
-  -- vim.keymap.set("n", "<leader>cLd", ":Paprun ln -sf builds/build-debug-$(echo $CONDA_DEFAULT_ENV)/compile_commands.json ./", { noremap = true, silent = false, desc = "Link debug compile_commands.json" })
-  -- -- Ctest
-  -- vim.keymap.set("n", "<leader>ctr", ":Paprun ctest --output-on-failure -j10 --test-dir builds/build-release-$(echo $CONDA_DEFAULT_ENV)", { noremap = true, silent = false, desc = "Run release tests" })
-  -- vim.keymap.set("n", "<leader>ctd", ":Paprun ctest --output-on-failure -j10 --test-dir builds/build-debug-$(echo $CONDA_DEFAULT_ENV)", { noremap = true, silent = false, desc = "Run debug tests" })
-  -- -- Ctest rerun failed
-  -- vim.keymap.set("n", "<leader>cTr", ":Paprun ctest --output-on-failure -j10 --test-dir builds/build-release-$(echo $CONDA_DEFAULT_ENV) --rerun-failed", { noremap = true, silent = false, desc = "Rerun failed release tests" })
-  -- vim.keymap.set("n", "<leader>cTd", ":Paprun ctest --output-on-failure -j10 --test-dir builds/build-debug-$(echo $CONDA_DEFAULT_ENV) --rerun-failed", { noremap = true, silent = false, desc = "Rerun failed release tests" })
 end
 
 -------------------------
@@ -1238,32 +1162,18 @@ if has_dap then
   --
   vim.keymap.set('n', "<leader>dR", function() dap.restart() end, { desc = "Restart", dapopts.args })
   --
-  -- vim.keymap.set('n', "<leader>dL", function() dap.run_last() end, { desc = "Run last", dapopts.args }) -- possibly needed if using .json configs
-  --
-  -- vim.keymap.set('n', "<F9>", function() dap.step_over() end, { desc = "Step over", dapopts.args })
-  -- vim.keymap.set('n', 'L', function() dap.step_over() end, { desc = "Step over (or L)", nowait = true, dapopts.args })
   vim.keymap.set('n', "<leader>dj", function() dap.step_over() end, { desc = "Step over", dapopts.args })
   vim.keymap.set('n', "<leader>dsj", function() dap.step_over() end, { desc = "Step over", dapopts.args })
   --
-  -- vim.keymap.set('n', "<F7>", function() dap.step_back() end, { desc = "Step back", dapopts.args })
-  -- vim.keymap.set('n', 'H', function() dap.step_back() end, { desc = "Step back (or H)", nowait = true, dapopts.args })
   vim.keymap.set('n', "<leader>dsk", function() dap.step_back() end, { desc = "Step back", dapopts.args })
   --
-  -- vim.keymap.set('n', "<F8>", function() dap.step_into() end, { desc = "Step into", dapopts.args })
-  -- vim.keymap.set('n', '}', function() dap.step_into() end, { desc = "Step into", dapopts.args })
   vim.keymap.set('n', "<leader>di", function() dap.step_into() end, { desc = "Step into (or '}')", dapopts.args })
   vim.keymap.set('n', "<leader>dsi", function() dap.step_into() end, { desc = "Step into (or '}')", dapopts.args })
   --
-  -- vim.keymap.set('n', "<F10>", function() dap.step_out() end, { desc = "Step out", dapopts.args })
-  -- vim.keymap.set('n', '{', function() dap.step_out() end, { desc = "Step out", dapopts.args })
   vim.keymap.set('n', "<leader>do", function() dap.step_out() end, { desc = "Step out (or '{')", dapopts.args })
   vim.keymap.set('n', "<leader>dso", function() dap.step_out() end, { desc = "Step out (or '{')", dapopts.args })
   --
   vim.keymap.set('n', "<leader>dn", function() dap.run_to_cursor() end, { desc = "Debug until cursor", dapopts.args })
-  --
-  -- vim.keymap.set('n', ')', function() dap.down() end, { desc = "Down stacktrace", dapopts.args })
-  --
-  -- vim.keymap.set('n', '(', function() dap.up() end, { desc = "Up stacktrace", dapopts.args })
   --
   vim.keymap.set('n', "<Leader>dp", function() dap.pause() end, { desc = "Pause", dapopts.args })
   --
@@ -1278,8 +1188,6 @@ if has_dap then
   vim.keymap.set('n', "<Leader>dD", function() dap.clear_breakpoints() end, { desc = "Clear breakpoints", dapopts.args })
   --
   vim.keymap.set('n', "<Leader>dr", function() dap.repl.toggle() end, { desc = "REPL toggle", dapopts.args })
-  --
-  -- vim.keymap.set({'n', 'v'}, "|", "<CMD>lua require('dapui').eval()<CR>", { desc = "DAP variable value", dapopts.args })
   --
   vim.keymap.set('n', "<Leader>dsf", function()
     local widgets = require("dap.ui.widgets")

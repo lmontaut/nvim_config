@@ -77,14 +77,21 @@ require('packer').startup(function(use)
   use { 'tpope/vim-eunuch' }
   -- use { 'tpope/vim-vinegar' }
   -- use { 'justinmk/vim-dirvish' }
-  use{ 'stevearc/oil.nvim' }
+  use{ 'stevearc/oil.nvim' } -- very very very good file navigator
 
+  -- Color themes
   -- use { 'navarasu/onedark.nvim' } -- Theme inspired by Atom
   use { "catppuccin/nvim", as = "catppuccin" }
+
+  -- Visual enhancements
   use { 'nvim-lualine/lualine.nvim' } -- Fancier statusline
   -- use { 'lukas-reineke/indent-blankline.nvim' } -- Add indentation guides even on blank lines
-  use { 'numToStr/Comment.nvim' } -- "gc" to comment visual regions/lines
-  use { 'tpope/vim-sleuth' } -- Detect tabstop and shiftwidth automatically
+
+  -- "gc" to comment visual regions/lines
+  use { 'numToStr/Comment.nvim' }
+
+  -- Detect tabstop and shiftwidth automatically. Can potentially conflict with Treesitter!
+  use { 'tpope/vim-sleuth' }
 
   -- Fuzzy Finder (files, lsp, etc)
   use { 'nvim-telescope/telescope.nvim', branch = '0.1.x', requires = { 'nvim-lua/plenary.nvim' } }
@@ -95,17 +102,11 @@ require('packer').startup(function(use)
   -- Helper to know what each binding does
   use { "folke/which-key.nvim" }
 
-  -- File browser -- takes way too much ram wtf
-  -- use { "ms-jpq/chadtree" }
-
   -- Navigation
   use { "justinmk/vim-sneak" }
 
   -- Project manager
   use { "ahmedkhalf/project.nvim" }
-
-  -- Buffer line
-  -- use { "akinsho/bufferline.nvim" }
 
   -- symbol outline
   -- use { "simrat39/symbols-outline.nvim" }
@@ -117,7 +118,7 @@ require('packer').startup(function(use)
   -- undo tree
   use { "mbbill/undotree" }
 
-  -- My Pap
+  -- My Pap -- best plugin
   use { "~/software/misc/nvim/nvim-pap" }
 
   -- Debugger
@@ -154,21 +155,6 @@ require('packer').startup(function(use)
 
   -- Any jump
   use { "pechorin/any-jump.vim" }
-
-  -- Dired
-  -- use {
-  --   "X3eRo0/dired.nvim",
-  --   requires = "MunifTanjim/nui.nvim",
-  --   config = function()
-  --     require("dired").setup {
-  --       path_separator = "/",
-  --       show_banner = false,
-  --       show_hidden = true,
-  --       show_dot_dirs = true,
-  --       show_colors = true,
-  --     }
-  --   end
-  -- }
 
   -- Multicursors
   use {
@@ -224,7 +210,7 @@ require('packer').startup(function(use)
   --   }
   -- }
 
-  -- Toggle term
+  -- Toggle term -- multiple terminals in vim
   use { "akinsho/toggleterm.nvim" }
 
   -- Add custom plugins to packer from ~/.config/nvim/lua/custom/plugins.lua
