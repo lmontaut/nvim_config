@@ -95,10 +95,10 @@ vim.keymap.set("n", "<leader>qN", ":cfirst<CR>", { desc = "Quicklist first", opt
 vim.keymap.set("n", "<leader>qP", ":clast<CR>", { desc = "Quicklist last", opts.args })
 
 -- Loclist navigation
-vim.keymap.set("n", "<leader>ln", ":lnext<CR>zz", { desc = "Location list next", opts.args })
-vim.keymap.set("n", "<leader>lp", ":lprev<CR>zz", { desc = "Location list prev", opts.args })
-vim.keymap.set("n", "<leader>lo", ":lopen<CR>", { desc = "Location list open", opts.args })
-vim.keymap.set("n", "<leader>lq", ":lclose<CR>", { desc = "Location list close", opts.args })
+vim.keymap.set("n", "<leader>Ln", ":lnext<CR>zz", { desc = "Location list next", opts.args })
+vim.keymap.set("n", "<leader>Lp", ":lprev<CR>zz", { desc = "Location list prev", opts.args })
+vim.keymap.set("n", "<leader>Lo", ":lopen<CR>", { desc = "Location list open", opts.args })
+vim.keymap.set("n", "<leader>Lq", ":lclose<CR>", { desc = "Location list close", opts.args })
 
 -- Make
 -- vim.keymap.set("n", "<leader>mm", function() return ":make<Space>" end, { noremap = true, silent = false, desc = "make", expr = true })

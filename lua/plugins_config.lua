@@ -1706,7 +1706,8 @@ if has_wk then
       p = { name = "Decrement node" },
     },
     --
-    l = { name = "LSP/Loclist" },
+    l = { name = "LSP" },
+    L = { name = "Loclist" },
     --
     m = { name = "Grapple/marks" },
     n = {
