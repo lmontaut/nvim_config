@@ -400,10 +400,13 @@ if os.getenv("CONDA_PREFIX") then
 end
 local on_attach = nil
 local servers = nil
+local use_lsp_mappings_telescope = false
+local use_lsp_mappings_lspsaga = true
+Has_lspsaga = nil -- will be modified once lspsagas is loaded
 local has_lsp_util, util = pcall(require, "lspconfig.util")
 if has_lsp_util then
-    --  This function gets run when an LSP connects to a particular buffer.
-    on_attach = function(client, bufnr)
+  --  This function gets run when an LSP connects to a particular buffer.
+  on_attach = function(client, bufnr)
     -- NOTE: Remember that lua is a real programming language, and as such it is possible
     -- to define small helper and utility functions so you don't have to repeat yourself
     -- many times.
@@ -424,7 +427,7 @@ if has_lsp_util then
       vim.api.nvim_set_keymap("i", "<C-s>", "<cmd>LspOverloadsSignature<CR>", { noremap = true, silent = true })
     end
     --
-    -- In this case, we create a function that lets us more easily define mappings specific
+    -- In this case, we create a func that lets us more easily define mappings specific
     -- for LSP related items. It sets the mode, buffer and description for us each time.
     local nmap = function(keys, func, desc)
       if desc then
@@ -442,32 +445,55 @@ if has_lsp_util then
       vim.keymap.set('i', keys, func, { buffer = bufnr, desc = desc })
     end
 
-    nmap('<leader>lr', vim.lsp.buf.rename, 'Rename')
-    nmap('<leader>lc', vim.lsp.buf.code_action, 'Code action')
-
-    -- nmap('gd', vim.lsp.buf.definition, 'Goto Definition')
-    nmap('gd', require('telescope.builtin').lsp_definitions, 'Goto definition')
-    nmap('gD', require('telescope.builtin').lsp_implementations, 'Goto implementation')
-    nmap('gt', require('telescope.builtin').lsp_type_definitions, 'Goto type definitions')
-    nmap('gh', "<CMD>ClangdSwitchSourceHeader<CR>", 'Switch from source to header')
-    nmap('gr', require('telescope.builtin').lsp_references, 'Goto References')
-    -- nmap('gI', vim.lsp.buf.implementation, 'Goto Implementation')
-    nmap('<leader>ls', require('telescope.builtin').lsp_document_symbols, 'Document symbols')
-    nmap('<leader>lS', require('telescope.builtin').lsp_dynamic_workspace_symbols, 'Workspace symbols')
-    nmap('<leader>ld', require('telescope.builtin').diagnostics, 'Diagnostics')
-
-    -- See `:help K` for why this keymap
-    nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
+    -- Mappings using the vim.lsp.buf functions:
+    nmap('gd', vim.lsp.buf.definition, 'Goto definition')
+    nmap('gD', vim.lsp.buf.declaration, 'Goto declatation')
+    nmap('gI', vim.lsp.buf.implementation, 'Goto implementation')
+    nmap('gt', vim.lsp.buf.type_definition, 'Goto type definition')
+    nmap('gr', vim.lsp.buf.references, 'Goto references')
     nmap('<C-x>', vim.lsp.buf.signature_help, 'Signature Documentation')
     imap('<C-x>', vim.lsp.buf.signature_help, 'Signature Documentation')
+    nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
+    nmap('<leader>lr', vim.lsp.buf.rename, 'Rename')
+    nmap('<leader>lc', vim.lsp.buf.code_action, 'Code action')
+    nmap('<leader>ls', require('telescope.builtin').lsp_document_symbols, 'Document symbols')
+    nmap('<leader>lS', require('telescope.builtin').lsp_dynamic_workspace_symbols, 'Workspace symbols')
+    nmap('gh', "<CMD>ClangdSwitchSourceHeader<CR>", 'Switch from source to header')
+    nmap("<leader>lo", vim.lsp.buf.outgoing_calls, 'Outgoing calls')
+    nmap("<leader>li", vim.lsp.buf.incoming_calls, 'Incoming calls')
+    -- Diagnostic keymaps
+    nmap('<leader>lD', require('telescope.builtin').diagnostics, 'Diagnostics')
+    nmap("<leader>lk", vim.diagnostic.goto_prev, 'Previous diagnostic')
+    nmap("<leader>lj", vim.diagnostic.goto_next, 'LSP: Next diagnostic')
+    nmap("gl", vim.diagnostic.open_float, 'LSP: Open diagnostic under cursor')
 
-    -- Lesser used LSP functionality
-    nmap('gD', vim.lsp.buf.declaration, 'Goto Declaration')
-    -- nmap('<leader>wa', vim.lsp.buf.add_workspace_folder, '[W]orkspace [A]dd Folder')
-    -- nmap('<leader>wr', vim.lsp.buf.remove_workspace_folder, '[W]orkspace [R]emove Folder')
-    -- nmap('<leader>wl', function()
-    -- print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-    -- end, '[W]orkspace [L]ist Folders')
+    if use_lsp_mappings_telescope then
+      nmap('gd', require('telescope.builtin').lsp_definitions, 'Goto definition')
+      nmap('gD', require('telescope.builtin').lsp_declaration, 'Goto declaration')
+      nmap('gI', require('telescope.builtin').lsp_implementations, 'Goto implementation')
+      nmap('gt', require('telescope.builtin').lsp_type_definitions, 'Goto type definitions')
+      nmap('gr', require('telescope.builtin').lsp_references, 'Goto references')
+    end
+
+    -- Documentation: https://nvimdev.github.io/lspsaga/
+    if use_lsp_mappings_lspsaga and Has_lspsaga then
+      nmap('K', ":Lspsaga hover_doc<CR>", 'Hover Documentation')
+      nmap('<leader>lr', ":Lspsaga rename<CR>", 'Rename')
+      nmap('gp', ":Lspsaga peek_definition<CR>", 'Peek definition')
+      nmap('gl', ":Lspsaga show_line_diagnostics<CR>", 'Buffer diagnostics')
+      nmap("<leader>lo", ":Lspsaga outgoing_calls<CR>", 'Outgoing calls')
+      nmap("<leader>li", ":Lspsaga incoming_calls<CR>", 'Incoming calls')
+      nmap('<leader>ld', ":Lspsaga show_buf_diagnostics<CR>", 'Buffer diagnostics')
+      nmap('<leader>lD', ":Lspsaga show_workspace_diagnostics<CR>", 'Workspace diagnostics')
+      -- Finder
+      nmap('gr', ":Lspsaga finder tyd+def+ref+imp<CR>", 'Goto references')
+      nmap('<leader>lfd', ":Lspsaga finder def<CR>", 'Find definitions')
+      nmap('<leader>lfi', ":Lspsaga finder imp<CR>", 'Find implementations')
+      nmap('<leader>lfr', ":Lspsaga finder ref<CR>", 'Find references')
+      nmap('<leader>lft', ":Lspsaga finder tyd<CR>", 'Find type definitions')
+      -- Outline
+      nmap('<leader>I', ":Lspsaga outline<CR>", 'File outline')
+    end
 
     -- Create a command `:Format` local to the LSP buffer
     vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
@@ -482,7 +508,7 @@ if has_lsp_util then
   --  the `settings` field of the server config. You must look up that documentation yourself.
   servers = {
     -- clangd = {
-      -- arguments = {"--compile-commands-dir=./build"}
+    -- arguments = {"--compile-commands-dir=./build"}
     -- },
     lua_ls = {},
     -- cmake = {},
@@ -522,10 +548,6 @@ end
 
 -- Looks of the LSP
 local signs = {
-  -- { name = "DiagnosticSignError", text = "" },
-  -- { name = "DiagnosticSignWarn", text = "" },
-  -- { name = "DiagnosticSignHint", text = "" },
-  -- { name = "DiagnosticSignInfo", text = "" },
   { name = "DiagnosticSignError", text = "" },
   { name = "DiagnosticSignWarn",  text = "" },
   { name = "DiagnosticSignHint",  text = "" },
@@ -1674,6 +1696,21 @@ if has_toggleterm then
   vim.cmd[[
     autocmd TermEnter term://*toggleterm#* tnoremap <silent><c-t> <Cmd>exe v:count1 . "ToggleTerm"<CR>
   ]]
+end
+
+-------------------------------
+-- [[ Configure Lspsaga ]] --
+-------------------------------
+-- Needs to be `setup` after nvim-lspconfig
+local has_lspsaga_, lspsaga = pcall(require, "lspsaga")
+Has_lspsaga = has_lspsaga_
+if Has_lspsaga then
+  lspsaga.setup({
+    outline = {
+      win_width = 50,
+      auto_preview = false,
+    }
+  })
 end
 
 -------------------------------

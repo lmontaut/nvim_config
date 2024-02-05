@@ -112,13 +112,7 @@ require('packer').startup(function(use)
   use { "lmontaut/symbols-outline.nvim" }
 
   -- LSP saga
-  -- use ({
-  --   'nvimdev/lspsaga.nvim',
-  --   after = 'nvim-lspconfig',
-  --   config = function()
-  --     require('lspsaga').setup({})
-  --   end,
-  -- })
+  use { 'nvimdev/lspsaga.nvim', }
 
   -- undo tree
   use { "mbbill/undotree" }
