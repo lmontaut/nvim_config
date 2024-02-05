@@ -125,10 +125,10 @@ require('packer').startup(function(use)
   use { "mfussenegger/nvim-dap",
     requires = { "nvim-telescope/telescope-dap.nvim" },
   }
-  use { "theHamsta/nvim-dap-virtual-text" }
   use { "rcarriga/nvim-dap-ui",
     requires = { "mfussenegger/nvim-dap", "rcarriga/cmp-dap" }
   }
+  -- use { "theHamsta/nvim-dap-virtual-text" }
 
   -- Align stuff
   use { "godlygeek/tabular" }

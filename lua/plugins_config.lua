@@ -1097,7 +1097,6 @@ if has_dap then
   end
 
   local function get_arguments()
-    -- return coroutine.create(function(dap_run_co)
     local args = {}
     vim.ui.input({ prompt = "[Executable arguments] > " }, function(input)
       if input ~= nil and input~= "" then
@@ -1105,20 +1104,18 @@ if has_dap then
       else
         args = {}
       end
-      -- coroutine.resume(dap_run_co, args)
     end)
     return args
-    -- end)
   end
 
   ------------------------------------
   -- C/C++/Rust configurations
   ------------------------------------
   -- local lldb_path = "/opt/homebrew/Cellar/llvm/17.0.6/bin/lldb-vscode"
-  local lldb_path = "/opt/homebrew/opt/llvm/bin/lldb-vscode"
-  dap.adapters.lldb = {
+  local lldb_path = "/opt/homebrew/opt/llvm/bin/lldb-vscode" -- Adjust depdending on llvm version
+  dap.adapters.cpp = {
     type = "executable",
-    command = lldb_path, -- Adjust depdending on llvm version
+    command = lldb_path,
     name = "lldb"
   }
 
@@ -1130,7 +1127,7 @@ if has_dap then
 
   dap.configurations.cpp = {
     {
-      type = 'lldb', -- Name of the dap.adapter you want to use
+      type = 'cpp', -- Name of the dap.adapter you want to use
       request = 'launch',
       name = 'Debug executable',
       program = get_executable,
@@ -1149,14 +1146,14 @@ if has_dap then
   ------------------------------------
   dap.adapters.python = {
     type = 'executable';
-    command = lsp_pythonpath, -- adjust as needed
+    command = lsp_pythonpath,
     args = { '-m', 'debugpy.adapter' };
   }
 
   -- Used to debug C++ code from python
   dap.adapters.python_cpp = {
     type = "executable",
-    command = lldb_path, -- Adjust depdending on llvm version
+    command = lldb_path,
     name = "lldb"
   }
 
@@ -1182,7 +1179,7 @@ if has_dap then
       pythonPath = lsp_pythonpath,
       console="integratedTerminal", -- So that the program's output is displayed in console
       args = get_arguments,
-      redirectOutput=true -- So that the program's output is displayed in console
+      redirectOutput = true -- So that the program's output is displayed in console
     },
     {
       -- The first three options are required by nvim-dap
@@ -1195,9 +1192,10 @@ if has_dap then
       -- lldb will debug the `python` program and the `args` will be used to pass the name of the python program + the optional arguments.
       program = "python";
       stopOnEntry = false,
-      args = get_python_arguments, -- select arguments to be passed to the executable
+      args = get_python_arguments, -- select python file + arguments to be passed to the executable
       reverseDebugging = true,
-      runInTerminal=true
+      runInTerminal = true,
+      justMyCode = false
     },
   }
 
@@ -1205,6 +1203,13 @@ if has_dap then
     command = '/Applications/Alacritty.app/Contents/MacOS/alacritty';
     args = {'-e'};
   }
+
+  -- Allows DAP to load `.vscode/launch.json`
+  require('dap.ext.vscode').load_launchjs(nil, {})
+  -- I you want to add something that has 'python_cpp' to the 'python' configurations,
+  -- you would do something like:
+  -- require('dap.ext.vscode').load_launchjs(nil, { python_cpp = {'python'} })
+  vim.keymap.set("n", "<leader>dJ", ":lua require('dap.ext.vscode').load_launchjs(nil, {})", { noremap = true, silent = false, desc = "(Re)-load launch.json" })
 
   -- keymaps
   -- TODO: attach to running debugger
@@ -1316,19 +1321,17 @@ if has_dapui and has_dap then
     },
     layouts = {
       { elements = {
-        { id = "console", size = 0.3 },
-        -- { id = "stacks", size = 0.4 },
-        { id = "breakpoints", size = 0.3 },
+        { id = "repl", size = 0.2 },
+        { id = "console", size = 0.6 },
+        { id = "breakpoints", size = 0.2 },
       },
         position = "bottom",
         size = 10
       },
       { elements = {
-        -- { id = "console", size = 0.5 },
         { id = "stacks", size = 0.3 },
         { id = "watches", size = 0.3 }, -- Keep track of expressions
         { id = "scopes", size = 0.3 }, -- Variables of the program
-        -- { id = "repl", size = 0.35 }
       },
         position = "left",
         size = 40
@@ -1351,28 +1354,24 @@ if has_dapui and has_dap then
   -- Automatically open/close ui when debugger starts/stops
   dap.listeners.after.event_initialized["dapui_config"] = function()
     dapui.open()
-    vim.cmd("stopinsert")
   end
-  dap.listeners.before.event_terminated["dapui_config"] = function()
-    dapui.close()
-    vim.cmd("stopinsert")
-  end
-  dap.listeners.before.event_exited["dapui_config"] = function()
-    dapui.close()
-    vim.cmd("stopinsert")
-  end
+  -- dap.listeners.before.event_terminated["dapui_config"] = function()
+  --   dapui.close()
+  --   vim.cmd("stopinsert")
+  -- end
+  -- dap.listeners.before.event_exited["dapui_config"] = function()
+  --   dapui.close()
+  --   vim.cmd("stopinsert")
+  -- end
 
   vim.keymap.set("n", "<leader>dO", function()
     dapui.open()
-    vim.cmd("stopinsert")
   end, { desc = "Open DAP UI (no start)", dapopts.args })
   vim.keymap.set("n", "<leader>dc", function()
     dapui.close()
-    vim.cmd("stopinsert")
   end, { desc = "Close DAP UI (no quit)", dapopts.args })
   vim.keymap.set("n", "<leader>d<CR>", function()
     dapui.toggle()
-    vim.cmd("stopinsert")
   end, { desc = "Toggle DAP UI", dapopts.args })
 
   -- Completion (if debugger supports it)
