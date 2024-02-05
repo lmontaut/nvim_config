@@ -1132,7 +1132,7 @@ if has_dap then
     {
       type = 'lldb', -- Name of the dap.adapter you want to use
       request = 'launch',
-      name = 'Debug C/C++/rust executable',
+      name = 'Debug executable',
       program = get_executable,
       cwd = '${workspaceFolder}',
       stopOnEntry = false,
@@ -1316,22 +1316,22 @@ if has_dapui and has_dap then
     },
     layouts = {
       { elements = {
-        { id = "scopes", size = 0.8 }, -- Variables of the program
-        { id = "console", size = 0.2 },
+        { id = "console", size = 0.3 },
         -- { id = "stacks", size = 0.4 },
-        -- { id = "breakpoints", size = 0.25 },
+        { id = "breakpoints", size = 0.3 },
       },
-        position = "right",
-        size = 60
+        position = "bottom",
+        size = 10
       },
       { elements = {
         -- { id = "console", size = 0.5 },
-        { id = "stacks", size = 0.4 },
-        { id = "watches", size = 0.6 }, -- Keep track of expressions
+        { id = "stacks", size = 0.3 },
+        { id = "watches", size = 0.3 }, -- Keep track of expressions
+        { id = "scopes", size = 0.3 }, -- Variables of the program
         -- { id = "repl", size = 0.35 }
       },
-        position = "bottom",
-        size = 15
+        position = "left",
+        size = 40
       }
     },
     mappings = {
