@@ -125,14 +125,13 @@ require('packer').startup(function(use)
   use { "mfussenegger/nvim-dap",
     requires = { "nvim-telescope/telescope-dap.nvim" },
   }
-
-  -- Align stuff
-  use { "godlygeek/tabular" }
-
-  -- Dap-ui
+  use { "theHamsta/nvim-dap-virtual-text" }
   use { "rcarriga/nvim-dap-ui",
     requires = { "mfussenegger/nvim-dap", "rcarriga/cmp-dap" }
   }
+
+  -- Align stuff
+  use { "godlygeek/tabular" }
 
   -- Just files syntax highlighting
   use {'NoahTheDuke/vim-just' }

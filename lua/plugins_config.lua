@@ -1269,6 +1269,16 @@ if has_dap then
   vim.keymap.set('n', '<leader>db',  ':Telescope dap list_breakpoints<CR>', { desc = "Telescope dap list_breakpoints", dapopts.args })
 end
 
+--------------------------------------
+-- [[ Configure DAP virtual text ]] --
+--------------------------------------
+local has_dap_virtual_text, dap_virtual_text = pcall(require, "nvim-dap-virtual-text")
+if has_dap_virtual_text then
+  dap_virtual_text.setup({
+    enable = false
+  })
+end
+
 ----------------------------
 -- [[ Configure DAP UI ]] --
 ----------------------------
