@@ -1084,14 +1084,31 @@ if has_dap then
   vim.fn.sign_define("DapStopped", dap_breakpoint.stopped)
   vim.fn.sign_define("DapBreakpointRejected", dap_breakpoint.rejected)
 
-  local function get_arguments()
-    return coroutine.create(function(dap_run_co)
-      local args = {}
-      vim.ui.input({ prompt = "[Executable arguments] > " }, function(input)
-        args = vim.split(input or "", " ")
-        coroutine.resume(dap_run_co, args)
+  local function get_executable()
+    local path = nil
+    vim.ui.input({
+      prompt = "[Path to executable] > ",
+      default = vim.fn.getcwd() .. '/',
+      completion = "file",
+    }, function(input)
+        path = input
       end)
+    return (path and path ~= "") and path or dap.ABORT
+  end
+
+  local function get_arguments()
+    -- return coroutine.create(function(dap_run_co)
+    local args = {}
+    vim.ui.input({ prompt = "[Executable arguments] > " }, function(input)
+      if input ~= nil and input~= "" then
+        args = vim.split(input or "", " ")
+      else
+        args = {}
+      end
+      -- coroutine.resume(dap_run_co, args)
     end)
+    return args
+    -- end)
   end
 
   ------------------------------------
@@ -1104,6 +1121,7 @@ if has_dap then
     command = lldb_path, -- Adjust depdending on llvm version
     name = "lldb"
   }
+
   dap.adapters.codelldb = {
     type = 'server',
     host = '127.0.0.1',
@@ -1115,14 +1133,7 @@ if has_dap then
       type = 'lldb', -- Name of the dap.adapter you want to use
       request = 'launch',
       name = 'Debug C/C++/rust executable',
-      program = function()
-        local path = vim.fn.input({
-          prompt = "[Path to executable] > ",
-          default = vim.fn.getcwd() .. '/',
-          completion = "file",
-        })
-        return (path and path ~= "") and path or dap.ABORT
-      end,
+      program = get_executable,
       cwd = '${workspaceFolder}',
       stopOnEntry = false,
       args = get_arguments, -- select arguments to be passed to the executable
