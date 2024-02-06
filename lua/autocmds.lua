@@ -18,6 +18,7 @@ vim.cmd[[
   autocmd FileType netrw nnoremap <buffer> q :Rexplore<CR>
   autocmd FileType cpp TSDisable indent
   autocmd FileType help TSDisable highlight
+  autocmd FileType NeogitStatus setlocal wrap
 ]]
 
 -- Stop from continuing comments when going to line with "o"
