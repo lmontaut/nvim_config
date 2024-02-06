@@ -1113,7 +1113,7 @@ if has_dap then
   ------------------------------------
   -- local lldb_path = "/opt/homebrew/Cellar/llvm/17.0.6/bin/lldb-vscode"
   local lldb_path = "/opt/homebrew/opt/llvm/bin/lldb-vscode" -- Adjust depdending on llvm version
-  dap.adapters.cpp = {
+  dap.adapters.lldb = {
     type = "executable",
     command = lldb_path,
     name = "lldb"
@@ -1127,9 +1127,9 @@ if has_dap then
 
   dap.configurations.cpp = {
     {
-      type = 'cpp', -- Name of the dap.adapter you want to use
+      type = 'lldb', -- Name of the dap.adapter you want to use
       request = 'launch',
-      name = 'Debug executable',
+      name = '(default) Debug binary executable',
       program = get_executable,
       cwd = '${workspaceFolder}',
       stopOnEntry = false,
@@ -1172,7 +1172,7 @@ if has_dap then
       -- The first three options are required by nvim-dap
       type = 'python'; -- the type here established the link to the adapter definition: `dap.adapters.python`
       request = 'launch';
-      name = "Debug python file";
+      name = "(default) Debug python file";
 
       -- Options below are for debugpy, see https://github.com/microsoft/debugpy/wiki/Debug-configuration-settings for supported options
       program = "${file}"; -- This configuration will launch the current file if used.
@@ -1185,7 +1185,7 @@ if has_dap then
       -- The first three options are required by nvim-dap
       type = 'python_cpp';
       request = 'launch';
-      name = "Debug C++ from python";
+      name = "(default) Debug rust/C/C++ from python";
 
       -- Options below are for lldb
       cwd = '${workspaceFolder}',
@@ -1205,11 +1205,18 @@ if has_dap then
   }
 
   -- Allows DAP to load `.vscode/launch.json`
-  require('dap.ext.vscode').load_launchjs(nil, {})
   -- I you want to add something that has 'python_cpp' to the 'python' configurations,
   -- you would do something like:
   -- require('dap.ext.vscode').load_launchjs(nil, { python_cpp = {'python'} })
-  vim.keymap.set("n", "<leader>dJ", ":lua require('dap.ext.vscode').load_launchjs(nil, {})", { noremap = true, silent = false, desc = "(Re)-load launch.json" })
+  local load_launch_json = function()
+    require('dap.ext.vscode').load_launchjs(nil, {})
+    require('dap.ext.vscode').load_launchjs(nil, { lldb = {'rust', 'c', 'cpp'} })
+    require('dap.ext.vscode').load_launchjs(nil, { python_cpp = { 'python' } })
+    -- Add more stuff that needs to be reloaded if needed
+    print("Reloaded configurations in .vscode/launch.json")
+  end
+  load_launch_json()
+  vim.keymap.set("n", "<leader>dJ", load_launch_json, { noremap = true, silent = true, desc = "(Re)-load launch.json" })
 
   -- keymaps
   -- TODO: attach to running debugger
@@ -1352,9 +1359,9 @@ if has_dapui and has_dap then
   })
 
   -- Automatically open/close ui when debugger starts/stops
-  dap.listeners.after.event_initialized["dapui_config"] = function()
-    dapui.open()
-  end
+  -- dap.listeners.after.event_initialized["dapui_config"] = function()
+  --   dapui.open()
+  -- end
   -- dap.listeners.before.event_terminated["dapui_config"] = function()
   --   dapui.close()
   --   vim.cmd("stopinsert")
@@ -1670,6 +1677,7 @@ if has_toggleterm then
   vim.keymap.set('i', "<c-t>", "<Esc><CMD>exe v:count1 . 'ToggleTerm'<CR>", { desc = "ToggleTerm" })
   vim.cmd[[
     autocmd TermEnter term://*toggleterm#* tnoremap <silent><c-t> <Cmd>exe v:count1 . "ToggleTerm"<CR>
+    autocmd TermEnter term://*toggleterm#* startinsert
   ]]
 end
 
