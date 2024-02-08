@@ -1205,9 +1205,14 @@ if has_dap then
   }
 
   -- Allows DAP to load `.vscode/launch.json`
-  -- I you want to add something that has 'python_cpp' to the 'python' configurations,
+  -- I you want to add something that has the 'python_cpp' adapter to the 'python' configurations,
   -- you would do something like:
-  -- require('dap.ext.vscode').load_launchjs(nil, { python_cpp = {'python'} })
+  --     require('dap.ext.vscode').load_launchjs(nil, { python_cpp = {'python'} })
+  -- I you want to add something that has the 'lldb' adapter to the 'c', cpp or rust configurations,
+  -- you would do something like:
+  --     require('dap.ext.vscode').load_launchjs(nil, { lldb = {'c'} }) -- will add only to c config
+  -- or:
+  --     require('dap.ext.vscode').load_launchjs(nil, { lldb = {'c', 'cpp', 'rust'} }) -- will add to the 3
   local load_launch_json = function()
     require('dap.ext.vscode').load_launchjs(nil, {})
     require('dap.ext.vscode').load_launchjs(nil, { lldb = {'rust', 'c', 'cpp'} })
