@@ -15,13 +15,40 @@ require('packer').startup(function(use)
   -- Main plugins: Telescope, cmp, treesitter, lsp-config, neodev, fugitive, comment, which-key, DAP and Pap
   -- Optional: packer, plenary, sneak, project, lualine, indent-blankline
 
+  ------------------------------------------------------------------------------------------------------------
+  ---------- NVIM TOOLS
+  ------------------------------------------------------------------------------------------------------------
   -- Package manager
   use { 'wbthomason/packer.nvim' }
 
   -- Plenary: lots of useful functions
   use { 'nvim-lua/plenary.nvim' }
 
-  use { -- LSP Configuration & Plugins
+  -- Highlight, edit, and navigate code
+  use {
+    'nvim-treesitter/nvim-treesitter',
+    run = function()
+      pcall(require('nvim-treesitter.install').update { with_sync = true })
+    end,
+  }
+
+  -- Helper to know what each binding does
+  use { "folke/which-key.nvim" }
+
+  -- Additional text objects via treesitter
+  use {
+    'nvim-treesitter/nvim-treesitter-textobjects',
+    after = 'nvim-treesitter',
+  }
+
+  -- Toggle term -- multiple terminals in vim
+  use { "akinsho/toggleterm.nvim" }
+
+  ------------------------------------------------------------------------------------------------------------
+  ---------- LSP
+  ------------------------------------------------------------------------------------------------------------
+  -- LSP Configuration & Plugins
+  use {
     'neovim/nvim-lspconfig',
     requires = {
       -- Automatically install LSPs to stdpath for neovim
@@ -36,8 +63,6 @@ require('packer').startup(function(use)
     },
   }
 
-  use { 'nvim-tree/nvim-web-devicons' }
-
   -- Autocompletion
   use {
     'hrsh7th/nvim-cmp',
@@ -48,79 +73,23 @@ require('packer').startup(function(use)
   -- Cycle functions overloads
   use { 'Issafalcon/lsp-overloads.nvim' }
 
-  -- Highlight, edit, and navigate code
-  use {
-    'nvim-treesitter/nvim-treesitter',
-    run = function()
-      pcall(require('nvim-treesitter.install').update { with_sync = true })
-    end,
-  }
-
-  -- fzf
-  use {'junegunn/fzf', run = function()
-      vim.fn['fzf#install']()
-  end
-  }
-
-  -- Additional text objects via treesitter
-  use {
-    'nvim-treesitter/nvim-treesitter-textobjects',
-    after = 'nvim-treesitter',
-  }
-
-  -- Git related plugins
-  use { 'tpope/vim-fugitive' }
-  use { 'tpope/vim-rhubarb' }
-  use { 'lewis6991/gitsigns.nvim' }
-
-  -- Better netrw
-  use { 'tpope/vim-eunuch' }
-  -- use { 'tpope/vim-vinegar' }
-  -- use { 'justinmk/vim-dirvish' }
-  use{ 'stevearc/oil.nvim' } -- very very very good file navigator
-
-  -- Color themes
-  -- use { 'navarasu/onedark.nvim' } -- Theme inspired by Atom
-  use { "catppuccin/nvim", as = "catppuccin" }
-
-  -- Visual enhancements
-  use { 'nvim-lualine/lualine.nvim' } -- Fancier statusline
-  -- use { 'lukas-reineke/indent-blankline.nvim' } -- Add indentation guides even on blank lines
-
-  -- "gc" to comment visual regions/lines
-  use { 'numToStr/Comment.nvim' }
-
-  -- Detect tabstop and shiftwidth automatically. Can potentially conflict with Treesitter!
-  use { 'tpope/vim-sleuth' }
-
-  -- Fuzzy Finder (files, lsp, etc)
-  use { 'nvim-telescope/telescope.nvim', branch = '0.1.x', requires = { 'nvim-lua/plenary.nvim' } }
-
-  -- Fuzzy Finder Algorithm which requires local dependencies to be built. Only load if `make` is available
-  use { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make', cond = vim.fn.executable 'make' == 1 }
-
-  -- Helper to know what each binding does
-  use { "folke/which-key.nvim" }
-
-  -- Navigation
-  use { "justinmk/vim-sneak" }
-
-  -- Project manager
-  use { "ahmedkhalf/project.nvim" }
-
   -- symbol outline
   -- use { "simrat39/symbols-outline.nvim" }
   use { "lmontaut/symbols-outline.nvim" }
 
-  -- LSP saga
+  -- LSP saga: fancier lsp display, outline etc
   use { 'nvimdev/lspsaga.nvim', }
 
-  -- undo tree
-  use { "mbbill/undotree" }
+  -- C# dev
+  -- use { 'OmniSharp/omnisharp-vim' }
+  -- use { "Decodetalkers/csharpls-extended-lsp.nvim" }
 
-  -- My Pap -- best plugin
-  use { "~/software/misc/nvim/nvim-pap" }
+  -- Any jump
+  use { "pechorin/any-jump.vim" }
 
+  ------------------------------------------------------------------------------------------------------------
+  ---------- DEBUG
+  ------------------------------------------------------------------------------------------------------------
   -- Debugger
   use { "mfussenegger/nvim-dap",
     requires = { "nvim-telescope/telescope-dap.nvim" },
@@ -130,57 +99,55 @@ require('packer').startup(function(use)
   }
   -- use { "theHamsta/nvim-dap-virtual-text" }
 
-  -- Align stuff
-  use { "godlygeek/tabular" }
+  ------------------------------------------------------------------------------------------------------------
+  ---------- LOOKS
+  ------------------------------------------------------------------------------------------------------------
+  -- Better icons
+  use { 'nvim-tree/nvim-web-devicons' }
+
+  -- Color themes
+  -- use { 'navarasu/onedark.nvim' } -- Theme inspired by Atom
+  use { "catppuccin/nvim", as = "catppuccin" }
+
+  -- Status line
+  use { 'nvim-lualine/lualine.nvim' }
+  -- use { 'lukas-reineke/indent-blankline.nvim' } -- Add indentation guides even on blank lines
 
   -- Just files syntax highlighting
   use {'NoahTheDuke/vim-just' }
 
-  -- Neorg
-  -- use { "nvim-neorg/neorg",
-    -- run = ":Neorg sync-parsers",
-    -- requires = "nvim-lua/plenary.nvim",
+  -- Replaces ui of cmdline, messages etc...
+  -- use { "folke/noice.nvim",
+  --   requires = {
+  --   -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
+  --   "MunifTanjim/nui.nvim",
+  --   -- OPTIONAL:
+  --   --   `nvim-notify` is only needed, if you want to use the notification view.
+  --   --   If not available, we use `mini` as the fallback
+  --   -- "rcarriga/nvim-notify",
+  --   }
   -- }
 
-  -- Obsidian
-  -- use { "epwalsh/obsidian.nvim" }
+  ------------------------------------------------------------------------------------------------------------
+  ---------- NAVIGATION
+  ------------------------------------------------------------------------------------------------------------
+  -- Fuzzy Finder (files, lsp, etc)
+  use { 'nvim-telescope/telescope.nvim', branch = '0.1.x', requires = { 'nvim-lua/plenary.nvim' } }
 
-  -- Mardown preview
-  -- use({ "iamcco/markdown-preview.nvim", run = "cd app && npm install", setup = function() vim.g.mkdp_filetypes = { "markdown" } end, ft = { "markdown" }, })
-
-  -- C# dev
-  -- use { 'OmniSharp/omnisharp-vim' }
-  -- use { "Decodetalkers/csharpls-extended-lsp.nvim" }
-
-  -- Any jump
-  use { "pechorin/any-jump.vim" }
-
-  -- Multicursors
-  use {
-    "smoka7/multicursors.nvim",
-    requires = {
-      "smoka7/hydra.nvim"
-    }
+  -- fzf
+  use {'junegunn/fzf', run = function()
+      vim.fn['fzf#install']()
+  end
   }
+
+  -- Project manager
+  use { "ahmedkhalf/project.nvim" }
+
+  -- Better s/f navigation
+  use { "justinmk/vim-sneak" }
 
   -- tpope's unimpaired (bunch of usefull ]-... stuff)
   use { "tpope/vim-unimpaired" }
-
-  -- Neogit
-  use {
-    "NeogitOrg/neogit",
-    requires = {
-      "nvim-lua/plenary.nvim",         -- required
-      "nvim-telescope/telescope.nvim", -- optional
-      "sindrets/diffview.nvim",        -- optional
-      "ibhagwan/fzf-lua",              -- optional
-    }
-  }
-
-  -- Find and replace (a wrapper around sad terminal utility)
-  use { "ray-x/sad.nvim",
-    requires = { "ray-x/guihua.lua", run = "cd lua/fzy && make" }
-  }
 
   -- Navigate important project files
   use {
@@ -197,27 +164,92 @@ require('packer').startup(function(use)
   -- Better marks setup
   use { "chentoast/marks.nvim" }
 
-  -- Noice
-  -- use { "folke/noice.nvim",
-  --   requires = {
-  --   -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
-  --   "MunifTanjim/nui.nvim",
-  --   -- OPTIONAL:
-  --   --   `nvim-notify` is only needed, if you want to use the notification view.
-  --   --   If not available, we use `mini` as the fallback
-  --   -- "rcarriga/nvim-notify",
-  --   }
-  -- }
+  -- Easy window switch
+  use { "yorickpeterse/nvim-window" }
 
-  -- Toggle term -- multiple terminals in vim
-  use { "akinsho/toggleterm.nvim" }
+  ------------------------------------------------------------------------------------------------------------
+  ---------- GIT
+  ------------------------------------------------------------------------------------------------------------
+  -- Neogit
+  use {
+    "NeogitOrg/neogit",
+    requires = {
+      "nvim-lua/plenary.nvim",         -- required
+      "nvim-telescope/telescope.nvim", -- optional
+      "sindrets/diffview.nvim",        -- optional
+      "ibhagwan/fzf-lua",              -- optional
+    }
+  }
+
+  -- Git related plugins
+  use { 'lewis6991/gitsigns.nvim' }
+  -- use { 'tpope/vim-fugitive' } -- replaced by neogit
+  -- use { 'tpope/vim-rhubarb' } -- open github urls
+
+  -- Better netrw
+  use{ 'stevearc/oil.nvim' } -- very very very good file navigator
+  -- use { 'tpope/vim-eunuch' } -- if oil.nvim is not available...
+  -- use { 'tpope/vim-vinegar' }
+  -- use { 'justinmk/vim-dirvish' }
+
+  ------------------------------------------------------------------------------------------------------------
+  ---------- CODE EDITION TOOLS
+  ------------------------------------------------------------------------------------------------------------
+  -- My Pap -- best plugin
+  use { "~/software/misc/nvim/nvim-pap" }
+
+  -- "gc" to comment visual regions/lines
+  use { 'numToStr/Comment.nvim' }
+
+  -- Detect tabstop and shiftwidth automatically. Can potentially conflict with Treesitter!
+  use { 'tpope/vim-sleuth' }
+
+  -- undo tree
+  use { "mbbill/undotree" }
+
+  -- Fuzzy Finder Algorithm which requires local dependencies to be built. Only load if `make` is available
+  use { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make', cond = vim.fn.executable 'make' == 1 }
+
+  -- Align stuff
+  use { "godlygeek/tabular" }
+
+  -- Multicursors
+  use {
+    "smoka7/multicursors.nvim",
+    requires = {
+      "smoka7/hydra.nvim"
+    }
+  }
+
+  -- Find and replace (a wrapper around sad terminal utility)
+  use { "ray-x/sad.nvim",
+    requires = { "ray-x/guihua.lua", run = "cd lua/fzy && make" }
+  }
 
   -- Automatic bracket closing
   use { "windwp/nvim-autopairs" }
 
-  -- Easy window switch
-  use { "yorickpeterse/nvim-window" }
+  ------------------------------------------------------------------------------------------------------------
+  ---------- NOTES
+  ------------------------------------------------------------------------------------------------------------
+  -- Neorg
+  -- use { "nvim-neorg/neorg",
+    -- run = ":Neorg sync-parsers",
+    -- requires = "nvim-lua/plenary.nvim",
+  -- }
 
+  -- Obsidian
+  -- use { "epwalsh/obsidian.nvim" }
+
+  -- Mardown preview
+  -- use({ "iamcco/markdown-preview.nvim", run = "cd app && npm install", setup = function() vim.g.mkdp_filetypes = { "markdown" } end, ft = { "markdown" }, })
+
+
+  ------------------------------------------------------------------------------------------------------------
+  ------------------------------------------------------------------------------------------------------------
+  ---------- END OF PLUGINS
+  ------------------------------------------------------------------------------------------------------------
+  ------------------------------------------------------------------------------------------------------------
 
   -- Add custom plugins to packer from ~/.config/nvim/lua/custom/plugins.lua
   local has_plugins, plugins = pcall(require, 'custom.plugins')
