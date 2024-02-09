@@ -237,6 +237,12 @@ require('packer').startup(function(use)
   -- Automatic bracket closing -- **
   use { "windwp/nvim-autopairs" }
 
+  -- Copilot
+  -- To set up:
+  -- :Copilot setup
+  -- :Copilot enable
+  use { "github/copilot.vim" }
+
   ------------------------------------------------------------------------------------------------------------
   ---------- NOTES
   ------------------------------------------------------------------------------------------------------------

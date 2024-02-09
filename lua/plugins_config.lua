@@ -1774,6 +1774,15 @@ if has_smart_splits then
   vim.keymap.set('n', '<C-Right>', smart_splits.resize_right, { desc = "Resize right"} )
 end
 
+-----------------------------
+-- [[ Configure copilot ]] --
+-----------------------------
+vim.keymap.set('i', '<C-o>', 'copilot#Accept("\\<CR>")', {
+  expr = true,
+  replace_keycodes = false
+})
+vim.g.copilot_no_tab_map = true
+
 -------------------------------
 -- [[ Configure Which-key ]] --
 -------------------------------
