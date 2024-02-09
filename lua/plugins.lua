@@ -215,6 +215,10 @@ require('packer').startup(function(use)
   -- Automatic bracket closing
   use { "windwp/nvim-autopairs" }
 
+  -- Easy window switch
+  use { "yorickpeterse/nvim-window" }
+
+
   -- Add custom plugins to packer from ~/.config/nvim/lua/custom/plugins.lua
   local has_plugins, plugins = pcall(require, 'custom.plugins')
   if has_plugins then

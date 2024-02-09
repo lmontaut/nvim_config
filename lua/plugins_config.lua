@@ -1745,6 +1745,15 @@ if has_autopairs then
   autopairs.setup({})
 end
 
+---------------------------------
+-- [[ Configure nvim-window ]] --
+---------------------------------
+local has_nvim_window, nvim_window = pcall(require, "nvim-window")
+if has_nvim_window then
+  nvim_window.setup({})
+  vim.keymap.set('n', "<leader>wn", function() nvim_window.pick() end, { desc = "Pick window" })
+end
+
 -------------------------------
 -- [[ Configure Which-key ]] --
 -------------------------------
