@@ -1755,6 +1755,15 @@ if has_nvim_window then
 end
 
 -------------------------------
+-- [[ Configure Win-shift ]] --
+-------------------------------
+local has_winshift, winshift = pcall(require, "winshift")
+if has_winshift then
+  winshift.setup({})
+  vim.keymap.set('n', "<leader>wm", ":WinShift<CR>", { desc = "Move window" })
+end
+
+-------------------------------
 -- [[ Configure Which-key ]] --
 -------------------------------
 local has_wk, wk = pcall(require, "which-key")

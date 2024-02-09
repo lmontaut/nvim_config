@@ -15,16 +15,18 @@ require('packer').startup(function(use)
   -- Main plugins: Telescope, cmp, treesitter, lsp-config, neodev, fugitive, comment, which-key, DAP and Pap
   -- Optional: packer, plenary, sneak, project, lualine, indent-blankline
 
+  -- Main plugins are tagged with **
+
   ------------------------------------------------------------------------------------------------------------
   ---------- NVIM TOOLS
   ------------------------------------------------------------------------------------------------------------
-  -- Package manager
+  -- Package manager -- **
   use { 'wbthomason/packer.nvim' }
 
   -- Plenary: lots of useful functions
   use { 'nvim-lua/plenary.nvim' }
 
-  -- Highlight, edit, and navigate code
+  -- Highlight, edit, and navigate code -- **
   use {
     'nvim-treesitter/nvim-treesitter',
     run = function()
@@ -32,7 +34,7 @@ require('packer').startup(function(use)
     end,
   }
 
-  -- Helper to know what each binding does
+  -- Helper to know what each binding does -- **
   use { "folke/which-key.nvim" }
 
   -- Additional text objects via treesitter
@@ -41,13 +43,13 @@ require('packer').startup(function(use)
     after = 'nvim-treesitter',
   }
 
-  -- Toggle term -- multiple terminals in vim
+  -- Multiple terminals in vim -- **
   use { "akinsho/toggleterm.nvim" }
 
   ------------------------------------------------------------------------------------------------------------
   ---------- LSP
   ------------------------------------------------------------------------------------------------------------
-  -- LSP Configuration & Plugins
+  -- LSP Configuration & Plugins -- **
   use {
     'neovim/nvim-lspconfig',
     requires = {
@@ -63,34 +65,34 @@ require('packer').startup(function(use)
     },
   }
 
-  -- Autocompletion
+  -- Autocompletion -- **
   use {
     'hrsh7th/nvim-cmp',
     requires = { 'hrsh7th/cmp-nvim-lsp', 'L3MON4D3/LuaSnip', 'saadparwaiz1/cmp_luasnip',
     'hrsh7th/cmp-buffer', 'hrsh7th/cmp-path', 'hrsh7th/cmp-cmdline' },
   }
 
-  -- Cycle functions overloads
+  -- Cycle functions overloads -- **
   use { 'Issafalcon/lsp-overloads.nvim' }
 
   -- symbol outline
   -- use { "simrat39/symbols-outline.nvim" }
   use { "lmontaut/symbols-outline.nvim" }
 
-  -- LSP saga: fancier lsp display, outline etc
+  -- LSP saga: fancier lsp display, outline etc -- **
   use { 'nvimdev/lspsaga.nvim', }
 
   -- C# dev
   -- use { 'OmniSharp/omnisharp-vim' }
   -- use { "Decodetalkers/csharpls-extended-lsp.nvim" }
 
-  -- Any jump
-  use { "pechorin/any-jump.vim" }
+  -- Any jump -- **
+  use { "pechorin/any-jump.vim" } -- For when LSP is unavailable
 
   ------------------------------------------------------------------------------------------------------------
   ---------- DEBUG
   ------------------------------------------------------------------------------------------------------------
-  -- Debugger
+  -- Debugger -- **
   use { "mfussenegger/nvim-dap",
     requires = { "nvim-telescope/telescope-dap.nvim" },
   }
@@ -109,7 +111,7 @@ require('packer').startup(function(use)
   -- use { 'navarasu/onedark.nvim' } -- Theme inspired by Atom
   use { "catppuccin/nvim", as = "catppuccin" }
 
-  -- Status line
+  -- Status line -- **
   use { 'nvim-lualine/lualine.nvim' }
   -- use { 'lukas-reineke/indent-blankline.nvim' } -- Add indentation guides even on blank lines
 
@@ -131,7 +133,7 @@ require('packer').startup(function(use)
   ------------------------------------------------------------------------------------------------------------
   ---------- NAVIGATION
   ------------------------------------------------------------------------------------------------------------
-  -- Fuzzy Finder (files, lsp, etc)
+  -- Fuzzy Finder (files, lsp, etc) -- **
   use { 'nvim-telescope/telescope.nvim', branch = '0.1.x', requires = { 'nvim-lua/plenary.nvim' } }
 
   -- fzf
@@ -140,10 +142,10 @@ require('packer').startup(function(use)
   end
   }
 
-  -- Project manager
+  -- Project manager -- **
   use { "ahmedkhalf/project.nvim" }
 
-  -- Better s/f navigation
+  -- Better s/f navigation -- **
   use { "justinmk/vim-sneak" }
 
   -- tpope's unimpaired (bunch of usefull ]-... stuff)
@@ -164,13 +166,17 @@ require('packer').startup(function(use)
   -- Better marks setup
   use { "chentoast/marks.nvim" }
 
-  -- Easy window switch
+  -- Easy window switch -- **
   use { "yorickpeterse/nvim-window" }
+
+  -- Move windows around -- **
+  use { "sindrets/winshift.nvim" }
+
 
   ------------------------------------------------------------------------------------------------------------
   ---------- GIT
   ------------------------------------------------------------------------------------------------------------
-  -- Neogit
+  -- Neogit -- **
   use {
     "NeogitOrg/neogit",
     requires = {
@@ -181,13 +187,13 @@ require('packer').startup(function(use)
     }
   }
 
-  -- Git related plugins
+  -- Git related plugins -- **
   use { 'lewis6991/gitsigns.nvim' }
   -- use { 'tpope/vim-fugitive' } -- replaced by neogit
   -- use { 'tpope/vim-rhubarb' } -- open github urls
 
-  -- Better netrw
-  use{ 'stevearc/oil.nvim' } -- very very very good file navigator
+  -- Very very very good file navigator -- **
+  use{ 'stevearc/oil.nvim' }
   -- use { 'tpope/vim-eunuch' } -- if oil.nvim is not available...
   -- use { 'tpope/vim-vinegar' }
   -- use { 'justinmk/vim-dirvish' }
@@ -195,10 +201,10 @@ require('packer').startup(function(use)
   ------------------------------------------------------------------------------------------------------------
   ---------- CODE EDITION TOOLS
   ------------------------------------------------------------------------------------------------------------
-  -- My Pap -- best plugin
+  -- My Pap: best plugin -- **
   use { "~/software/misc/nvim/nvim-pap" }
 
-  -- "gc" to comment visual regions/lines
+  -- "gc" to comment visual regions/lines -- **
   use { 'numToStr/Comment.nvim' }
 
   -- Detect tabstop and shiftwidth automatically. Can potentially conflict with Treesitter!
@@ -221,12 +227,12 @@ require('packer').startup(function(use)
     }
   }
 
-  -- Find and replace (a wrapper around sad terminal utility)
+  -- Find and replace (a wrapper around sad terminal utility) -- **
   use { "ray-x/sad.nvim",
     requires = { "ray-x/guihua.lua", run = "cd lua/fzy && make" }
   }
 
-  -- Automatic bracket closing
+  -- Automatic bracket closing -- **
   use { "windwp/nvim-autopairs" }
 
   ------------------------------------------------------------------------------------------------------------
