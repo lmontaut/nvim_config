@@ -1332,23 +1332,27 @@ if has_dapui and has_dap then
       expanded = ""
     },
     layouts = {
-      { elements = {
-        { id = "repl", size = 0.3 },
-        { id = "console", size = 0.4 },
-        -- { id = "breakpoints", size = 0.2 },
-        { id = "watches", size = 0.3 },
-      },
+      -- Simple layout
+      {
+        elements = {
+          { id = "repl", size = 0.3 },
+          { id = "console", size = 0.3 },
+          -- { id = "breakpoints", size = 0.2 },
+          { id = "watches", size = 0.3 },
+        },
         position = "bottom",
-        size = 5
+        size = 10
       },
-      -- { elements = {
-      --   { id = "stacks", size = 0.3 },
-      --   { id = "watches", size = 0.3 }, -- Keep track of expressions
-      --   { id = "scopes", size = 0.3 }, -- Variables of the program
-      -- },
-      --   position = "left",
-      --   size = 40
-      -- }
+      -- More details
+      {
+        elements = {
+          { id = "watches", size = 0.3 }, -- Keep track of expressions
+          { id = "stacks", size = 0.3 }, -- keep track of scope variables
+          { id = "scopes", size = 0.3 }, -- Variables of the program
+        },
+        position = "left",
+        size = 40
+      }
     },
     mappings = {
       edit = "e",
@@ -1379,6 +1383,12 @@ if has_dapui and has_dap then
   vim.keymap.set("n", "<leader>d<CR>", function()
     dapui.toggle()
   end, { desc = "Toggle DAP UI", dapopts.args })
+  vim.keymap.set("n", "<leader>d1", function()
+    dapui.toggle({layout=1})
+  end, { desc = "Toggle bottom DAP UI", dapopts.args })
+  vim.keymap.set("n", "<leader>d2", function()
+    dapui.toggle({layout=2})
+  end, { desc = "Toggle left DAP UI", dapopts.args })
   -- Trigger DAP ui element
   vim.keymap.set("n", "<leader>du", function()
     ---@diagnostic disable-next-line: missing-fields, param-type-mismatch
