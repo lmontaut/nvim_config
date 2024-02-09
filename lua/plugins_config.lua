@@ -1763,6 +1763,17 @@ if has_winshift then
   vim.keymap.set('n', "<leader>wm", ":WinShift<CR>", { desc = "Move window" })
 end
 
+----------------------------------
+-- [[ Configure smart-splits ]] --
+----------------------------------
+local has_smart_splits, smart_splits = pcall(require, "smart-splits")
+if has_smart_splits then
+  vim.keymap.set('n', '<C-Up>',    smart_splits.resize_up,    { desc = "Resize up"} )
+  vim.keymap.set('n', '<C-Down>',  smart_splits.resize_down,  { desc = "Resize down"} )
+  vim.keymap.set('n', '<C-Left>',  smart_splits.resize_left,  { desc = "Resize left"} )
+  vim.keymap.set('n', '<C-Right>', smart_splits.resize_right, { desc = "Resize right"} )
+end
+
 -------------------------------
 -- [[ Configure Which-key ]] --
 -------------------------------

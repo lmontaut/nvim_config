@@ -175,6 +175,8 @@ vim.keymap.set("n", "<leader>sb", "<CMD>ClearQuickfixList<CR>:bufdo vimgrepadd <
 vim.keymap.set("n", "<leader>vo", "mz:tabnew %<CR>`z", { desc = "Tab new", opts.args })
 vim.keymap.set("n", "<leader>]", ":tabnext<CR>", { desc = "Tab next", opts.args })
 vim.keymap.set("n", "<leader>[", ":tabprevious<CR>", { desc = "Tab previous", opts.args })
+vim.keymap.set("n", "<leader>}", ":+tabmove<CR>", { desc = "Move tab right", opts.args })
+vim.keymap.set("n", "<leader>{", ":-tabmove<CR>", { desc = "Move tab left", opts.args })
 
 -- Location list navigation
 vim.keymap.set("n", "<leader>qj", ":lnext<CR>", { desc = "Location next", opts.args })

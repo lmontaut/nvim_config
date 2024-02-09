@@ -172,6 +172,8 @@ require('packer').startup(function(use)
   -- Move windows around -- **
   use { "sindrets/winshift.nvim" }
 
+  -- More intuitive window resizing
+  use { "mrjones2014/smart-splits.nvim" }
 
   ------------------------------------------------------------------------------------------------------------
   ---------- GIT
