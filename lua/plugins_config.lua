@@ -1333,21 +1333,22 @@ if has_dapui and has_dap then
     },
     layouts = {
       { elements = {
-        { id = "repl", size = 0.2 },
-        { id = "console", size = 0.6 },
-        { id = "breakpoints", size = 0.2 },
+        { id = "repl", size = 0.3 },
+        { id = "console", size = 0.4 },
+        -- { id = "breakpoints", size = 0.2 },
+        { id = "watches", size = 0.3 },
       },
         position = "bottom",
-        size = 10
+        size = 5
       },
-      { elements = {
-        { id = "stacks", size = 0.3 },
-        { id = "watches", size = 0.3 }, -- Keep track of expressions
-        { id = "scopes", size = 0.3 }, -- Variables of the program
-      },
-        position = "left",
-        size = 40
-      }
+      -- { elements = {
+      --   { id = "stacks", size = 0.3 },
+      --   { id = "watches", size = 0.3 }, -- Keep track of expressions
+      --   { id = "scopes", size = 0.3 }, -- Variables of the program
+      -- },
+      --   position = "left",
+      --   size = 40
+      -- }
     },
     mappings = {
       edit = "e",
@@ -1364,21 +1365,49 @@ if has_dapui and has_dap then
   })
 
   -- Automatically open/close ui when debugger starts/stops
-  -- dap.listeners.after.event_initialized["dapui_config"] = function()
-  --   dapui.open()
-  -- end
+  dap.listeners.after.event_initialized["dapui_config"] = function()
+    dapui.open()
+  end
   -- dap.listeners.before.event_terminated["dapui_config"] = function()
   --   dapui.close()
-  --   vim.cmd("stopinsert")
   -- end
   -- dap.listeners.before.event_exited["dapui_config"] = function()
   --   dapui.close()
-  --   vim.cmd("stopinsert")
   -- end
 
+  -- Toggle DAP ui
   vim.keymap.set("n", "<leader>d<CR>", function()
     dapui.toggle()
   end, { desc = "Toggle DAP UI", dapopts.args })
+  -- Trigger DAP ui element
+  vim.keymap.set("n", "<leader>du", function()
+    ---@diagnostic disable-next-line: missing-fields, param-type-mismatch
+    dapui.float_element(nil, {width = 180, height = 40, enter = true, position="center"})
+  end, { desc = "Dap show...", dapopts.args })
+  -- Hover
+  vim.keymap.set({"n", "v"}, "<leader>dk", function()
+    -- eval twice to enter the floating window
+    dapui.eval()
+    dapui.eval()
+  end, { desc = "Hover", dapopts.args })
+  -- Breakpoints
+  vim.keymap.set("n", "<leader>dB", function()
+    ---@diagnostic disable-next-line: missing-fields
+    dapui.float_element("breakpoints", {enter = true})
+  end, { desc = "List breakpoints", dapopts.args })
+  -- Watches
+  vim.keymap.set("n", "<leader>dw", function()
+    ---@diagnostic disable-next-line: missing-fields
+    dapui.float_element("watches", {enter = true})
+  end, { desc = "Show watches", dapopts.args })
+  -- Scopes
+  vim.keymap.set("n", "<leader>ds", function()
+    dapui.float_element("scopes", {width = 180, height = 40, enter = true, position="center"})
+  end, { desc = "Show scopes", dapopts.args })
+  -- Stacks frames
+  vim.keymap.set("n", "<leader>df", function()
+    dapui.float_element("stacks", {width = 180, height = 40, enter = true, position="center"})
+  end, { desc = "Show frames", dapopts.args })
 
   -- Completion (if debugger supports it)
   if has_cmp then
