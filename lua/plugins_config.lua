@@ -1225,56 +1225,56 @@ if has_dap then
 
   -- keymaps
   -- TODO: attach to running debugger
-  --
-  -- vim.keymap.set('n', "<F5>", function() dap.continue() end, { desc = "Launch/continue", dapopts.args })
+  -- Launch
   vim.keymap.set('n', "<leader>dl", function() dap.continue() end, { desc = "Launch/continue", dapopts.args })
-  vim.keymap.set('n', "<leader>dL", function() dap.reverse_continue() end, { desc = "Reverse continue", dapopts.args })
-  --
+  -- Quit
   vim.keymap.set('n', "<leader>dq", function()
     dap.disconnect()
     vim.cmd("stopinsert")
   end, { desc = "Disconnect/quit", dapopts.args })
-  --
+  -- Restart
   vim.keymap.set('n', "<leader>dR", function() dap.restart() end, { desc = "Restart", dapopts.args })
-  --
+  -- Step over
   vim.keymap.set('n', "<leader>dj", function() dap.step_over() end, { desc = "Step over", dapopts.args })
-  vim.keymap.set('n', "<leader>dsj", function() dap.step_over() end, { desc = "Step over", dapopts.args })
-  --
-  vim.keymap.set('n', "<leader>dsk", function() dap.step_back() end, { desc = "Step back", dapopts.args })
-  --
+  -- Step into
   vim.keymap.set('n', "<leader>di", function() dap.step_into() end, { desc = "Step into (or '}')", dapopts.args })
-  vim.keymap.set('n', "<leader>dsi", function() dap.step_into() end, { desc = "Step into (or '}')", dapopts.args })
-  --
+  -- Step out
   vim.keymap.set('n', "<leader>do", function() dap.step_out() end, { desc = "Step out (or '{')", dapopts.args })
-  vim.keymap.set('n', "<leader>dso", function() dap.step_out() end, { desc = "Step out (or '{')", dapopts.args })
-  --
-  vim.keymap.set('n', "<leader>dn", function() dap.run_to_cursor() end, { desc = "Debug until cursor", dapopts.args })
-  --
-  vim.keymap.set('n', "<Leader>dp", function() dap.pause() end, { desc = "Pause", dapopts.args })
-  --
-  vim.keymap.set('n', "<Leader>dk", function() dap.toggle_breakpoint() end, { desc = "Breakpoint", dapopts.args })
-  vim.keymap.set('n', "<Leader>dK", function()
+  -- Run to cursor
+  vim.keymap.set('n', "<leader>dL", function() dap.run_to_cursor() end, { desc = "Run until cursor", dapopts.args })
+  -- Pause
+  vim.keymap.set('n', "<leader>dP", function() dap.pause() end, { desc = "Pause", dapopts.args })
+  -- Breakpoints
+  vim.keymap.set('n', "<leader>db", function() dap.toggle_breakpoint() end, { desc = "Breakpoint", dapopts.args })
+  vim.keymap.set('n', "<leader>dc", function()
     dap.set_breakpoint(vim.fn.input({
         prompt = "[Condition] > ",
         default = "",
         cancelreturn = ""
       })
     ) end, { desc = "Breakpoint set condition", dapopts.args })
-  vim.keymap.set('n', "<Leader>dD", function() dap.clear_breakpoints() end, { desc = "Clear breakpoints", dapopts.args })
-  --
-  vim.keymap.set('n', "<Leader>dr", function() dap.repl.toggle() end, { desc = "REPL toggle", dapopts.args })
-  --
-  vim.keymap.set('n', "<Leader>dsf", function()
+  vim.keymap.set('n', "<leader>dD", function() dap.clear_breakpoints() end, { desc = "Clear breakpoints", dapopts.args })
+  -- Repl
+  vim.keymap.set('n', "<leader>dr", function() dap.repl.toggle() end, { desc = "REPL toggle", dapopts.args })
+  -- Hover
+  vim.keymap.set({'n', 'v'}, "<leader>dk", function() require('dap.ui.widgets').hover() end, { desc = "Hover" })
+  -- Up/down the stack trace (without stepping)
+  vim.keymap.set('n', "<leader>dn", function() dap.down() end, { desc = "Down stack trace" })
+  vim.keymap.set('n', "<leader>dp", function() dap.up() end, { desc = "Up stack trace" })
+  -- Show frames
+  vim.keymap.set('n', "<leader>df", function()
     local widgets = require("dap.ui.widgets")
-    local sidebar = widgets.sidebar(widgets.frames)
-    sidebar.open()
+    widgets.centered_float(widgets.scopes)
   end, { desc = "Show frames", dapopts.args })
-  --
-  vim.keymap.set('n', "<Leader>dss", function()
+  -- Show scopes
+  vim.keymap.set('n', "<leader>ds", function()
     local widgets = require("dap.ui.widgets")
-    local sidebar = widgets.sidebar(widgets.scopes)
-    sidebar.open()
+    widgets.centered_float(widgets.frames)
   end, { desc = "Show scopes", dapopts.args })
+  -- Widgets
+  vim.keymap.set({'n', 'v'}, '<leader>dw', function()
+    require('dap.ui.widgets').preview()
+  end, { desc = "Preview" })
 
   -- Integration with Telescope
   require('telescope').load_extension("dap")
@@ -1283,7 +1283,7 @@ if has_dap then
   vim.keymap.set('n', '<leader>dtv', ':Telescope dap variables<CR>', { desc = "Telescope dap variables", dapopts.args })
   vim.keymap.set('n', '<leader>dtf', ':Telescope dap frames<CR>', { desc = "Telescope dap frames", dapopts.args })
   vim.keymap.set('n', '<leader>dtb', ':Telescope dap list_breakpoints<CR>', { desc = "Telescope dap list_breakpoints", dapopts.args })
-  vim.keymap.set('n', '<leader>db',  ':Telescope dap list_breakpoints<CR>', { desc = "Telescope dap list_breakpoints", dapopts.args })
+  vim.keymap.set('n', '<leader>dB', ':Telescope dap list_breakpoints<CR>', { desc = "Telescope dap list_breakpoints", dapopts.args })
 end
 
 --------------------------------------
@@ -1376,12 +1376,6 @@ if has_dapui and has_dap then
   --   vim.cmd("stopinsert")
   -- end
 
-  vim.keymap.set("n", "<leader>dO", function()
-    dapui.open()
-  end, { desc = "Open DAP UI (no start)", dapopts.args })
-  vim.keymap.set("n", "<leader>dc", function()
-    dapui.close()
-  end, { desc = "Close DAP UI (no quit)", dapopts.args })
   vim.keymap.set("n", "<leader>d<CR>", function()
     dapui.toggle()
   end, { desc = "Toggle DAP UI", dapopts.args })
@@ -1732,8 +1726,7 @@ if has_wk then
     c = { name = "Multicursor" },
     d = {
       name = "Debbuger",
-      t = { name = "Search with Telescope" },
-      s = { name = "Step/show" }
+      t = { name = "Dap-telescope" },
     },
     e = {
       name = "Treesitter select",
@@ -1767,3 +1760,8 @@ if has_wk then
     }
   }, { prefix = "<leader>" })
 end
+
+-- Sometimes nvim starts going into insert mode whenever I change buffer... Stop that.
+vim.cmd[[
+  au! BufEnter * stopinsert
+]]
