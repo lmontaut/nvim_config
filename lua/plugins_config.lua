@@ -1444,6 +1444,7 @@ local has_neogit, neogit = pcall(require, "neogit")
 if has_neogit then
   neogit.setup({})
   vim.keymap.set('n', '<leader>gg', '<CMD>Neogit<CR>', { desc = 'Neogit' })
+  vim.keymap.set('n', '<leader>gh', '<CMD>DiffviewFileHistory %<CR>', { desc = 'File history' })
 end
 
 ---------------------------
