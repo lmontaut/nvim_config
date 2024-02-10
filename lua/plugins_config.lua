@@ -1880,6 +1880,7 @@ if has_gpt then
   vim.keymap.set( { 'n', 'v' }, '<leader>cg', '<CMD>ChatGPTRun grammar_correction<CR>',        { desc = "Grammar correction" })
   vim.keymap.set( { 'n', 'v' }, '<leader>cr', '<CMD>ChatGPTRun code_readibility_analysis<CR>', { desc = "Code review" })
   vim.keymap.set( { 'n', 'v' }, '<leader>cp', '<CMD>ChatGPTRun complete_code<CR>',             { desc = "Complete code" })
+  vim.keymap.set( { 'n', 'v' }, '<leader>ci', '<CMD>ChatGPTEditWithInstructions<CR>',          { desc = "Edit with instructions" })
 end
 
 -------------------------------
