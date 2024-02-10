@@ -1509,9 +1509,9 @@ end
 -----------------------------------
 -- [[ Configure obsidian.nvim ]] --
 -----------------------------------
-local has_obsidian, _ = pcall(require, "obsidian")
+local has_obsidian, obsidian = pcall(require, "obsidian")
 if has_obsidian then
-  require("obsidian").setup({
+  obsidian.setup({
     dir = "~/notes",
   })
 end
