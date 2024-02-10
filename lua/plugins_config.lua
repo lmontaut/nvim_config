@@ -1933,7 +1933,7 @@ if has_gpt then
         height = "80%",
       },
       right = {
-        width = "30%",
+        width = "50%",
         width_settings_open = "50%",
       },
     },
@@ -1948,7 +1948,7 @@ if has_gpt then
       win_options = {
         wrap = true,
         linebreak = true,
-        foldcolumn = "1",
+        foldcolumn = "4",
         winhighlight = "Normal:Normal,FloatBorder:FloatBorder",
       },
       buf_options = {
@@ -1966,7 +1966,7 @@ if has_gpt then
       win_options = {
         wrap = true,
         linebreak = true,
-        foldcolumn = "2",
+        foldcolumn = "4",
         winhighlight = "Normal:Normal,FloatBorder:FloatBorder",
       },
     },

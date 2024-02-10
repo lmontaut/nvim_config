@@ -242,15 +242,15 @@ require('packer').startup(function(use)
   -- :Copilot setup
   -- :Copilot enable
   use { "github/copilot.vim" }
-  use({
-    "jackMort/ChatGPT.nvim",
-    requires = {
-      "MunifTanjim/nui.nvim",
-      "nvim-lua/plenary.nvim",
-      "folke/trouble.nvim",
-      "nvim-telescope/telescope.nvim"
-    }
-  })
+  -- use({ -- buggy and useless tbh
+  --   "jackMort/ChatGPT.nvim",
+  --   requires = {
+  --     "MunifTanjim/nui.nvim",
+  --     "nvim-lua/plenary.nvim",
+  --     "folke/trouble.nvim",
+  --     "nvim-telescope/telescope.nvim"
+  --   }
+  -- })
 
   ------------------------------------------------------------------------------------------------------------
   ---------- NOTES
