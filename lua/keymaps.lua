@@ -15,7 +15,7 @@ vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
 -- -- NORMAL MODE -- --
 -----------------------
 -- Bind cmdline to <M-'>
-vim.keymap.set("n", "<M-\'>", ":", { desc = "Command line", noremap = true, silent = true })
+vim.keymap.set("n", "<M-\'>", ":", { desc = "Command line", noremap = true, silent = false })
 
 -- List of default keymaps:  https://blog.codepen.io/2014/02/21/vim-key-bindings/
 -- Available keymaps: | ) ( ] [ "
