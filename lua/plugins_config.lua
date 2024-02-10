@@ -282,18 +282,18 @@ if has_cmp then
         fallback()
       end, { 'i' }),
     -- Abort completion
-    ['<C-e>'] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        return cmp.abort()
-      end
-        fallback()
-      end, { 'i', 'c' }),
+    -- ['<C-e>'] = cmp.mapping(function(fallback)
+    --   if cmp.visible() then
+    --     return cmp.abort()
+    --   end
+    --     fallback()
+    --   end, { 'i', 'c' }),
     -- Invoke completion
     ['<C-o>'] = cmp.mapping(function()
         cmp.complete()
       end, { 'i', 'c' }),
     -- Close completion window
-    ['<C-[>'] = cmp.mapping(function()
+    ['<C-e>'] = cmp.mapping(function()
       cmp.close()
       end, { 'i', 'c' }),
     -- Next completion item
