@@ -304,11 +304,11 @@ if has_cmp then
         fallback()
       end, { 'i', 'c' }),
     -- Invoke completion
-    ['<Tab>'] = cmp.mapping(function()
+    ['<C-o>'] = cmp.mapping(function()
         cmp.complete()
       end, { 'i', 'c' }),
     -- Close completion window
-    ['<S-Tab>'] = cmp.mapping(function()
+    ['<C-f>'] = cmp.mapping(function()
       cmp.close()
       end, { 'i', 'c' }),
     -- Next completion item
@@ -1777,11 +1777,21 @@ end
 -----------------------------
 -- [[ Configure copilot ]] --
 -----------------------------
-vim.keymap.set('i', '<C-o>', 'copilot#Accept("\\<CR>")', {
-  expr = true,
-  replace_keycodes = false
-})
-vim.g.copilot_no_tab_map = true
+-- vim.keymap.set('i', '<C-f>', 'copilot#Accept("\\<CR>")', {
+--   expr = true,
+--   replace_keycodes = false
+-- })
+-- vim.g.copilot_no_tab_map = true
+vim.keymap.set('n', '<leader>ce', ':Copilot enable<CR>',         { desc = "Enable copilot" })
+vim.keymap.set('n', '<leader>cd', ':Copilot disable<CR>',        { desc = "Disable copilot " })
+vim.keymap.set('n', '<leader>cs', ':Copilot status<CR>',         { desc = "Copilot status" })
+vim.keymap.set('n', '<leader>cc', ':Copilot panel<CR>',          { desc = "Copilot panel" })
+vim.keymap.set('i', '<M-e>',      '<Plug>(copilot-dismiss)',     { desc = "Copilot dismiss" })
+vim.keymap.set('i', '<M-n>',      '<Plug>(copilot-next)',        { desc = "Copilot next" })
+vim.keymap.set('i', '<M-p>',      '<Plug>(copilot-previous)',    { desc = "Copilot previous" })
+vim.keymap.set('i', '<M-\\>',     '<Plug>(copilot-suggest)',     { desc = "Copilot suggest" })
+vim.keymap.set('i', '<M-l>',      '<Plug>(copilot-accept-word)', { desc = "Copilot accept word" })
+vim.keymap.set('i', '<M-j>',      '<Plug>(copilot-accept-line)', { desc = "Copilot accept line" })
 
 -------------------------------
 -- [[ Configure Which-key ]] --
@@ -1800,7 +1810,8 @@ if has_wk then
   wk.register({
     a = { name = "AnyJump" },
     b = { name = "Buffers" },
-    c = { name = "Multicursor" },
+    c = { name = "Copilot" },
+    C = { name = "Multicursor" },
     d = {
       name = "Debbuger",
       t = { name = "Dap-telescope" },
