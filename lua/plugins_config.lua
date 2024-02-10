@@ -293,7 +293,7 @@ if has_cmp then
         cmp.complete()
       end, { 'i', 'c' }),
     -- Close completion window
-    ['<C-c>'] = cmp.mapping(function()
+    ['<C-[>'] = cmp.mapping(function()
       cmp.close()
       end, { 'i', 'c' }),
     -- Next completion item
@@ -1464,8 +1464,8 @@ end
 local has_mc, mc = pcall(require, "multicursors")
 if has_mc then
   mc.setup ({})
-  vim.keymap.set('n', '<leader>cw', '<CMD>MCstart<CR>',       { desc = "Multicursors start word"   })
-  vim.keymap.set('n', '<leader>cc', '<CMD>MCunderCursor<CR>', { desc = "Multicursors start cursor" })
+  vim.keymap.set('n', '<leader>Mw', '<CMD>MCstart<CR>',       { desc = "Multicursors start word"   })
+  vim.keymap.set('n', '<leader>Mc', '<CMD>MCunderCursor<CR>', { desc = "Multicursors start cursor" })
 end
 
 ------------------------------
@@ -1848,16 +1848,39 @@ end
 --   replace_keycodes = false
 -- })
 -- vim.g.copilot_no_tab_map = true
-vim.keymap.set('n', '<leader>ce', '<CMD>Copilot enable<CR>',     { desc = "Enable copilot"      })
-vim.keymap.set('n', '<leader>cd', '<CMD>Copilot disable<CR>',    { desc = "Disable copilot "    })
-vim.keymap.set('n', '<leader>cs', '<CMD>Copilot status<CR>',     { desc = "Copilot status"      })
-vim.keymap.set('n', '<leader>cc', '<CMD>Copilot panel<CR>',      { desc = "Copilot panel"       })
+vim.keymap.set('n', '<leader>Ce', '<CMD>Copilot enable<CR>',     { desc = "Enable copilot"      })
+vim.keymap.set('n', '<leader>Cd', '<CMD>Copilot disable<CR>',    { desc = "Disable copilot "    })
+vim.keymap.set('n', '<leader>Cs', '<CMD>Copilot status<CR>',     { desc = "Copilot status"      })
+vim.keymap.set('n', '<leader>Cc', '<CMD>Copilot panel<CR>',      { desc = "Copilot panel"       })
 vim.keymap.set('i', '<M-e>',      '<Plug>(copilot-dismiss)',     { desc = "Copilot dismiss"     })
 vim.keymap.set('i', '<M-n>',      '<Plug>(copilot-next)',        { desc = "Copilot next"        })
 vim.keymap.set('i', '<M-p>',      '<Plug>(copilot-previous)',    { desc = "Copilot previous"    })
 vim.keymap.set('i', '<M-\\>',     '<Plug>(copilot-suggest)',     { desc = "Copilot suggest"     })
 vim.keymap.set('i', '<M-l>',      '<Plug>(copilot-accept-word)', { desc = "Copilot accept word" })
 vim.keymap.set('i', '<M-j>',      '<Plug>(copilot-accept-line)', { desc = "Copilot accept line" })
+
+------------------------------
+-- [[ Configure gpt.nvim ]] --
+------------------------------
+local has_gpt, gpt = pcall(require, "chatgpt")
+if has_gpt then
+  gpt.setup({
+    api_key_cmd = "pass show nvim_gpt",
+  })
+  vim.keymap.set('n', '<leader>cc', '<CMD>ChatGPT<CR>',      { desc = "Start GPT" })
+  vim.keymap.set('n', '<leader>ca', '<CMD>ChatGPTActAs<CR>', { desc = "Act as" })
+  vim.keymap.set('n', '<leader>cl', ':ChatGPTRun',           { desc = "ChatGPTRun", silent = false })
+  vim.keymap.set( { 'n', 'v' }, '<leader>ce', '<CMD>ChatGPTRun explain_code<CR>',              { desc = "Explain code" })
+  vim.keymap.set( { 'n', 'v' }, '<leader>ct', '<CMD>ChatGPTRun add_tests<CR>',                 { desc = "Add tests" })
+  vim.keymap.set( { 'n', 'v' }, '<leader>cd', '<CMD>ChatGPTRun docstring<CR>',                 { desc = "Add docstring" })
+  vim.keymap.set( { 'n', 'v' }, '<leader>cs', '<CMD>ChatGPTRun summarize<CR>',                 { desc = "Summarize" })
+  vim.keymap.set( { 'n', 'v' }, '<leader>cb', '<CMD>ChatGPTRun fix_bugs<CR>',                  { desc = "Fix bugs" })
+  vim.keymap.set( { 'n', 'v' }, '<leader>ck', '<CMD>ChatGPTRun keywords<CR>',                  { desc = "Keywords" })
+  vim.keymap.set( { 'n', 'v' }, '<leader>co', '<CMD>ChatGPTRun optimize_code<CR>',             { desc = "Optimize code" })
+  vim.keymap.set( { 'n', 'v' }, '<leader>cg', '<CMD>ChatGPTRun grammar_correction<CR>',        { desc = "Grammar correction" })
+  vim.keymap.set( { 'n', 'v' }, '<leader>cr', '<CMD>ChatGPTRun code_readibility_analysis<CR>', { desc = "Code review" })
+  vim.keymap.set( { 'n', 'v' }, '<leader>cp', '<CMD>ChatGPTRun complete_code<CR>',             { desc = "Complete code" })
+end
 
 -------------------------------
 -- [[ Configure Which-key ]] --
@@ -1876,8 +1899,9 @@ if has_wk then
   wk.register({
     a = { name = "AnyJump" },
     b = { name = "Buffers" },
-    c = { name = "Copilot" },
-    C = { name = "Multicursor" },
+    c = { name = "ChatGPT" },
+    C = { name = "Copilot" },
+    M = { name = "Multicursor" },
     d = {
       name = "Debbuger",
       t = { name = "Dap-telescope" },
@@ -1912,7 +1936,7 @@ if has_wk then
       name = "Window",
       q = {name = "Kill a window"},
     }
-  }, { prefix = "<leader>" })
+  }, { prefix = "<leader>", mode = {"n", "v"} })
 end
 
 -- Sometimes nvim starts going into insert mode whenever I change buffer... Stop that.
