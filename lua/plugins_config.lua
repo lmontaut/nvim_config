@@ -1532,6 +1532,11 @@ end
 local has_noice, noice = pcall(require, "noice")
 if has_noice then
   noice.setup({
+    messages = {
+      view = false, -- I don't need to know that I saved every time I save...
+      enabled = true,
+      view_search = false, -- I don't need to know that I searched every time I search...
+    },
     lsp = {
       -- override markdown rendering so that **cmp** and other plugins use **Treesitter**
       override = {
