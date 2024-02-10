@@ -100,20 +100,20 @@ vim.keymap.set("n", "<leader>Lo", "<CMD>lopen<CR>", { desc = "Location list open
 vim.keymap.set("n", "<leader>Lq", "<CMD>lclose<CR>", { desc = "Location list close", opts.args })
 
 -- Make
--- vim.keymap.set("n", "<leader>mm", function() return "<CMD>make<Space>" end, { noremap = true, silent = false, desc = "make", expr = true })
--- vim.keymap.set("n", "<leader>mm", "<CMD>make!<Space>", { noremap = true, silent = false, desc = "make! (+enter command)" })
+-- vim.keymap.set("n", "<leader>mm", function() return ":make<Space>" end, { noremap = true, silent = false, desc = "make", expr = true })
+-- vim.keymap.set("n", "<leader>mm", ":make!<Space>", { noremap = true, silent = false, desc = "make! (+enter command)" })
 -- vim.keymap.set("n", "<leader>m<CR>", "<CMD>make<CR>", { desc = "make<CR>", opts.args })
 -- vim.keymap.set("n", "<leader>m!<CR>", "<CMD>make!<CR>", { desc = "make!<CR>", opts.args })
--- vim.keymap.set("n", "<leader>mM", "<CMD>Make<Space>", { noremap = true, silent = false, desc = "Make (+enter command)" })
+-- vim.keymap.set("n", "<leader>mM", ":Make<Space>", { noremap = true, silent = false, desc = "Make (+enter command)" })
 -- vim.keymap.set("n", "<leader>M<CR>", "<CMD>Make<CR>", { noremap = true, silent = false, desc = "Make<CR>" })
 -- vim.keymap.set("n", "<leader>M!", "<CMD>Make!<CR>", { noremap = true, silent = false, desc = "Make!<CR>" })
--- vim.keymap.set("n", "<leader>ms", "<CMD>setlocal<Space>makeprg=", { noremap = true, silent = false, desc = "Set makeprg localy" })
--- vim.keymap.set("n", "<leader>mS", "<CMD>set<Space>makeprg=", { noremap = true, silent = false, desc = "Set makeprg globaly" })
--- vim.keymap.set("n", "<leader>mb", "<CMD>set<Space>makeprg=make\\ -C\\ build\\ -j10", { noremap = true, silent = false, desc = "Set makeprg to make -C build" })
+-- vim.keymap.set("n", "<leader>ms", ":setlocal<Space>makeprg=", { noremap = true, silent = false, desc = "Set makeprg localy" })
+-- vim.keymap.set("n", "<leader>mS", ":set<Space>makeprg=", { noremap = true, silent = false, desc = "Set makeprg globaly" })
+-- vim.keymap.set("n", "<leader>mb", ":set<Space>makeprg=make\\ -C\\ build\\ -j10", { noremap = true, silent = false, desc = "Set makeprg to make -C build" })
 -- Example: `:setlocal makeprg=python \%` or `:setlocal makeprg=make` or `:setlocal makeprg=clang++ \-Wall \-Wextra % -o %<`
--- vim.keymap.set("n", "<leader>ml", "<CMD>let<Space>&makeprg='", { noremap = true, silent = false, desc = "Let makeprg" })
--- vim.keymap.set("n", "<leader>mc", "<CMD>setlocal<Space>makeprg=clang++\\ -Wall\\ -Wextra\\ %\\ -o\\ %<", { noremap = true, silent = false, desc = "Set makeprg clang" })
--- vim.keymap.set("n", "<leader>mt", "<CMD>Make!<Space>test", { noremap = true, silent = false, desc = "Make! test" })
+-- vim.keymap.set("n", "<leader>ml", ":let<Space>&makeprg='", { noremap = true, silent = false, desc = "Let makeprg" })
+-- vim.keymap.set("n", "<leader>mc", ":setlocal<Space>makeprg=clang++\\ -Wall\\ -Wextra\\ %\\ -o\\ %<", { noremap = true, silent = false, desc = "Set makeprg clang" })
+-- vim.keymap.set("n", "<leader>mt", ":Make!<Space>test", { noremap = true, silent = false, desc = "Make! test" })
 
 -- File exploration
 -- vim.keymap.set("n", "<leader>2", "<CMD>Explore<CR>", { desc = "Explore", opts.args })
@@ -123,19 +123,19 @@ vim.keymap.set("n", "<leader>Lq", "<CMD>lclose<CR>", { desc = "Location list clo
 
 
 -- Wrap/unwrap
-vim.keymap.set("n", "<leader>vw", "<CMD>setlocal wrap<CR>", { desc = "Wrap text", opts.args })
+vim.keymap.set("n", "<leader>vw", "<CMD>setlocal wrap<CR>",   { desc = "Wrap text", opts.args })
 vim.keymap.set("n", "<leader>vW", "<CMD>setlocal nowrap<CR>", { desc = "Unwrap text", opts.args })
 
 -- hl/nohl search
-vim.keymap.set("n", "<leader>vh", "<CMD>setlocal hlsearch<CR>", { desc = "Highligth search", opts.args })
+vim.keymap.set("n", "<leader>vh", "<CMD>setlocal hlsearch<CR>",   { desc = "Highligth search", opts.args })
 vim.keymap.set("n", "<leader>vH", "<CMD>setlocal nohlsearch<CR>", { desc = "No highligth search", opts.args })
 
 -- Launch terminal command
-vim.keymap.set("n", "<leader>t", "<CMD>below split | terminal<Space>", { noremap = true, silent = false, desc = "Launch terminal horizontal" })
-vim.keymap.set("n", "<leader>T", "<CMD>rightbelow vsplit | terminal<Space>", { noremap = true, silent = false, desc = "Launch terminal vertical" })
+vim.keymap.set("n", "<leader>t", ":below split | terminal<Space>",       { noremap = true, silent = false, desc = "Launch terminal horizontal" })
+vim.keymap.set("n", "<leader>T", ":rightbelow vsplit | terminal<Space>", { noremap = true, silent = false, desc = "Launch terminal vertical" })
 
 -- help
-vim.keymap.set("n", "<leader>h", "<CMD>vertical rightbelow help<Space>", { noremap = true, silent = false, desc = "Vim help" })
+vim.keymap.set("n", "<leader>h", ":vertical rightbelow help<Space>", { noremap = true, silent = false, desc = "Vim help" })
 
 -- Last buffer
 vim.keymap.set("n", "<leader>1", "<CMD>b#<CR>", { desc = "Last buffer", opts.args })
@@ -149,7 +149,7 @@ vim.keymap.set("n", "<C-f>", ":<C-f>", { desc = "Command history", opts.args })
 
 -- Buffer close
 vim.keymap.set("n", "<leader>bc", "<CMD>bd!<CR>", { desc = "Close buffer", opts.args })
-vim.keymap.set("n", "<leader>bd", "<CMD>bd<Space>", { noremap = true, silent = false, desc = "Select which buffer to delete" })
+vim.keymap.set("n", "<leader>bd", ":bd<Space>",   { noremap = true, silent = false, desc = "Select which buffer to delete" })
 
 -- Replace under cursor
 vim.keymap.set("n", "<leader>S", "<CMD>%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>", { noremap = true, silent = false, desc = "Search and replace word" })
