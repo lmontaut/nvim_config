@@ -289,7 +289,7 @@ if has_cmp then
     --     fallback()
     --   end, { 'i', 'c' }),
     -- Invoke completion
-    ['<C-o>'] = cmp.mapping(function()
+    ['<Tab>'] = cmp.mapping(function()
         cmp.complete()
       end, { 'i', 'c' }),
     -- Close completion window
@@ -445,6 +445,10 @@ if has_lsp_util then
     if client.server_capabilities.signatureHelpProvider then
       local has_lspoverloads, lspoverloads = pcall(require, "lsp-overloads")
       if has_lspoverloads then
+        -- Don't show the overload by default
+        vim.cmd [[
+          autocmd VimEnter * LspOverloadsSignatureAutoToggle
+        ]]
         lspoverloads.setup(client, {
           keymaps = {
             next_signature = "<C-j>",
@@ -1850,19 +1854,18 @@ end
 -----------------------------
 -- [[ Configure copilot ]] --
 -----------------------------
--- vim.keymap.set('i', '<C-f>', 'copilot#Accept("\\<CR>")', {
---   expr = true,
---   replace_keycodes = false
--- })
--- vim.g.copilot_no_tab_map = true
+vim.keymap.set('i', '<M-CR>', 'copilot#Accept("\\<CR>")', {
+  expr = true,
+  replace_keycodes = false
+})
+vim.g.copilot_no_tab_map = true
 vim.keymap.set('n', '<leader>Ce', '<CMD>Copilot enable<CR>',     { desc = "Enable copilot"      })
 vim.keymap.set('n', '<leader>Cd', '<CMD>Copilot disable<CR>',    { desc = "Disable copilot "    })
 vim.keymap.set('n', '<leader>Cs', '<CMD>Copilot status<CR>',     { desc = "Copilot status"      })
 vim.keymap.set('n', '<leader>Cc', '<CMD>Copilot panel<CR>',      { desc = "Copilot panel"       })
 vim.keymap.set('i', '<M-e>',      '<Plug>(copilot-dismiss)',     { desc = "Copilot dismiss"     })
-vim.keymap.set('i', '<M-n>',      '<Plug>(copilot-next)',        { desc = "Copilot next"        })
-vim.keymap.set('i', '<M-p>',      '<Plug>(copilot-previous)',    { desc = "Copilot previous"    })
 vim.keymap.set('i', '<M-\\>',     '<Plug>(copilot-suggest)',     { desc = "Copilot suggest"     })
+vim.keymap.set('i', '<M-p>',     '<Plug>(copilot-suggest)',      { desc = "Copilot suggest"     })
 vim.keymap.set('i', '<M-l>',      '<Plug>(copilot-accept-word)', { desc = "Copilot accept word" })
 vim.keymap.set('i', '<M-j>',      '<Plug>(copilot-accept-line)', { desc = "Copilot accept line" })
 
