@@ -259,7 +259,7 @@ if has_treesitter then
   -- Hack for certain file types
   vim.cmd[[
     autocmd FileType cpp TSDisable indent
-    autocmd FileType help TSDisable highlight
+    " autocmd FileType help TSDisable highlight
   ]]
 end
 
@@ -434,7 +434,6 @@ if os.getenv("CONDA_PREFIX") then
   lsp_pythonpath = os.getenv("CONDA_PREFIX") .. "/bin/python"
 end
 local on_attach = nil
-local servers = nil
 local use_lsp_mappings_telescope = true
 local use_lsp_mappings_lspsaga = true -- has precedence over telescope
 Has_lspsaga = nil -- will be modified once lspsagas is loaded
@@ -548,49 +547,6 @@ if has_lsp_util then
     end, { desc = 'Format current buffer with LSP' })
   end
 
-  -- Have the following language servers enabled by default.
-  -- This bit of code is relatively useless as we use the 'Mason' plugin to automatically install and configure LSP servers.
-  --   Feel free to add/remove any LSPs that you want here. They will automatically be installed.
-  --   Add any additional override configuration in the following tables. They will be passed to
-  --   the `settings` field of the server config. You must look up that documentation yourself.
-  servers = {
-    lua_ls = {
-      settings = {
-        Lua = {
-          runtime = {
-            -- Tell the language server which version of Lua you're using
-            -- (most likely LuaJIT in the case of Neovim)
-            version = 'LuaJIT',
-          },
-          diagnostics = {
-            -- Get the language server to recognize the `vim` global
-            globals = {
-              'vim',
-              'require'
-            },
-          },
-          workspace = {
-            -- Make the server aware of Neovim runtime files
-            library = vim.api.nvim_get_runtime_file("", true),
-          },
-          -- Do not send telemetry data containing a randomized but unique identifier
-          telemetry = {
-            enable = false,
-          },
-        },
-      },
-    },
-    neocmake = {},
-    rust_analyzer = {},
-    pyright = {
-      python = {
-        pythonPath = lsp_pythonpath,
-        analysis = {
-          typeCheckingMode = "off",
-        }
-      }
-    },
-  }
 end
 
 -- Neodev: better support for the signature, docs and completion.
@@ -650,15 +606,29 @@ vim.lsp.diagnostics_config = diagnostics_config
 ---------------------------
 -- [[ Configure Mason ]] --
 ---------------------------
--- Mason allows to download an automatically setup LSP servers.
--- Setup mason so it can manage external tooling
+-- Mason allows to easily install and manage LSPs, debuggers, linters etc.
 local has_mason, mason = pcall(require, "mason")
+local has_mason_lsp_config, mason_lspconfig = pcall(require, "mason-lspconfig")
 local has_lspconfig, lspconfig = pcall(require, "lspconfig")
-if has_mason then
+if has_mason and has_mason_lsp_config and has_lspconfig then
   mason.setup()
+  mason_lspconfig.setup()
 
-  -- Ensure the servers above are installed
-  local mason_lspconfig = require 'mason-lspconfig'
+  -- Have the following language servers enabled by default, with these options.
+  local servers = {
+    clangd = {},
+    lua_ls = {},
+    neocmake = {},
+    rust_analyzer = {},
+    pyright = {
+      python = {
+        pythonPath = lsp_pythonpath,
+        analysis = {
+          typeCheckingMode = "off",
+        }
+      }
+    },
+  }
 
   -- Mason ensures the servers in `servers` are installed.
   -- Go checkout the `servers` variable to see the options for each server.
@@ -666,18 +636,82 @@ if has_mason then
     ensure_installed = vim.tbl_keys(servers),
   }
 
-  if servers ~= nil then
-    mason_lspconfig.setup_handlers({
-      function(server_name)
-        if has_lspconfig then
-          lspconfig[server_name].setup({
-            capabilities = capabilities,
-            on_attach = on_attach,
-            settings = servers[server_name],
-          })
-        end
-      end,
-    })
+  mason_lspconfig.setup_handlers({
+    function(server_name)
+      -- Put server specific things if needed.
+      -- For example, for clangd, we want to use the background-index and
+      -- disable header-insertion.
+      if server_name == "clangd" then
+        lspconfig.clangd.setup({
+          capabilities = capabilities,
+          on_attach = on_attach,
+          -- Each server can have its own command to start it.
+          cmd = { "clangd", "--background-index", "--header-insertion=never" },
+          settings = servers.clangd,
+        })
+      elseif server_name == "lua_ls" then
+        lspconfig[server_name].setup({
+          capabilities = capabilities,
+          on_attach = on_attach,
+          on_init = function(client)
+            local path = client.workspace_folders[1].name
+            if not vim.loop.fs_stat(path..'/.luarc.json') and not vim.loop.fs_stat(path..'/.luarc.jsonc') then
+              client.config.settings = vim.tbl_deep_extend('force', client.config.settings, {
+                Lua = {
+                  runtime = {
+                    -- Tell the language server which version of Lua you're using
+                    -- (most likely LuaJIT in the case of Neovim)
+                    version = 'LuaJIT'
+                  },
+                  diagnostics = {
+                    -- Get the language server to recognize the `vim` global
+                    globals = {
+                      'vim',
+                      'require'
+                    },
+                  },
+                  -- Make the server aware of Neovim runtime files
+                  workspace = {
+                    checkThirdParty = false,
+                    library = {
+                      vim.env.VIMRUNTIME
+                      -- "${3rd}/luv/library"
+                      -- "${3rd}/busted/library",
+                    }
+                    -- or pull in all of 'runtimepath'. NOTE: this is a lot slower
+                    -- library = vim.api.nvim_get_runtime_file("", true)
+                  },
+                  telemetry = {
+                    enable = false,
+                  },
+                },
+              })
+
+              client.notify("workspace/didChangeConfiguration", { settings = client.config.settings })
+            end
+            return true
+          end
+        })
+      else
+        lspconfig[server_name].setup({
+          capabilities = capabilities, -- This is needed for nvim-cmp to work
+          on_attach = on_attach, -- This is needed for the keybindings to work
+          settings = servers[server_name], -- Specific settings for the server
+          -- There are other options you can set for each server, like cmd, filetypes, etc.
+          -- Visit the lspconfig documentation for more information.
+        })
+      end
+    end,
+  })
+else
+  if not has_mason then
+    print("Warning: missing mason.")
+  end
+  if not has_mason_lsp_config then
+    print("Warning: missing mason-lspconfig.")
+  end
+  if not has_lspconfig then
+    print("Warning: missing lsp-config.")
   end
 end
 
@@ -734,7 +768,7 @@ if has_lspconfig then
         return string.gsub(str, "%s*[- ]%s*", "_")
       end
 
-      if client.name == 'omnisharp' then
+      if client ~= nil and client.name == 'omnisharp' then
         local tokenModifiers = client.server_capabilities.semanticTokensProvider.legend.tokenModifiers
         for i, v in ipairs(tokenModifiers) do
           tokenModifiers[i] = toSnakeCase(v)
@@ -1311,7 +1345,7 @@ if has_dapui and has_dap then
   if has_cmp then
     cmp.setup({
       enabled = function()
-        return vim.api.nvim_buf_get_option(0, "buftype") ~= "prompt"
+        return vim.api.nvim_get_option_value("buftype", {buf = 0}) ~= "prompt"
           or require("cmp_dap").is_dap_buffer()
       end
     })
@@ -1326,7 +1360,7 @@ if has_dapui and has_dap then
   vim.api.nvim_create_autocmd("BufEnter", {
     pattern = "*",
     callback = function()
-      if vim.api.nvim_buf_get_option(0, "buftype") == "prompt" then
+      if vim.api.nvim_get_option_value("buftype", {buf = 0}) == "prompt" then
         vim.api.nvim_buf_set_keymap(0, 'i', "<C-w>", "<CMD>norm ciw<CR>", { silent = true, noremap = true })
       end
     end,
@@ -1571,7 +1605,7 @@ local has_noice, noice = pcall(require, "noice")
 if has_noice then
   noice.setup({
     messages = {
-      view = false, -- I don't need to know that I saved every time I save...
+      view = "notify", -- I don't need to know that I saved every time I save...
       enabled = true,
       view_search = false, -- I don't need to know that I searched every time I search...
     },
@@ -1704,7 +1738,7 @@ if has_lualine then
   local lsp = {
     function(msg)
       msg = msg or "LS Inactive"
-      local buf_clients = vim.lsp.get_active_clients()
+      local buf_clients = vim.lsp.get_clients()
       if next(buf_clients) == nil then
         -- TODO: clean up this if statement
         if type(msg) == "boolean" or #msg == 0 then
@@ -1755,10 +1789,10 @@ if has_lualine then
   }
   if has_noice then
     lualine_x = {
-      {
-        noice.api.status.message.get_hl,
-        cond = noice.api.status.message.has,
-      },
+      -- {
+      --   noice.api.status.message.get_hl,
+      --   cond = noice.api.status.message.has,
+      -- },
       {
         noice.api.status.command.get,
         cond = noice.api.status.command.has,
@@ -1889,7 +1923,7 @@ end
 -- [[ Configure copilot ]] --
 -----------------------------
 vim.cmd [[
-  autocmd VimEnter * Copilot disable
+  " autocmd VimEnter * Copilot disable
 ]]
 vim.keymap.set('i', '<M-CR>', 'copilot#Accept("\\<CR>")', {
   expr = true,
