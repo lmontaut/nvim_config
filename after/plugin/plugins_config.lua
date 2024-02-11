@@ -1,13 +1,13 @@
 ----------------------------
 -- [[ Configure Packer ]] --
 ----------------------------
-local has_packer, _ = pcall(require, 'packer')
-if has_packer then
-  vim.keymap.set("n", "<leader>Pc", "<CMD>PackerCompile<CR>", { desc = "Packer compile" })
-  vim.keymap.set("n", "<leader>Pi", "<CMD>PackerInstall<CR>", { desc = "Packer install" })
-  vim.keymap.set("n", "<leader>Pd", "<CMD>PackerClean<CR>", { desc = "Packer clean" })
-  vim.keymap.set("n", "<leader>Ps", "<CMD>source %<CR>", { desc = "Source current file" })
-end
+-- local has_packer, _ = pcall(require, 'packer')
+-- if has_packer then
+--   vim.keymap.set("n", "<leader>Pc", "<CMD>PackerCompile<CR>", { desc = "Packer compile" })
+--   vim.keymap.set("n", "<leader>Pi", "<CMD>PackerInstall<CR>", { desc = "Packer install" })
+--   vim.keymap.set("n", "<leader>Pd", "<CMD>PackerClean<CR>", { desc = "Packer clean" })
+--   vim.keymap.set("n", "<leader>Ps", "<CMD>source %<CR>", { desc = "Source current file" })
+-- end
 
 ----------------------------------
 -- [[ Configure Comment.nvim ]] --
@@ -191,6 +191,7 @@ end
 local has_treesitter, treesitter_configs = pcall(require, "nvim-treesitter.configs")
 if has_treesitter then
   treesitter_configs.setup({
+    sync_install = false,
     -- Add languages to be installed here that you want installed for treesitter
     -- ensure_installed = { 'c', 'cpp', 'cmake', 'lua', 'python', 'rust', 'help', 'vim' },
     ensure_installed = { 'c', 'cpp', 'cmake', 'lua', 'python', 'rust', 'vim' },
@@ -254,6 +255,12 @@ if has_treesitter then
   -- needs treesitter to be installed
   -- vim.opt.foldmethod = "expr"
   -- vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
+
+  -- Hack for certain file types
+  vim.cmd[[
+    autocmd FileType cpp TSDisable indent
+    autocmd FileType help TSDisable highlight
+  ]]
 end
 
 ------------------------------
@@ -545,7 +552,32 @@ if has_lsp_util then
   --   Add any additional override configuration in the following tables. They will be passed to
   --   the `settings` field of the server config. You must look up that documentation yourself.
   servers = {
-    lua_ls = {},
+    lua_ls = {
+      settings = {
+        Lua = {
+          runtime = {
+            -- Tell the language server which version of Lua you're using
+            -- (most likely LuaJIT in the case of Neovim)
+            version = 'LuaJIT',
+          },
+          diagnostics = {
+            -- Get the language server to recognize the `vim` global
+            globals = {
+              'vim',
+              'require'
+            },
+          },
+          workspace = {
+            -- Make the server aware of Neovim runtime files
+            library = vim.api.nvim_get_runtime_file("", true),
+          },
+          -- Do not send telemetry data containing a randomized but unique identifier
+          telemetry = {
+            enable = false,
+          },
+        },
+      },
+    },
     neocmake = {},
     rust_analyzer = {},
     pyright = {
@@ -1854,6 +1886,9 @@ end
 -----------------------------
 -- [[ Configure copilot ]] --
 -----------------------------
+vim.cmd [[
+  autocmd VimEnter * Copilot disable
+]]
 vim.keymap.set('i', '<M-CR>', 'copilot#Accept("\\<CR>")', {
   expr = true,
   replace_keycodes = false

@@ -16,8 +16,6 @@ vim.cmd[[
   autocmd FileType dap-float nnoremap <buffer> q :close<CR>
   autocmd FileType dap-float setlocal colorcolumn=0
   autocmd FileType netrw nnoremap <buffer> q :Rexplore<CR>
-  autocmd FileType cpp TSDisable indent
-  autocmd FileType help TSDisable highlight
   autocmd FileType NeogitStatus setlocal wrap
 ]]
 
@@ -55,7 +53,6 @@ vim.cmd [[
   " Not the best to impose the compiler -> one project may have multiple filetypes
   " However, if none of the compilers change 'makeprg', the user can set it as they want
   " autocmd VimEnter * compiler clang
-  autocmd VimEnter * Copilot disable
   autocmd VimEnter * compiler clang " Default compiler
   autocmd BufEnter *.hpp compiler clang
   autocmd BufEnter *.cpp compiler clang
