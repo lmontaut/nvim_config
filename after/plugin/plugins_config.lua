@@ -452,11 +452,13 @@ if has_lsp_util then
     if client.server_capabilities.signatureHelpProvider then
       local has_lspoverloads, lspoverloads = pcall(require, "lsp-overloads")
       if has_lspoverloads then
-        -- Don't show the overload by default
-        vim.cmd [[
-          autocmd VimEnter * LspOverloadsSignatureAutoToggle
-        ]]
         lspoverloads.setup(client, {
+          ui = {
+            max_height = 40,
+            max_width = 120,
+          },
+          -- Don't show the overload by default
+          display_automatically = false,
           keymaps = {
             next_signature = "<C-j>",
             previous_signature = "<C-k>",
