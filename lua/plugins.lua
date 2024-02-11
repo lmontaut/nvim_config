@@ -118,7 +118,7 @@ return {
   ------------------------------------------------------------------------------------------------------------
   -- Fuzzy Finder (files, lsp, etc) -- **
   -- TODO: tag 0.1.5
-  { 'nvim-telescope/telescope.nvim', branch = '0.1.x', dependencies = { 'nvim-lua/plenary.nvim' } },
+  { 'nvim-telescope/telescope.nvim', branch = '0.1.x', tag = '0.1.5', dependencies = { 'nvim-lua/plenary.nvim' } },
 
   -- fzf
   {'junegunn/fzf', build = function()
