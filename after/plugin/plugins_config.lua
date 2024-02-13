@@ -425,6 +425,29 @@ if has_cmp then
   })
 end
 
+-------------------------------
+-- [[ Configure Lspsaga ]] --
+-------------------------------
+-- Needs to be `setup` after nvim-lspconfig
+local has_lspsaga, lspsaga = pcall(require, "lspsaga")
+if has_lspsaga then
+  lspsaga.setup({
+    outline = {
+      win_width    = 50,
+      auto_preview = false,
+    },
+    finder = {
+      keys = {
+        quit = {"q", "<Esc>"},
+        toggle_or_open = {"<CR>", "o"},
+      }
+    },
+    lightbulb = {
+      sign = false
+    }
+  })
+end
+
 -------------------------
 -- [[ Configure LSP ]] --
 -------------------------
@@ -436,7 +459,6 @@ end
 local on_attach = nil
 local use_lsp_mappings_telescope = true
 local use_lsp_mappings_lspsaga = true -- has precedence over telescope
-Has_lspsaga = nil -- will be modified once lspsagas is loaded
 local has_lsp_util, _ = pcall(require, "lspconfig.util")
 --
 -- This bit of code sets up the LSP servers used and their related keybindings.
@@ -520,7 +542,7 @@ if has_lsp_util then
     end
 
     -- Documentation: https://nvimdev.github.io/lspsaga/
-    if use_lsp_mappings_lspsaga and Has_lspsaga then
+    if use_lsp_mappings_lspsaga and has_lspsaga then
       nmap('K'          , "<CMD>Lspsaga hover_doc<CR>"                  , 'Hover Documentation')
       nmap('<leader>lr' , "<CMD>Lspsaga rename<CR>"                     , 'Rename')
       nmap('gp'         , "<CMD>Lspsaga peek_definition<CR>"            , 'Peek definition')
@@ -1862,24 +1884,6 @@ if has_toggleterm then
     autocmd TermEnter term://*toggleterm#* tnoremap <silent><c-t> <Cmd>exe v:count1 . "ToggleTerm"<CR>
     autocmd TermEnter term://*toggleterm#* startinsert
   ]]
-end
-
--------------------------------
--- [[ Configure Lspsaga ]] --
--------------------------------
--- Needs to be `setup` after nvim-lspconfig
-local has_lspsaga_, lspsaga = pcall(require, "lspsaga")
-Has_lspsaga = has_lspsaga_
-if Has_lspsaga then
-  lspsaga.setup({
-    outline = {
-      win_width    = 50,
-      auto_preview = false,
-    },
-    lightbulb = {
-      sign = false
-    }
-  })
 end
 
 -------------------------------
