@@ -2190,7 +2190,20 @@ if has_wk then
   }, { prefix = "<leader>", mode = {"n", "v"} })
 end
 
--- Sometimes nvim starts going into insert mode whenever I change buffer... Stop that.
-vim.cmd[[
-  au! BufEnter * stopinsert
-]]
+-- Because a conflict btw DAP and toggleterm, nvim starts going into insert modewhenever I change buffer... Stop that.
+-- NOTE: this autocmd may cause some bugs where normal mode is forced where you don't want it to be.
+-- Just add a condition to the autocmd to fix it.
+vim.api.nvim_create_autocmd("FileType", {
+  callback = function()
+    if vim.api.nvim_get_option_value("filetype", {buf = 0}) == "terminal" then
+      return
+    end
+    if vim.api.nvim_get_option_value("filetype", {buf = 0}) == "prompt" then
+      return
+    end
+    vim.api.nvim_command("stopinsert")
+  end,
+})
+-- vim.cmd[[
+--    au! BufEnter * if (&buftype != 'terminal' && &buftype != 'prompt') | stopinsert | endif
+-- ]]
