@@ -96,6 +96,7 @@ if has_telescope then
           ["<C-s>"] = actions.select_horizontal,
           ["<C-v>"] = actions.select_vertical,
           ["<C-t>"] = actions.select_tab,
+          ["<C-h>"] = "which_key",
 
           -- Absolutely insane, you can refine your search
           ["<C-e>"] = actions.to_fuzzy_refine, -- in case C-space doesn't work
@@ -153,7 +154,7 @@ if has_telescope then
         -- theme = "dropdown", -- use dropdown theme
         -- theme = { }, -- use own theme spec
         -- layout_config = { mirror=true }, -- mirror preview pane
-      }
+      },
     }
   })
 
@@ -1909,8 +1910,15 @@ if has_toggleterm then
   vim.keymap.set('i', "<c-t>", "<Esc><CMD>exe v:count1 . 'ToggleTerm'<CR>", { desc = "ToggleTerm" })
   vim.cmd[[
     autocmd TermEnter term://*toggleterm#* tnoremap <silent><c-t> <Cmd>exe v:count1 . "ToggleTerm"<CR>
-    autocmd TermEnter term://*toggleterm#* startinsert
   ]]
+  vim.api.nvim_create_autocmd("FileType", {
+    callback = function()
+      if vim.api.nvim_get_option_value("filetype", {buf = 0}) == "toggleterm" then
+        vim.api.nvim_command("startinsert")
+        return
+      end
+    end,
+  })
 end
 
 -------------------------------
@@ -2220,21 +2228,3 @@ if has_wk then
     }
   }, { prefix = "<leader>", mode = {"n", "v"} })
 end
-
--- Because a conflict btw DAP and toggleterm, nvim starts going into insert modewhenever I change buffer... Stop that.
--- NOTE: this autocmd may cause some bugs where normal mode is forced where you don't want it to be.
--- Just add a condition to the autocmd to fix it.
-vim.api.nvim_create_autocmd("FileType", {
-  callback = function()
-    if vim.api.nvim_get_option_value("filetype", {buf = 0}) == "terminal" then
-      return
-    end
-    if vim.api.nvim_get_option_value("filetype", {buf = 0}) == "prompt" then
-      return
-    end
-    vim.api.nvim_command("stopinsert")
-  end,
-})
--- vim.cmd[[
---    au! BufEnter * if (&buftype != 'terminal' && &buftype != 'prompt') | stopinsert | endif
--- ]]
