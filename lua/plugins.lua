@@ -102,23 +102,28 @@ return {
   { 'NoahTheDuke/vim-just' },
 
   -- Replaces ui of cmdline, messages etc...
-  { "folke/noice.nvim",
-    dependencies = {
-    -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
-    "MunifTanjim/nui.nvim",
-    -- OPTIONAL:
-    --   `nvim-notify` is only needed, if you want to use the notification view.
-    --   If not available, we use `mini` as the fallback
-    -- "rcarriga/nvim-notify",
-    }
-  },
+  -- { "folke/noice.nvim",
+  --   dependencies = {
+  --   -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
+  --   "MunifTanjim/nui.nvim",
+  --   -- OPTIONAL:
+  --   --   `nvim-notify` is only needed, if you want to use the notification view.
+  --   --   If not available, we use `mini` as the fallback
+  --   -- "rcarriga/nvim-notify",
+  --   }
+  -- },
 
   ------------------------------------------------------------------------------------------------------------
   ---------- NAVIGATION
   ------------------------------------------------------------------------------------------------------------
   -- Fuzzy Finder (files, lsp, etc) -- **
   -- TODO: tag 0.1.5
-  { 'nvim-telescope/telescope.nvim', branch = '0.1.x', tag = '0.1.5', dependencies = { 'nvim-lua/plenary.nvim' } },
+  { 'nvim-telescope/telescope.nvim', branch = '0.1.x', tag = '0.1.5',
+    dependencies = {
+      { 'nvim-lua/plenary.nvim' },
+      { 'nvim-telescope/telescope-live-grep-args.nvim', version = "^1.0.0" },
+    },
+  },
 
   -- fzf
   {'junegunn/fzf', build = function()

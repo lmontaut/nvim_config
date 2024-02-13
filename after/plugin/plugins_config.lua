@@ -48,9 +48,12 @@ end
 -- See `:help telescope` and `:help telescope.setup()`
 local has_telescope, _ = pcall(require, "telescope")
 if has_telescope then
-  local actions = require "telescope.actions"
+  local actions = require("telescope.actions")
   local telescope = require("telescope")
   local telescopeConfig = require("telescope.config")
+  -- Extensions actions
+  local has_live_grep_args, _ = pcall(telescope.load_extension, "live_grep_args")
+  local lga_actions = require("telescope-live-grep-args.actions")
 
   -- Clone the default Telescope configuration
   local vimgrep_arguments = { unpack(telescopeConfig.values.vimgrep_arguments) }
@@ -136,10 +139,23 @@ if has_telescope then
                           find_command = { "rg", "--files", "--hidden", "--glob", "!**/.git/*" },
       },
     },
+    -- Extensions
+    extensions = {
+      live_grep_args = {
+        auto_quoting = true,
+        mappings = {
+          i = {
+            ["<C-f>"] = lga_actions.quote_prompt(),
+            ["<C-g>"] = lga_actions.quote_prompt({ postfix = " --iglob "}),
+          },
+        },
+        -- ... also accepts theme settings, for example:
+        -- theme = "dropdown", -- use dropdown theme
+        -- theme = { }, -- use own theme spec
+        -- layout_config = { mirror=true }, -- mirror preview pane
+      }
+    }
   })
-
-  -- Enable telescope fzf native, if installed
-  pcall(require('telescope').load_extension, 'fzf')
 
   -- See `:help telescope.builtin`
   local tb = require('telescope.builtin')
@@ -174,6 +190,17 @@ if has_telescope then
   vim.keymap.set('n', '<leader>sQ', tb.quickfixhistory, { desc = 'Search quickfix history' })
   vim.keymap.set('n', '<leader>qh', tb.quickfixhistory, { desc = 'Quickfix history' })
   vim.keymap.set('n', '<leader>qt', tb.quickfix,        { desc = 'Telescope quickfix' })
+
+  ------------------------
+  -- TELESCOPE EXTENSIONS
+  ------------------------
+  -- Enable telescope fzf native, if installed
+  pcall(require('telescope').load_extension, 'fzf')
+
+  -- Proper grep for telescope
+  if has_live_grep_args then
+    vim.keymap.set('n', '<leader>sg', function() telescope.extensions.live_grep_args.live_grep_args() end, { desc = 'Grep in directory' })
+  end
 end
 
 ------------------------------
