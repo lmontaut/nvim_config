@@ -463,6 +463,10 @@ if has_lspsaga then
     outline = {
       win_width    = 50,
       auto_preview = false,
+      keys = {
+        toggle_or_jump = { "<CR>", "o" },
+        jump = { "e" },
+      },
     },
     finder = {
       keys = {
