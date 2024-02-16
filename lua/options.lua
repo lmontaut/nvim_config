@@ -8,6 +8,8 @@ vim.o.hlsearch = false
 -- Make line numbers default
 vim.wo.number = true
 
+vim.o.autoread = true
+
 -- The cursor always has room above and below
 vim.o.scrolloff = 8
 
