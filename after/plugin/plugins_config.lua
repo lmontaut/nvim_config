@@ -1090,8 +1090,12 @@ if has_dap then
   ------------------------------------
   -- C/C++/Rust configurations
   ------------------------------------
-  -- local lldb_path = "/opt/homebrew/Cellar/llvm/17.0.6/bin/lldb-vscode"
   local lldb_path = "/opt/homebrew/opt/llvm/bin/lldb-vscode" -- Adjust depdending on llvm version
+  local os_name = vim.loop.os_uname().sysname
+  if os_name == "Linux" then
+    -- On arch-based linux, simply do `sudo pacman -S lldb`
+    lldb_path = "/usr/bin/lldb-vscode"
+  end
   dap.adapters.lldb = {
     type    = "executable",
     command = lldb_path,
