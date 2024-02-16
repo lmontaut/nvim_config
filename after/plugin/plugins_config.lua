@@ -700,7 +700,7 @@ if has_mason and has_mason_lsp_config and has_lspconfig then
           capabilities = capabilities,
           on_attach = on_attach,
           -- Each server can have its own command to start it.
-          cmd = { "clangd", "--background-index", "--header-insertion=never" },
+          cmd = { "clangd", "--background-index", "--header-insertion=never", "--offset-encoding=utf-16" },
           settings = servers.clangd,
         })
       elseif server_name == "lua_ls" then
