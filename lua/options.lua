@@ -35,9 +35,10 @@ vim.o.smartindent = true
 vim.wo.signcolumn = 'yes'
 vim.o.showbreak = "    "
 vim.o.linebreak = true -- so that wrapping does not occur in middle of word
--- Any time a buffer is entered, check if it changed on disk
+-- Check when files are changed on disk
 vim.cmd [[
-  autocmd BufEnter * checktime
+  set autoread
+  autocmd CursorHold * checktime
 ]]
 
 -- Modify jumplist behavior -> much better

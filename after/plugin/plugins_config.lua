@@ -543,6 +543,14 @@ if has_lsp_util then
       vim.keymap.set('i', keys, func, { buffer = bufnr, desc = desc, silent = true })
     end
 
+    local vmap = function(keys, func, desc)
+      if desc then
+        desc = 'LSP: ' .. desc
+      end
+
+      vim.keymap.set('v', keys, func, { buffer = bufnr, desc = desc, silent = true })
+    end
+
     -- Mappings using the vim.lsp.buf functions:
     local tb = require('telescope.builtin')
     nmap('gd'         , vim.lsp.buf.definition              , 'Goto definition')
@@ -565,6 +573,8 @@ if has_lsp_util then
     nmap("<leader>lk" , vim.diagnostic.goto_prev  , 'Previous diagnostic')
     nmap("<leader>lj" , vim.diagnostic.goto_next  , 'LSP: Next diagnostic')
     nmap("gl"         , vim.diagnostic.open_float , 'LSP: Open diagnostic under cursor')
+    nmap('<leader>f', vim.lsp.buf.format, 'Format')
+    vmap('<leader>f', vim.lsp.buf.format, 'Format')
 
     if use_lsp_mappings_telescope then
       nmap('gd' , tb.lsp_definitions      , 'Goto definition')
@@ -701,6 +711,7 @@ if has_mason and has_mason_lsp_config and has_lspconfig then
           on_attach = on_attach,
           -- Each server can have its own command to start it.
           cmd = { "clangd", "--background-index", "--header-insertion=never", "--offset-encoding=utf-16" },
+          -- cmd = { "clangd", "--header-insertion=never", "--offset-encoding=utf-16" },
           settings = servers.clangd,
         })
       elseif server_name == "lua_ls" then
