@@ -123,19 +123,22 @@ vim.keymap.set("n", "<leader>Lq", "<CMD>lclose<CR>", { desc = "Location list clo
 
 
 -- Wrap/unwrap
-vim.keymap.set("n", "<leader>vw", "<CMD>setlocal wrap<CR>",   { desc = "Wrap text", opts.args })
+vim.keymap.set("n", "<leader>vw", "<CMD>setlocal wrap<CR>", { desc = "Wrap text", opts.args })
 vim.keymap.set("n", "<leader>vW", "<CMD>setlocal nowrap<CR>", { desc = "Unwrap text", opts.args })
 
 -- hl/nohl search
-vim.keymap.set("n", "<leader>vh", "<CMD>setlocal hlsearch<CR>",   { desc = "Highligth search", opts.args })
+vim.keymap.set("n", "<leader>vh", "<CMD>setlocal hlsearch<CR>", { desc = "Highligth search", opts.args })
 vim.keymap.set("n", "<leader>vH", "<CMD>setlocal nohlsearch<CR>", { desc = "No highligth search", opts.args })
 
 -- Launch terminal command
-vim.keymap.set("n", "<leader>t", ":below split | terminal<Space>",       { noremap = true, silent = false, desc = "Launch terminal horizontal" })
-vim.keymap.set("n", "<leader>T", ":rightbelow vsplit | terminal<Space>", { noremap = true, silent = false, desc = "Launch terminal vertical" })
+vim.keymap.set("n", "<leader>t", ":below split | terminal<Space>",
+  { noremap = true, silent = false, desc = "Launch terminal horizontal" })
+vim.keymap.set("n", "<leader>T", ":rightbelow vsplit | terminal<Space>",
+  { noremap = true, silent = false, desc = "Launch terminal vertical" })
 
 -- help
-vim.keymap.set("n", "<leader>h", ":vertical rightbelow help<Space>", { noremap = true, silent = false, desc = "Vim help" })
+vim.keymap.set("n", "<leader>h", ":vertical rightbelow help<Space>",
+  { noremap = true, silent = false, desc = "Vim help" })
 
 -- Last buffer
 vim.keymap.set("n", "<leader>1", "<CMD>b#<CR>", { desc = "Last buffer", opts.args })
@@ -149,10 +152,12 @@ vim.keymap.set("n", "<C-f>", ":<C-f>", { desc = "Command history", opts.args })
 
 -- Buffer close
 vim.keymap.set("n", "<leader>bc", "<CMD>bd!<CR>", { desc = "Close buffer", opts.args })
-vim.keymap.set("n", "<leader>bd", ":bd<Space>",   { noremap = true, silent = false, desc = "Select which buffer to delete" })
+vim.keymap.set("n", "<leader>bd", ":bd<Space>",
+  { noremap = true, silent = false, desc = "Select which buffer to delete" })
 
 -- Replace under cursor
-vim.keymap.set("n", "<leader>S", "<CMD>%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>", { noremap = true, silent = false, desc = "Search and replace word" })
+vim.keymap.set("n", "<leader>S", "<CMD>%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>",
+  { noremap = true, silent = false, desc = "Search and replace word" })
 
 -- Move lines around - normal
 -- vim.keymap.set("n", "H", "<<", { desc = "", opts.args })
@@ -172,7 +177,8 @@ vim.cmd [[
   endfunction
   command! ClearQuickfixList call ClearQuickfixList()
 ]]
-vim.keymap.set("n", "<leader>sb", "<CMD>ClearQuickfixList<CR>:bufdo vimgrepadd <C-r><C-w> %<Left><Left>", { noremap = true, silent = false, desc = "Grep in buffers" })
+vim.keymap.set("n", "<leader>sb", "<CMD>ClearQuickfixList<CR>:bufdo vimgrepadd <C-r><C-w> %<Left><Left>",
+  { noremap = true, silent = false, desc = "Grep in buffers" })
 
 -- Tab navigation
 vim.keymap.set("n", "<leader>vo", "mz<CMD>tabnew %<CR>`z", { desc = "Tab new", opts.args })

@@ -52,7 +52,7 @@ return {
   {
     'hrsh7th/nvim-cmp',
     dependencies = { 'hrsh7th/cmp-nvim-lsp', 'L3MON4D3/LuaSnip', 'saadparwaiz1/cmp_luasnip',
-    'hrsh7th/cmp-buffer', 'hrsh7th/cmp-path', 'hrsh7th/cmp-cmdline' },
+      'hrsh7th/cmp-buffer', 'hrsh7th/cmp-path', 'hrsh7th/cmp-cmdline' },
   },
 
   -- Cycle functions overloads -- **
@@ -76,10 +76,12 @@ return {
   ---------- DEBUG
   ------------------------------------------------------------------------------------------------------------
   -- Debugger -- **
-  { "mfussenegger/nvim-dap",
+  {
+    "mfussenegger/nvim-dap",
     dependencies = { "nvim-telescope/telescope-dap.nvim" }
   },
-  { "rcarriga/nvim-dap-ui",
+  {
+    "rcarriga/nvim-dap-ui",
     dependencies = { "mfussenegger/nvim-dap", "rcarriga/cmp-dap" }
   },
   -- { "theHamsta/nvim-dap-virtual-text" },
@@ -92,7 +94,7 @@ return {
 
   -- Color themes
   -- use { 'navarasu/onedark.nvim' } -- Theme inspired by Atom
-  { "catppuccin/nvim", name = "catppuccin" },
+  { "catppuccin/nvim",            name = "catppuccin" },
 
   -- Status line -- **
   { 'nvim-lualine/lualine.nvim' },
@@ -118,7 +120,10 @@ return {
   ------------------------------------------------------------------------------------------------------------
   -- Fuzzy Finder (files, lsp, etc) -- **
   -- TODO: tag 0.1.5
-  { 'nvim-telescope/telescope.nvim', branch = '0.1.x', tag = '0.1.5',
+  {
+    'nvim-telescope/telescope.nvim',
+    branch = '0.1.x',
+    tag = '0.1.5',
     dependencies = {
       { 'nvim-lua/plenary.nvim' },
       { 'nvim-telescope/telescope-live-grep-args.nvim', version = "^1.0.0" },
@@ -126,9 +131,11 @@ return {
   },
 
   -- fzf
-  {'junegunn/fzf', build = function()
+  {
+    'junegunn/fzf',
+    build = function()
       vim.fn['fzf#install']()
-  end
+    end
   },
 
   -- Project manager -- **
@@ -147,7 +154,8 @@ return {
   },
 
   -- Navigate recent locations quickly
-  { "cbochs/portal.nvim",
+  {
+    "cbochs/portal.nvim",
     -- Optional dependencies
     dependencies = { "cbochs/grapple.nvim" },
   },
@@ -193,10 +201,11 @@ return {
   ---------- CODE EDITION TOOLS
   ------------------------------------------------------------------------------------------------------------
   -- My Pap: best plugin -- **
-  { "lmontaut/nvim-pap", dev = true, lazy = false },
+  { "lmontaut/nvim-pap",      dev = true, lazy = false },
 
   -- "gc" to comment visual regions/lines -- **
-  { 'numToStr/Comment.nvim',
+  {
+    'numToStr/Comment.nvim',
     opts = {}, -- arguments to be passed to setup function
   },
 
@@ -221,7 +230,8 @@ return {
   },
 
   -- Find and replace (a wrapper around sad terminal utility) -- **
-  { "ray-x/sad.nvim",
+  {
+    "ray-x/sad.nvim",
     dependencies = { "ray-x/guihua.lua", build = "cd lua/fzy && make" }
   },
 
@@ -248,8 +258,8 @@ return {
   ------------------------------------------------------------------------------------------------------------
   -- Neorg
   -- { "nvim-neorg/neorg",
-    -- build = ":Neorg sync-parsers",
-    -- requires = "nvim-lua/plenary.nvim",
+  -- build = ":Neorg sync-parsers",
+  -- requires = "nvim-lua/plenary.nvim",
   -- },
 
   -- Obsidian

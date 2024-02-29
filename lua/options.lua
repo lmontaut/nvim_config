@@ -33,12 +33,18 @@ vim.o.updatetime = 500
 vim.o.timeoutlen = 500
 vim.o.smartindent = true
 vim.wo.signcolumn = 'yes'
-vim.o.showbreak = "    "
+vim.o.showbreak = "  ↪ "
 vim.o.linebreak = true -- so that wrapping does not occur in middle of word
+-- vim.o.breakat = " ^I!@*-+;:,./?" -- default
+vim.o.breakat = "=(!@;,? "
 -- Check when files are changed on disk
 vim.cmd [[
   set autoread
   autocmd CursorHold * checktime
+]]
+vim.cmd [[
+ " cino = how vim should indent
+  set cino+=(0
 ]]
 
 -- Modify jumplist behavior -> much better
@@ -47,7 +53,7 @@ vim.cmd [[
   autocmd TextYankPost * normal! m'
   autocmd BufWrite * normal! m'
 ]]
-vim.o.jumpoptions=""
+vim.o.jumpoptions = ""
 
 -- Where to split -> I want the cursor to remain in the top left window
 -- Then ctrl w + o to close other windows

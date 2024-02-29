@@ -16,7 +16,8 @@ local has_comment, comment = pcall(require, 'Comment')
 if has_comment then
   comment.setup()
   vim.keymap.set("n", "\\", require('Comment.api').toggle.linewise.current, { desc = "Comment" })
-  vim.keymap.set("v", "\\", "<ESC><CMD>lua require(\"Comment.api\").toggle.linewise(vim.fn.visualmode())<CR>", { desc = "Comment" })
+  vim.keymap.set("v", "\\", "<ESC><CMD>lua require(\"Comment.api\").toggle.linewise(vim.fn.visualmode())<CR>",
+    { desc = "Comment" })
 end
 
 --------------------------------------
@@ -26,10 +27,10 @@ end
 local has_indent_blankline, indent_blankline = pcall(require, 'indent_blankline')
 if has_indent_blankline then
   indent_blankline.setup({
-    char = '┊',
-    show_trailing_blankline_indent = true,
+    char                            = '┊',
+    show_trailing_blankline_indent  = true,
     indent_blankline_use_treesitter = true,
-    show_current_context = true,
+    show_current_context            = true,
   })
 end
 
@@ -48,15 +49,15 @@ end
 -- See `:help telescope` and `:help telescope.setup()`
 local has_telescope, _ = pcall(require, "telescope")
 if has_telescope then
-  local actions = require("telescope.actions")
-  local telescope = require("telescope")
-  local telescopeConfig = require("telescope.config")
+  local actions               = require("telescope.actions")
+  local telescope             = require("telescope")
+  local telescopeConfig       = require("telescope.config")
   -- Extensions actions
   local has_live_grep_args, _ = pcall(telescope.load_extension, "live_grep_args")
-  local lga_actions = require("telescope-live-grep-args.actions")
+  local lga_actions           = require("telescope-live-grep-args.actions")
 
   -- Clone the default Telescope configuration
-  local vimgrep_arguments = { unpack(telescopeConfig.values.vimgrep_arguments) }
+  local vimgrep_arguments     = { unpack(telescopeConfig.values.vimgrep_arguments) }
   -- I want to search in hidden/dot files.
   table.insert(vimgrep_arguments, "--files")
   table.insert(vimgrep_arguments, "--hidden")
@@ -132,12 +133,12 @@ if has_telescope then
         fname_width = 150,
       },
       git_files = {
-      file_ignore_patterns = { "%.png", "%.jpg", "%.jpeg" },
+        file_ignore_patterns = { "%.png", "%.jpg", "%.jpeg" },
       },
       find_files = { -- Search ALL files, even if not tracked by git
         -- find_command = { "rg", "--files", "--hidden", },
         -- `hidden = true` will still show the inside of `.git/` as it's not `.gitignore`d.
-                          find_command = { "rg", "--files", "--hidden", "--glob", "!**/.git/*" },
+        find_command = { "rg", "--files", "--hidden", "--glob", "!**/.git/*" },
       },
     },
     -- Extensions
@@ -147,7 +148,7 @@ if has_telescope then
         mappings = {
           i = {
             ["<C-f>"] = lga_actions.quote_prompt(),
-            ["<C-g>"] = lga_actions.quote_prompt({ postfix = " --iglob "}),
+            ["<C-g>"] = lga_actions.quote_prompt({ postfix = " --iglob " }),
           },
         },
         -- ... also accepts theme settings, for example:
@@ -160,15 +161,16 @@ if has_telescope then
 
   -- See `:help telescope.builtin`
   local tb = require('telescope.builtin')
-  vim.keymap.set('n', '<leader>?',       tb.oldfiles,           { desc = 'Find recently opened files' })
-  vim.keymap.set('n', '<leader>,',       tb.buffers,            { desc = 'Find buffer' })
-  vim.keymap.set('n', '<leader><space>', tb.git_files,          { desc = 'Find git file' })
-  vim.keymap.set('n', '<leader>s:',      tb.command_history,    { desc = 'Search command history' })
-  vim.keymap.set('n', '<leader>sC',      tb.commands,           { desc = 'Search all vim commands' })
-  vim.keymap.set('n', '<leader>sq',      tb.quickfix,           { desc = 'Search in quickfix' })
-  vim.keymap.set('n', '<leader>sf',      tb.find_files,         { desc = 'Find files' })
-  vim.keymap.set('n', '<leader>r', "<CMD>Telescope resume<CR>", { desc = 'Telescope resume' })
-  vim.keymap.set('n', '<leader>/', function()
+  ---@format disable
+  vim.keymap.set('n', '<leader>?'      , tb.oldfiles                , { desc = 'Find recently opened files' })
+  vim.keymap.set('n', '<leader>,'      , tb.buffers                 , { desc = 'Find buffer'                })
+  vim.keymap.set('n', '<leader><space>', tb.git_files               , { desc = 'Find git file'              })
+  vim.keymap.set('n', '<leader>s:'     , tb.command_history         , { desc = 'Search command history'     })
+  vim.keymap.set('n', '<leader>sC'     , tb.commands                , { desc = 'Search all vim commands'    })
+  vim.keymap.set('n', '<leader>sq'     , tb.quickfix                , { desc = 'Search in quickfix'         })
+  vim.keymap.set('n', '<leader>sf'     , tb.find_files              , { desc = 'Find files'                 })
+  vim.keymap.set('n', '<leader>r'      , "<CMD>Telescope resume<CR>", { desc = 'Telescope resume'           })
+  vim.keymap.set('n', '<leader>/'      , function()
     -- You can pass additional configuration to telescope to change theme, layout, etc.
     require('telescope.builtin').current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
       winblend = 10,
@@ -176,21 +178,22 @@ if has_telescope then
     })
   end, { desc = 'Fuzzily search in current buffer' })
 
-  vim.keymap.set('n', '<leader>sf', tb.find_files,         { desc = 'Search files' })
-  vim.keymap.set('n', '<leader>sk', tb.keymaps,            { desc = 'Search keymaps' })
-  vim.keymap.set('n', '<leader>sw', tb.grep_string,        { desc = 'Search current word' })
-  vim.keymap.set('n', '<leader>sg', tb.live_grep,          { desc = 'Grep in directory' })
-  vim.keymap.set('n', '<leader>sd', tb.diagnostics,        { desc = 'Search diagnostics' })
-  vim.keymap.set('n', '<leader>sc', tb.git_commits,        { desc = 'Search git commits' })
-  vim.keymap.set('n', '<leader>sm', tb.man_pages,          { desc = 'Search man pages' })
-  vim.keymap.set('n', '<leader>8',  tb.reloader,           { desc = 'Reload vim modules' })
-  vim.keymap.set('n', '<leader>sh', tb.search_history,     { desc = 'Search history' })
+  vim.keymap.set('n', '<leader>sf', tb.find_files        , { desc = 'Search files'              })
+  vim.keymap.set('n', '<leader>sk', tb.keymaps           , { desc = 'Search keymaps'            })
+  vim.keymap.set('n', '<leader>sw', tb.grep_string       , { desc = 'Search current word'       })
+  vim.keymap.set('n', '<leader>sg', tb.live_grep         , { desc = 'Grep in directory'         })
+  vim.keymap.set('n', '<leader>sd', tb.diagnostics       , { desc = 'Search diagnostics'        })
+  vim.keymap.set('n', '<leader>sc', tb.git_commits       , { desc = 'Search git commits'        })
+  vim.keymap.set('n', '<leader>sm', tb.man_pages         , { desc = 'Search man pages'          })
+  vim.keymap.set('n', '<leader>8' , tb.reloader          , { desc = 'Reload vim modules'        })
+  vim.keymap.set('n', '<leader>sh', tb.search_history    , { desc = 'Search history'            })
   vim.keymap.set('n', '<leader>sl', tb.lsp_incoming_calls, { desc = 'Search LSP incoming calls' })
   vim.keymap.set('n', '<leader>sL', tb.lsp_outgoing_calls, { desc = 'Search LSP outgoing calls' })
   -- Quickfix list interaction
   vim.keymap.set('n', '<leader>sQ', tb.quickfixhistory, { desc = 'Search quickfix history' })
-  vim.keymap.set('n', '<leader>qh', tb.quickfixhistory, { desc = 'Quickfix history' })
-  vim.keymap.set('n', '<leader>qt', tb.quickfix,        { desc = 'Telescope quickfix' })
+  vim.keymap.set('n', '<leader>qh', tb.quickfixhistory, { desc = 'Quickfix history'        })
+  vim.keymap.set('n', '<leader>qt', tb.quickfix       , { desc = 'Telescope quickfix'      })
+  ---@format enable
 
   ------------------------
   -- TELESCOPE EXTENSIONS
@@ -200,7 +203,8 @@ if has_telescope then
 
   -- Proper grep for telescope
   if has_live_grep_args then
-    vim.keymap.set('n', '<leader>sg', function() telescope.extensions.live_grep_args.live_grep_args() end, { desc = 'Grep in directory' })
+    vim.keymap.set('n', '<leader>sg', function() telescope.extensions.live_grep_args.live_grep_args() end,
+      { desc = 'Grep in directory' })
   end
 end
 
@@ -229,7 +233,7 @@ if has_treesitter then
     incremental_selection = {
       enable = true,
       keymaps = {
-        init_selection = '<leader>ee',
+        init_selection   = '<leader>ee',
         node_incremental = '<leader>en',
         node_decremental = '<leader>ep',
       },
@@ -285,7 +289,7 @@ if has_treesitter then
   -- vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
 
   -- Hack for certain file types
-  vim.cmd[[
+  vim.cmd [[
     autocmd FileType cpp TSDisable indent
     " autocmd FileType help TSDisable highlight
   ]]
@@ -297,7 +301,7 @@ end
 local has_cmp, cmp = pcall(require, 'cmp')
 local has_luasnip, luasnip = pcall(require, 'luasnip')
 if has_cmp then
-  vim.cmd[[
+  vim.cmd [[
     highlight GhostText gui=bold guifg=#282c34 guibg=#98c379
   ]]
 
@@ -307,15 +311,15 @@ if has_cmp then
       if cmp.visible() then
         return cmp.scroll_docs(4)
       end
-        fallback()
-      end, { 'i' }),
+      fallback()
+    end, { 'i' }),
     -- Scroll docs up
     ['<C-u>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
         return cmp.scroll_docs(-4)
       end
-        fallback()
-      end, { 'i' }),
+      fallback()
+    end, { 'i' }),
     -- Abort completion
     -- ['<C-e>'] = cmp.mapping(function(fallback)
     --   if cmp.visible() then
@@ -325,33 +329,33 @@ if has_cmp then
     --   end, { 'i', 'c' }),
     -- Invoke completion
     ['<Tab>'] = cmp.mapping(function()
-        cmp.complete()
-      end, { 'i', 'c' }),
+      cmp.complete()
+    end, { 'i', 'c' }),
     -- Close completion window
     ['<C-e>'] = cmp.mapping(function()
       cmp.close()
-      end, { 'i', 'c' }),
+    end, { 'i', 'c' }),
     -- Next completion item
     ['<C-n>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
         return cmp.select_next_item()
       end
-        fallback()
-      end, { 'i', 'c' }),
+      fallback()
+    end, { 'i', 'c' }),
     -- Previous completion item
     ['<C-p>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
         return cmp.select_prev_item()
       end
-        fallback()
-      end, { 'i', 'c' }),
+      fallback()
+    end, { 'i', 'c' }),
     -- Confirm completion
     ['<CR>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
         return cmp.confirm({ select = true })
       end
-        fallback()
-      end, { 'i', 'c' }),
+      fallback()
+    end, { 'i', 'c' }),
   }
 
   local fixed_width = 50
@@ -418,10 +422,10 @@ if has_cmp then
       { name = 'nvim_lsp' },
       { name = 'luasnip' }, -- For luasnip users.
     }, {
-        { name = 'buffer' },
-        { name = 'path' },
-        { name = 'cmdline' },
-      }),
+      { name = 'buffer' },
+      { name = 'path' },
+      { name = 'cmdline' },
+    }),
     experimental = {
       ghost_text = { hl_group = 'GhostText' }
     }
@@ -439,8 +443,8 @@ if has_cmp then
     sources = cmp.config.sources({
       { name = 'path' }
     }, {
-        { name = 'cmdline' }
-      })
+      { name = 'cmdline' }
+    })
   })
 
   cmp.setup.filetype('vim', {
@@ -448,8 +452,8 @@ if has_cmp then
     sources = cmp.config.sources({
       { name = 'path' }
     }, {
-        { name = 'cmdline' }
-      })
+      { name = 'cmdline' }
+    })
   })
 end
 
@@ -463,15 +467,15 @@ if has_lspsaga then
     outline = {
       win_width    = 50,
       auto_preview = false,
-      keys = {
+      keys         = {
         toggle_or_jump = { "<CR>", "o" },
         jump = { "e" },
       },
     },
     finder = {
       keys = {
-        quit = {"q", "<Esc>"},
-        toggle_or_open = {"<CR>", "o"},
+        quit = { "q", "<Esc>" },
+        toggle_or_open = { "<CR>", "o" },
       }
     },
     lightbulb = {
@@ -488,10 +492,10 @@ local lsp_pythonpath = "$HOME/miniforge3/bin/python"
 if os.getenv("CONDA_PREFIX") then
   lsp_pythonpath = os.getenv("CONDA_PREFIX") .. "/bin/python"
 end
-local on_attach = nil
+local on_attach                  = nil
 local use_lsp_mappings_telescope = true
-local use_lsp_mappings_lspsaga = true -- has precedence over telescope
-local has_lsp_util, _ = pcall(require, "lspconfig.util")
+local use_lsp_mappings_lspsaga   = true -- has precedence over telescope
+local has_lsp_util, _            = pcall(require, "lspconfig.util")
 --
 -- This bit of code sets up the LSP servers used and their related keybindings.
 -- I don't do it here but in theory you can have different keybindings for each server.
@@ -513,15 +517,15 @@ if has_lsp_util then
           -- Don't show the overload by default
           display_automatically = false,
           keymaps = {
-            next_signature = "<C-j>",
+            next_signature     = "<C-j>",
             previous_signature = "<C-k>",
-            next_parameter = "<C-l>",
+            next_parameter     = "<C-l>",
             previous_parameter = "<C-h>",
-            close_signature = "<C-s>"
+            close_signature    = "<C-s>"
           },
         })
       end
-      vim.api.nvim_set_keymap("n", "<C-s>", "<CMD>LspOverloadsSignature<CR>",     { noremap = true, silent = true })
+      vim.api.nvim_set_keymap("n", "<C-s>", "<CMD>LspOverloadsSignature<CR>", { noremap = true, silent = true })
       vim.api.nvim_set_keymap("i", "<C-s>", "<CMD>LspOverloadsSignature<CR>", { noremap = true, silent = true })
     end
     --
@@ -543,74 +547,67 @@ if has_lsp_util then
       vim.keymap.set('i', keys, func, { buffer = bufnr, desc = desc, silent = true })
     end
 
-    local vmap = function(keys, func, desc)
-      if desc then
-        desc = 'LSP: ' .. desc
-      end
-
-      vim.keymap.set('v', keys, func, { buffer = bufnr, desc = desc, silent = true })
-    end
-
+    -- The following comment is to turn off the formatting of the following code block:
     -- Mappings using the vim.lsp.buf functions:
     local tb = require('telescope.builtin')
-    nmap('gd'         , vim.lsp.buf.definition              , 'Goto definition')
-    nmap('gD'         , vim.lsp.buf.declaration             , 'Goto declatation')
-    nmap('gI'         , vim.lsp.buf.implementation          , 'Goto implementation')
-    nmap('gt'         , vim.lsp.buf.type_definition         , 'Goto type definition')
-    nmap('gr'         , vim.lsp.buf.references              , 'Goto references')
-    nmap('<C-x>'      , vim.lsp.buf.signature_help          , 'Signature Documentation')
-    imap('<C-x>'      , vim.lsp.buf.signature_help          , 'Signature Documentation')
-    nmap('K'          , vim.lsp.buf.hover                   , 'Hover Documentation')
-    nmap('<leader>lr' , vim.lsp.buf.rename                  , 'Rename')
-    nmap('<leader>lc' , vim.lsp.buf.code_action             , 'Code action')
-    nmap('<leader>ls' , tb.lsp_document_symbols             , 'Document symbols')
-    nmap('<leader>lS' , tb.lsp_dynamic_workspace_symbols    , 'Workspace symbols')
-    nmap('gh'         , "<CMD>ClangdSwitchSourceHeader<CR>" , 'Switch from source to header')
-    nmap("<leader>lo" , vim.lsp.buf.outgoing_calls          , 'Outgoing calls')
-    nmap("<leader>li" , vim.lsp.buf.incoming_calls          , 'Incoming calls')
+    ---@format disable
+    nmap('gd'        , vim.lsp.buf.definition             , 'Goto definition'             )
+    nmap('gD'        , vim.lsp.buf.declaration            , 'Goto declatation'            )
+    nmap('gI'        , vim.lsp.buf.implementation         , 'Goto implementation'         )
+    nmap('gt'        , vim.lsp.buf.type_definition        , 'Goto type definition'        )
+    nmap('gr'        , vim.lsp.buf.references             , 'Goto references'             )
+    nmap('<C-x>'     , vim.lsp.buf.signature_help         , 'Signature Documentation'     )
+    imap('<C-x>'     , vim.lsp.buf.signature_help         , 'Signature Documentation'     )
+    nmap('K'         , vim.lsp.buf.hover                  , 'Hover Documentation'         )
+    nmap('<leader>lr', vim.lsp.buf.rename                 , 'Rename'                      )
+    nmap('<leader>lc', vim.lsp.buf.code_action            , 'Code action'                 )
+    nmap('<leader>ls', tb.lsp_document_symbols            , 'Document symbols'            )
+    nmap('<leader>lS', tb.lsp_dynamic_workspace_symbols   , 'Workspace symbols'           )
+    nmap('gh'        , "<CMD>ClangdSwitchSourceHeader<CR>", 'Switch from source to header')
+    nmap("<leader>lo", vim.lsp.buf.outgoing_calls         , 'Outgoing calls'              )
+    nmap("<leader>li", vim.lsp.buf.incoming_calls         , 'Incoming calls'              )
     -- Diagnostic keymaps
-    nmap('<leader>lD' , tb.diagnostics            , 'Diagnostics')
-    nmap("<leader>lk" , vim.diagnostic.goto_prev  , 'Previous diagnostic')
-    nmap("<leader>lj" , vim.diagnostic.goto_next  , 'LSP: Next diagnostic')
-    nmap("gl"         , vim.diagnostic.open_float , 'LSP: Open diagnostic under cursor')
-    nmap('<leader>f', vim.lsp.buf.format, 'Format')
-    vmap('<leader>f', vim.lsp.buf.format, 'Format')
+    nmap('<leader>lD', tb.diagnostics           , 'Diagnostics'                      )
+    nmap("<leader>lk", vim.diagnostic.goto_prev , 'Previous diagnostic'              )
+    nmap("<leader>lj", vim.diagnostic.goto_next , 'LSP: Next diagnostic'             )
+    nmap("gl"        , vim.diagnostic.open_float, 'LSP: Open diagnostic under cursor')
+    nmap('<leader>f' , vim.lsp.buf.format       , 'Format'                           )
 
     if use_lsp_mappings_telescope then
-      nmap('gd' , tb.lsp_definitions      , 'Goto definition')
-      nmap('gI' , tb.lsp_implementations  , 'Goto implementation')
-      nmap('gt' , tb.lsp_type_definitions , 'Goto type definitions')
-      nmap('gr' , tb.lsp_references       , 'Goto references')
+      nmap('gd', tb.lsp_definitions     , 'Goto definition'      )
+      nmap('gI', tb.lsp_implementations , 'Goto implementation'  )
+      nmap('gt', tb.lsp_type_definitions, 'Goto type definitions')
+      nmap('gr', tb.lsp_references      , 'Goto references'      )
     end
 
     -- Documentation: https://nvimdev.github.io/lspsaga/
     if use_lsp_mappings_lspsaga and has_lspsaga then
-      nmap('K'          , "<CMD>Lspsaga hover_doc<CR>"                  , 'Hover Documentation')
-      nmap('<leader>lr' , "<CMD>Lspsaga rename<CR>"                     , 'Rename')
-      nmap('gp'         , "<CMD>Lspsaga peek_definition<CR>"            , 'Peek definition')
-      nmap('gl'         , "<CMD>Lspsaga show_line_diagnostics<CR>"      , 'Buffer diagnostics')
-      nmap("<leader>lo" , "<CMD>Lspsaga outgoing_calls<CR>"             , 'Outgoing calls')
-      nmap("<leader>li" , "<CMD>Lspsaga incoming_calls<CR>"             , 'Incoming calls')
-      nmap('<leader>ld' , "<CMD>Lspsaga show_buf_diagnostics<CR>"       , 'Buffer diagnostics')
-      nmap('<leader>lD' , "<CMD>Lspsaga show_workspace_diagnostics<CR>" , 'Workspace diagnostics')
+      nmap('K'         , "<CMD>Lspsaga hover_doc<CR>"                 , 'Hover Documentation'  )
+      nmap('<leader>lr', "<CMD>Lspsaga rename<CR>"                    , 'Rename'               )
+      nmap('gp'        , "<CMD>Lspsaga peek_definition<CR>"           , 'Peek definition'      )
+      nmap('gl'        , "<CMD>Lspsaga show_line_diagnostics<CR>"     , 'Buffer diagnostics'   )
+      nmap("<leader>lo", "<CMD>Lspsaga outgoing_calls<CR>"            , 'Outgoing calls'       )
+      nmap("<leader>li", "<CMD>Lspsaga incoming_calls<CR>"            , 'Incoming calls'       )
+      nmap('<leader>ld', "<CMD>Lspsaga show_buf_diagnostics<CR>"      , 'Buffer diagnostics'   )
+      nmap('<leader>lD', "<CMD>Lspsaga show_workspace_diagnostics<CR>", 'Workspace diagnostics')
       -- Finder
-      nmap('gr'          , "<CMD>Lspsaga finder tyd+def+ref+imp<CR>" , 'Goto references')
-      nmap('gI'          , "<CMD>Lspsaga finder imp<CR>"             , 'Goto implementation')
-      nmap('gt'          , "<CMD>Lspsaga finder tyd<CR>"             , 'Goto type definitions')
-      nmap('<leader>lfd' , "<CMD>Lspsaga finder def<CR>"             , 'Find definitions')
-      nmap('<leader>lfi' , "<CMD>Lspsaga finder imp<CR>"             , 'Find implementations')
-      nmap('<leader>lfr' , "<CMD>Lspsaga finder ref<CR>"             , 'Find references')
-      nmap('<leader>lft' , "<CMD>Lspsaga finder tyd<CR>"             , 'Find type definitions')
+      nmap('gr'         , "<CMD>Lspsaga finder tyd+def+ref+imp<CR>", 'Goto references'      )
+      nmap('gI'         , "<CMD>Lspsaga finder imp<CR>"            , 'Goto implementation'  )
+      nmap('gt'         , "<CMD>Lspsaga finder tyd<CR>"            , 'Goto type definitions')
+      nmap('<leader>lfd', "<CMD>Lspsaga finder def<CR>"            , 'Find definitions'     )
+      nmap('<leader>lfi', "<CMD>Lspsaga finder imp<CR>"            , 'Find implementations' )
+      nmap('<leader>lfr', "<CMD>Lspsaga finder ref<CR>"            , 'Find references'      )
+      nmap('<leader>lft', "<CMD>Lspsaga finder tyd<CR>"            , 'Find type definitions')
       -- Outline
       nmap('<leader>I', "<CMD>Lspsaga outline<CR>", 'File outline')
     end
+    ---@format enable
 
     -- Create a command `:Format` local to the LSP buffer
     vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
       vim.lsp.buf.format()
     end, { desc = 'Format current buffer with LSP' })
   end
-
 end
 
 -- Neodev: better support for the signature, docs and completion.
@@ -635,9 +632,9 @@ end
 -- Looks of the LSP
 local signs = {
   { name = "DiagnosticSignError", text = "" },
-  { name = "DiagnosticSignWarn",  text = "" },
-  { name = "DiagnosticSignHint",  text = "" },
-  { name = "DiagnosticSignInfo",  text = "" },
+  { name = "DiagnosticSignWarn", text = "" },
+  { name = "DiagnosticSignHint", text = "" },
+  { name = "DiagnosticSignInfo", text = "" },
 }
 
 for _, sign in ipairs(signs) do
@@ -656,11 +653,11 @@ local diagnostics_config = {
   severity_sort = true,
   float = {
     focusable = false,
-    style = "minimal",
-    border = "rounded",
-    source = "always",
-    header = "",
-    prefix = "",
+    style     = "minimal",
+    border    = "rounded",
+    source    = "always",
+    header    = "",
+    prefix    = "",
   },
 }
 
@@ -720,7 +717,7 @@ if has_mason and has_mason_lsp_config and has_lspconfig then
           on_attach = on_attach,
           on_init = function(client)
             local path = client.workspace_folders[1].name
-            if not vim.loop.fs_stat(path..'/.luarc.json') and not vim.loop.fs_stat(path..'/.luarc.jsonc') then
+            if not vim.loop.fs_stat(path .. '/.luarc.json') and not vim.loop.fs_stat(path .. '/.luarc.jsonc') then
               client.config.settings = vim.tbl_deep_extend('force', client.config.settings, {
                 Lua = {
                   runtime = {
@@ -759,8 +756,8 @@ if has_mason and has_mason_lsp_config and has_lspconfig then
         })
       else
         lspconfig[server_name].setup({
-          capabilities = capabilities, -- This is needed for nvim-cmp to work
-          on_attach = on_attach, -- This is needed for the keybindings to work
+          capabilities = capabilities,     -- This is needed for nvim-cmp to work
+          on_attach = on_attach,           -- This is needed for the keybindings to work
           settings = servers[server_name], -- Specific settings for the server
           -- There are other options you can set for each server, like cmd, filetypes, etc.
           -- Visit the lspconfig documentation for more information.
@@ -786,44 +783,44 @@ if has_lspconfig then
   local omnisharp_bin = "$HOME/software/misc/omnisharp-osx/run"
 
   lspconfig.omnisharp.setup({
-      cmd = { omnisharp_bin, "--languageserver" , "--hostPID", tostring(pid) };
-      on_attach = on_attach;
-      capabilities = capabilities;
+    cmd = { omnisharp_bin, "--languageserver", "--hostPID", tostring(pid) },
+    on_attach = on_attach,
+    capabilities = capabilities,
 
-      -- Enables support for reading code style, naming convention and analyzer
-      -- settings from .editorconfig.
-      enable_editorconfig_support = true;
+    -- Enables support for reading code style, naming convention and analyzer
+    -- settings from .editorconfig.
+    enable_editorconfig_support = true,
 
-      -- If true, MSBuild project system will only load projects for files that
-      -- were opened in the editor. This setting is useful for big C# codebases
-      -- and allows for faster initialization of code navigation features only
-      -- for projects that are relevant to code that is being edited. With this
-      -- setting enabled OmniSharp may load fewer projects and may thus display
-      -- incomplete reference lists for symbols.
-      enable_ms_build_load_projects_on_demand = false;
+    -- If true, MSBuild project system will only load projects for files that
+    -- were opened in the editor. This setting is useful for big C# codebases
+    -- and allows for faster initialization of code navigation features only
+    -- for projects that are relevant to code that is being edited. With this
+    -- setting enabled OmniSharp may load fewer projects and may thus display
+    -- incomplete reference lists for symbols.
+    enable_ms_build_load_projects_on_demand = false,
 
-      -- Enables support for roslyn analyzers, code fixes and rulesets.
-      enable_roslyn_analyzers = false;
+    -- Enables support for roslyn analyzers, code fixes and rulesets.
+    enable_roslyn_analyzers = false,
 
-      -- Specifies whether 'using' directives should be grouped and sorted during
-      -- document formatting.
-      organize_imports_on_format = false;
+    -- Specifies whether 'using' directives should be grouped and sorted during
+    -- document formatting.
+    organize_imports_on_format = false,
 
-      -- Enables support for showing unimported types and unimported extension
-      -- methods in completion lists. When committed, the appropriate using
-      -- directive will be added at the top of the current file. This option can
-      -- have a negative impact on initial completion responsiveness,
-      -- particularly for the first few completion sessions after opening a
-      -- solution.
-      enable_import_completion = false;
+    -- Enables support for showing unimported types and unimported extension
+    -- methods in completion lists. When committed, the appropriate using
+    -- directive will be added at the top of the current file. This option can
+    -- have a negative impact on initial completion responsiveness,
+    -- particularly for the first few completion sessions after opening a
+    -- solution.
+    enable_import_completion = false,
 
-      -- Specifies whether to include preview versions of the .NET SDK when
-      -- determining which version to use for project loading.
-      sdk_include_prereleases = true;
+    -- Specifies whether to include preview versions of the .NET SDK when
+    -- determining which version to use for project loading.
+    sdk_include_prereleases = true,
 
-      -- Only run analyzers against open files when 'enableRoslynAnalyzers' is
-      -- true
-      analyze_open_documents_only = false;
+    -- Only run analyzers against open files when 'enableRoslynAnalyzers' is
+    -- true
+    analyze_open_documents_only = false,
   })
 
   vim.api.nvim_create_autocmd("LspAttach", {
@@ -908,6 +905,7 @@ end
 -- [[ Configure symbols outline ]] --
 -------------------------------------
 -- When lspsaga outline is turned off
+---@format disable
 local has_symbols_outline, symbols_outline = pcall(require, "symbols-outline")
 if has_symbols_outline then
   symbols_outline.setup({
@@ -919,8 +917,8 @@ if has_symbols_outline then
     show_relative_numbers = false,
     autofold_depth        = 1,
     auto_unfold_hover     = true,
-    keymaps = {
-      close          = {"<Esc>", "q"},
+    keymaps               = {
+      close          = { "<Esc>", "q" },
       goto_location  = "<Cr>",
       focus_location = "o",
       hover_symbol   = "<C-space>",
@@ -934,67 +932,74 @@ if has_symbols_outline then
       fold_reset     = "R",
     },
     symbols = {
-      File          = { icon = "",    hl = "@text.uri"    } ,
-      Module        = { icon = "",    hl = "@namespace"   } ,
-      Namespace     = { icon = "",    hl = "@namespace"   } ,
-      Package       = { icon = "",    hl = "@namespace"   } ,
-      Class         = { icon = "𝓒",    hl = "@type"        } ,
-      Method        = { icon = "ƒ",    hl = "@method"      } ,
-      Property      = { icon = "",    hl = "@method"      } ,
-      Field         = { icon = "ғ",    hl = "@field"       } ,
-      Constructor   = { icon = "",    hl = "@constructor" } ,
-      Enum          = { icon = "ℰ",    hl = "@type"        } ,
-      Interface     = { icon = "ﰮ",    hl = "@type"        } ,
-      Function      = { icon = "",    hl = "@function"    } ,
-      Variable      = { icon = "",    hl = "@constant"    } ,
-      Constant      = { icon = "",    hl = "@constant"    } ,
-      String        = { icon = "𝓐",    hl = "@string"      } ,
-      Number        = { icon = "#",    hl = "@number"      } ,
-      Boolean       = { icon = "⊨",    hl = "@boolean"     } ,
-      Array         = { icon = "",    hl = "@constant"    } ,
-      Object        = { icon = "⦿",    hl = "@type"        } ,
-      Key           = { icon = "🔐",   hl = "@type"        } ,
-      Null          = { icon = "NULL", hl = "@type"        } ,
-      EnumMember    = { icon = "",    hl = "@field"       } ,
-      Struct        = { icon = "𝓢",    hl = "@type"        } ,
-      Event         = { icon = "є",    hl = "@type"        } ,
-      Operator      = { icon = "+",    hl = "@operator"    } ,
-      TypeParameter = { icon = "𝙏",    hl = "@parameter"   } ,
-      Component     = { icon = "к",    hl = "@function"    } ,
-      Fragment      = { icon = "Ґ",    hl = "@constant"    } ,
+      File          = { icon = ""   , hl = "@text.uri"    },
+      Module        = { icon = ""   , hl = "@namespace"   },
+      Namespace     = { icon = ""   , hl = "@namespace"   },
+      Package       = { icon = ""   , hl = "@namespace"   },
+      Class         = { icon = "𝓒"   , hl = "@type"        },
+      Method        = { icon = "ƒ"   , hl = "@method"      },
+      Property      = { icon = ""   , hl = "@method"      },
+      Field         = { icon = "ғ"   , hl = "@field"       },
+      Constructor   = { icon = ""   , hl = "@constructor" },
+      Enum          = { icon = "ℰ"   , hl = "@type"        },
+      Interface     = { icon = "ﰮ"   , hl = "@type"        },
+      Function      = { icon = ""   , hl = "@function"    },
+      Variable      = { icon = ""   , hl = "@constant"    },
+      Constant      = { icon = ""   , hl = "@constant"    },
+      String        = { icon = "𝓐"   , hl = "@string"      },
+      Number        = { icon = "#"   , hl = "@number"      },
+      Boolean       = { icon = "⊨"   , hl = "@boolean"     },
+      Array         = { icon = ""   , hl = "@constant"    },
+      Object        = { icon = "⦿"   , hl = "@type"        },
+      Key           = { icon = "🔐"  , hl = "@type"        },
+      Null          = { icon = "NULL", hl = "@type"        },
+      EnumMember    = { icon = ""   , hl = "@field"       },
+      Struct        = { icon = "𝓢"   , hl = "@type"        },
+      Event         = { icon = "є"   , hl = "@type"        },
+      Operator      = { icon = "+"   , hl = "@operator"    },
+      TypeParameter = { icon = "𝙏"   , hl = "@parameter"   },
+      Component     = { icon = "к"   , hl = "@function"    },
+      Fragment      = { icon = "Ґ"   , hl = "@constant"    },
     },
   })
   vim.keymap.set('n', '<leader>I', "<CMD>SymbolsOutline<CR>", { desc = 'Symbols outline' })
 end
+---@format enable
 
 ------------------------------
 -- [[ Configure fugitive ]] --
 ------------------------------
-vim.keymap.set('n', '<leader>gG', '<CMD>vertical rightbelow Git<CR>',               { desc = 'Git status fugitive'                     })
-vim.keymap.set('n', '<leader>gC', '<CMD>vertical rightbelow Git log --oneline<CR>', { desc = 'Git short log'                           })
-vim.keymap.set('n', '<leader>gL', '<CMD>rightbelow vsplit | Gclog<CR>',             { desc = 'Git log (fugitive)'                      })
-vim.keymap.set('n', '<leader>gj', '<CMD>Gitsigns next_hunk<CR>',                    { desc = 'Next hunk'                               })
-vim.keymap.set('n', '<leader>gk', '<CMD>Gitsigns prev_hunk<CR>',                    { desc = 'Previous hunk'                           })
-vim.keymap.set('n', '<leader>gc', '<CMD>Git commit -v -q<CR>',                      { desc = 'Git commit'                              })
-vim.keymap.set('n', '<leader>gf', ':Git fetch<Space>',                              { desc = 'Git fetch', silent = false               })
-vim.keymap.set('n', '<leader>gp', ':Git pull<Space>',                               { desc = 'Git pull', silent = false                })
-vim.keymap.set('n', '<leader>gP', ':Git push<Space>',                               { desc = 'Git push', silent = false                })
-vim.keymap.set('n', '<leader>ga', ':Git add %<Space>',                              { desc = 'Git stage file', silent = false          })
-vim.keymap.set('n', '<leader>gS', ':Git reset %<Space>',                            { desc = 'Git unstage file', silent = false        })
-vim.keymap.set('n', '<leader>gd', '<CMD>Gdiffsplit<CR>',                            { desc = 'Git file diff'                           })
-vim.keymap.set('n', '<leader>gm', '<CMD>Gdiffsplit!<CR>',                           { desc = 'Git solve conflicts'                     })
-vim.keymap.set('n', '<leader>g[', '<CMD>diffget //2<CR>',                           { desc = 'Git conflict select target (left/up)'    })
-vim.keymap.set('n', '<leader>g]', '<CMD>diffget //3<CR>',                           { desc = 'Git conflict select source (right/down)' })
-vim.keymap.set('n', '<leader>gR', '<CMD>Gitsigns reset_buffer<CR>',                 { desc = 'Git reset buffer'                        })
-vim.keymap.set('n', '<leader>gt', '<CMD>Gitsigns toggle_current_line_blame<CR>',    { desc = 'Git toggle blame line'                   })
-vim.keymap.set( { 'n', 'v' } , '<leader>gs', '<CMD>Gitsigns stage_hunk<CR>',      { desc = 'Git stage hunk'   })
-vim.keymap.set( { 'n', 'v' } , '<leader>gS', '<CMD>Gitsigns undo_stage_hunk<CR>', { desc = 'Git unstage hunk' })
-vim.keymap.set( { 'n', 'v' } , '<leader>gr', '<CMD>Gitsigns reset_hunk<CR>',      { desc = 'Git reset hunk'   })
+---@format disable
+vim.keymap.set('n', '<leader>gG', '<CMD>vertical rightbelow Git<CR>',
+  { desc = 'Git status fugitive' })
+vim.keymap.set('n', '<leader>gC', '<CMD>vertical rightbelow Git log --oneline<CR>',
+  { desc = 'Git short log' })
+vim.keymap.set('n', '<leader>gL', '<CMD>rightbelow vsplit | Gclog<CR>',
+  { desc = 'Git log (fugitive)' })
+vim.keymap.set('n', '<leader>gj', '<CMD>Gitsigns next_hunk<CR>'   , { desc = 'Next hunk'                               })
+vim.keymap.set('n', '<leader>gk', '<CMD>Gitsigns prev_hunk<CR>'   , { desc = 'Previous hunk'                           })
+vim.keymap.set('n', '<leader>gc', '<CMD>Git commit -v -q<CR>'     , { desc = 'Git commit'                              })
+vim.keymap.set('n', '<leader>gf', ':Git fetch<Space>'             , { desc = 'Git fetch'       , silent = false        })
+vim.keymap.set('n', '<leader>gp', ':Git pull<Space>'              , { desc = 'Git pull'        , silent = false        })
+vim.keymap.set('n', '<leader>gP', ':Git push<Space>'              , { desc = 'Git push'        , silent = false        })
+vim.keymap.set('n', '<leader>ga', ':Git add %<Space>'             , { desc = 'Git stage file'  , silent = false        })
+vim.keymap.set('n', '<leader>gS', ':Git reset %<Space>'           , { desc = 'Git unstage file', silent = false        })
+vim.keymap.set('n', '<leader>gd', '<CMD>Gdiffsplit<CR>'           , { desc = 'Git file diff'                           })
+vim.keymap.set('n', '<leader>gm', '<CMD>Gdiffsplit!<CR>'          , { desc = 'Git solve conflicts'                     })
+vim.keymap.set('n', '<leader>g[', '<CMD>diffget //2<CR>'          , { desc = 'Git conflict select target (left/up)'    })
+vim.keymap.set('n', '<leader>g]', '<CMD>diffget //3<CR>'          , { desc = 'Git conflict select source (right/down)' })
+vim.keymap.set('n', '<leader>gR', '<CMD>Gitsigns reset_buffer<CR>', { desc = 'Git reset buffer'                        })
+vim.keymap.set('n', '<leader>gt', '<CMD>Gitsigns toggle_current_line_blame<CR>',
+  { desc = 'Git toggle blame line' })
+vim.keymap.set({ 'n' , 'v' }, '<leader>gs', '<CMD>Gitsigns stage_hunk<CR>'     , { desc = 'Git stage hunk'   })
+vim.keymap.set({ 'n' , 'v' }, '<leader>gS', '<CMD>Gitsigns undo_stage_hunk<CR>', { desc = 'Git unstage hunk' })
+vim.keymap.set({ 'n' , 'v' }, '<leader>gr', '<CMD>Gitsigns reset_hunk<CR>'     , { desc = 'Git reset hunk'   })
 local tb = require('telescope.builtin')
-vim.keymap.set('n', '<leader>gu', tb.git_stash,       { desc = 'Git stashes'     })
-vim.keymap.set('n', '<leader>gb', tb.git_branches,    { desc = 'Git branches'    })
-vim.keymap.set('n', '<leader>gl', tb.git_commits,     { desc = 'Git log'         })
+vim.keymap.set('n', '<leader>gu', tb.git_stash      , { desc = 'Git stashes'     })
+vim.keymap.set('n', '<leader>gb', tb.git_branches   , { desc = 'Git branches'    })
+vim.keymap.set('n', '<leader>gl', tb.git_commits    , { desc = 'Git log'         })
 vim.keymap.set('n', '<leader>gB', '<CMD>GBrowse<CR>', { desc = 'Git open remote' })
+---@format enable
 
 -------------------------------
 -- [[ Configure vim-sneak ]] --
@@ -1015,29 +1020,53 @@ vim.keymap.set('n', "<leader>u", vim.cmd.UndotreeToggle, { desc = "Undo history"
 -------------------------
 local has_pap, pap = pcall(require, "pap")
 if has_pap then
-  vim.cmd("autocmd Filetype pap-output nnoremap <silent> <buffer> <CR> <CMD>cg<Space>".. pap.dumpfile .. "<CR>'B")
+  vim.cmd("autocmd Filetype pap-output nnoremap <silent> <buffer> <CR> <CMD>cg<Space>" .. pap.dumpfile .. "<CR>'B")
   -- vim.cmd("autocmd Filetype pap-output nnoremap <silent> <buffer> q <CMD>cg<Space>".. pap.dumpfile .. "<CR>'B")
-  vim.cmd("autocmd Filetype pap-output nnoremap <silent> <buffer> <leader>qq <CMD>cg<Space>" .. pap.dumpfile .. "<CR><CMD>cc<CR>")
+  vim.cmd("autocmd Filetype pap-output nnoremap <silent> <buffer> <leader>qq <CMD>cg<Space>" ..
+    pap.dumpfile .. "<CR><CMD>cc<CR>")
 
-  vim.api.nvim_create_user_command('Papcmd',           function (command) pap.set_cmd(command.args)                                  end ,   { nargs = "*" })
-  vim.api.nvim_create_user_command('Pap',              function (command) pap.run_cmd(command.args)                                  end ,   { nargs = "*" })
-  vim.api.nvim_create_user_command('Paphsize',         function (command) pap.set_window_hsize(command.args)                         end ,   { nargs = "*" })
-  vim.api.nvim_create_user_command('Papvsize',         function (command) pap.set_window_vsize(command.args)                         end ,   { nargs = "*" })
-  vim.api.nvim_create_user_command('PapSetHorizontal', function () pap.set_horizontal_window(); print("Pap set in horizontal mode.") end ,   { })
-  vim.api.nvim_create_user_command('PapSetVertical',   function () pap.set_vertical_window();   print("Pap set in vertical mode.")   end ,   { })
-  vim.api.nvim_create_user_command('Paprun',           function (command) pap.run_custom_cmd(command.args, false)                    end ,   { nargs = "*" })
-  vim.api.nvim_create_user_command('Par',              function (command) pap.run_custom_cmd(command.args, false)                    end ,   { nargs = "*" })
-  vim.api.nvim_create_user_command('Paprerun',         function () pap.run_custom_cmd("_last", false)                                end ,   { nargs = "*" })
-  vim.api.nvim_create_user_command('Papa',             function (command) pap.run_custom_cmd(command.args, false)                    end ,   { nargs = "*" })
-  vim.keymap.set("n", "<leader>qe",  "<CMD>cg<Space>~/.cache/nvim/pap_output.txt<CR><CMD>cc<CR>", { noremap = true, silent = true, desc = "Load error file into quickfix"  })
-  vim.keymap.set("n", "<leader>psh", "<CMD>Paphsize<CR>",                                         { noremap = true, silent = true, desc = "Set pap horizontal window size" })
-  vim.keymap.set("n", "<leader>psv", "<CMD>Papvsize<CR>",                                         { noremap = true, silent = true, desc = "Set pap vertical window size"   })
-  vim.keymap.set("n", "<leader>pr",  "<CMD>Paprun<CR>",                                           { noremap = true, silent = true, desc = "Paprun (any cmd)"               })
-  vim.keymap.set("n", "<leader>pR",  "<CMD>Paprerun<CR>",                                         { noremap = true, silent = true, desc = "Pap rerun last cmd"             })
-  vim.keymap.set("n", "<leader>pc",  "<CMD>Papcmd<CR>",                                           { noremap = true, silent = true, desc = "Set pap default cmd"            })
-  vim.keymap.set("n", "<leader>pp",  ":Pap<space>",                                               { noremap = true, silent = false, desc = "Pap (prefix default cmd)"      })
-  vim.keymap.set("n", "<leader>pv",  "<CMD>PapSetVertical<CR>",                                   { noremap = true, silent = true, desc = "Pap set vertical mode"          })
-  vim.keymap.set("n", "<leader>ph",  "<CMD>PapSetHorizontal<CR>",                                 { noremap = true, silent = true, desc = "Pap set horizontal mode"        })
+  vim.api.nvim_create_user_command('Papcmd',
+    function(command) pap.set_cmd(command.args) end, { nargs = "*" })
+  vim.api.nvim_create_user_command('Pap',
+    function(command) pap.run_cmd(command.args) end, { nargs = "*" })
+  vim.api.nvim_create_user_command('Paphsize',
+    function(command) pap.set_window_hsize(command.args) end, { nargs = "*" })
+  vim.api.nvim_create_user_command('Papvsize',
+    function(command) pap.set_window_vsize(command.args) end, { nargs = "*" })
+  vim.api.nvim_create_user_command('PapSetHorizontal',
+    function()
+      pap.set_horizontal_window(); print("Pap set in horizontal mode.")
+    end, {})
+  vim.api.nvim_create_user_command('PapSetVertical',
+    function()
+      pap.set_vertical_window(); print("Pap set in vertical mode.")
+    end, {})
+  vim.api.nvim_create_user_command('Paprun',
+    function(command) pap.run_custom_cmd(command.args, false) end, { nargs = "*" })
+  vim.api.nvim_create_user_command('Par',
+    function(command) pap.run_custom_cmd(command.args, false) end, { nargs = "*" })
+  vim.api.nvim_create_user_command('Paprerun',
+    function() pap.run_custom_cmd("_last", false) end, { nargs = "*" })
+  vim.api.nvim_create_user_command('Papa',
+    function(command) pap.run_custom_cmd(command.args, false) end, { nargs = "*" })
+  vim.keymap.set("n", "<leader>qe", "<CMD>cg<Space>~/.cache/nvim/pap_output.txt<CR><CMD>cc<CR>",
+    { noremap = true, silent = true, desc = "Load error file into quickfix" })
+  vim.keymap.set("n", "<leader>psh", "<CMD>Paphsize<CR>",
+    { noremap = true, silent = true, desc = "Set pap horizontal window size" })
+  vim.keymap.set("n", "<leader>psv", "<CMD>Papvsize<CR>",
+    { noremap = true, silent = true, desc = "Set pap vertical window size" })
+  vim.keymap.set("n", "<leader>pr", "<CMD>Paprun<CR>",
+    { noremap = true, silent = true, desc = "Paprun (any cmd)" })
+  vim.keymap.set("n", "<leader>pR", "<CMD>Paprerun<CR>",
+    { noremap = true, silent = true, desc = "Pap rerun last cmd" })
+  vim.keymap.set("n", "<leader>pc", "<CMD>Papcmd<CR>",
+    { noremap = true, silent = true, desc = "Set pap default cmd" })
+  vim.keymap.set("n", "<leader>pp", ":Pap<space>",
+    { noremap = true, silent = false, desc = "Pap (prefix default cmd)" })
+  vim.keymap.set("n", "<leader>pv", "<CMD>PapSetVertical<CR>",
+    { noremap = true, silent = true, desc = "Pap set vertical mode" })
+  vim.keymap.set("n", "<leader>ph", "<CMD>PapSetHorizontal<CR>",
+    { noremap = true, silent = true, desc = "Pap set horizontal mode" })
 end
 
 -------------------------
@@ -1070,9 +1099,9 @@ if has_dap then
     },
   }
 
-  vim.fn.sign_define("DapBreakpoint"         , dap_breakpoint.breakpoint)
-  vim.fn.sign_define("DapStopped"            , dap_breakpoint.stopped)
-  vim.fn.sign_define("DapBreakpointRejected" , dap_breakpoint.rejected)
+  vim.fn.sign_define("DapBreakpoint", dap_breakpoint.breakpoint)
+  vim.fn.sign_define("DapStopped", dap_breakpoint.stopped)
+  vim.fn.sign_define("DapBreakpointRejected", dap_breakpoint.rejected)
 
   local function get_executable()
     local path = nil
@@ -1081,15 +1110,15 @@ if has_dap then
       default = vim.fn.getcwd() .. '/',
       completion = "file",
     }, function(input)
-        path = input
-      end)
+      path = input
+    end)
     return (path and path ~= "") and path or dap.ABORT
   end
 
   local function get_arguments()
     local args = {}
     vim.ui.input({ prompt = "[Executable arguments] > " }, function(input)
-      if input ~= nil and input~= "" then
+      if input ~= nil and input ~= "" then
         args = vim.split(input or "", " ")
       else
         args = {}
@@ -1107,19 +1136,19 @@ if has_dap then
     -- On arch-based linux, simply do `sudo pacman -S lldb`
     lldb_path = "/usr/bin/lldb-vscode"
   end
-  dap.adapters.lldb = {
+  dap.adapters.lldb       = {
     type    = "executable",
     command = lldb_path,
     name    = "lldb"
   }
 
-  dap.adapters.codelldb = {
+  dap.adapters.codelldb   = {
     type = 'server',
     host = '127.0.0.1',
     port = 13000
   }
 
-  dap.configurations.cpp = {
+  dap.configurations.cpp  = {
     {
       type             = 'lldb', -- Name of the dap.adapter you want to use
       request          = 'launch',
@@ -1128,8 +1157,8 @@ if has_dap then
       cwd              = '${workspaceFolder}',
       stopOnEntry      = false,
       args             = get_arguments, -- select arguments to be passed to the executable
-      reverseDebugging = true, -- Not available on bare metal
-      runInTerminal    = true -- So that the program's output is displayed in console
+      reverseDebugging = true,          -- Not available on bare metal
+      runInTerminal    = true           -- So that the program's output is displayed in console
     },
   }
   dap.configurations.c    = dap.configurations.cpp
@@ -1138,10 +1167,10 @@ if has_dap then
   ------------------------------------
   -- Python config
   ------------------------------------
-  dap.adapters.python = {
-    type    = 'executable';
+  dap.adapters.python     = {
+    type    = 'executable',
     command = lsp_pythonpath,
-    args    = { '-m', 'debugpy.adapter' };
+    args    = { '-m', 'debugpy.adapter' },
   }
 
   -- Used to debug C++ code from python
@@ -1164,25 +1193,25 @@ if has_dap then
   dap.configurations.python = {
     {
       -- The first three options are required by nvim-dap
-      type    = 'python', -- the type here established the link to the adapter definition: `dap.adapters.python`
-      request = 'launch',
-      name    = "(default) Debug python file",
+      type           = 'python', -- the type here established the link to the adapter definition: `dap.adapters.python`
+      request        = 'launch',
+      name           = "(default) Debug python file",
 
       -- Options below are for debugpy, see https://github.com/microsoft/debugpy/wiki/Debug-configuration-settings for supported options
-      program        = "${file}", -- This configuration will launch the current file if used.
+      program        = "${file}",            -- This configuration will launch the current file if used.
       pythonPath     = lsp_pythonpath,
       console        = "integratedTerminal", -- So that the program's output is displayed in console
       args           = get_arguments,
-      redirectOutput = true -- So that the program's output is displayed in console
+      redirectOutput = true                  -- So that the program's output is displayed in console
     },
     {
       -- The first three options are required by nvim-dap
-      type    = 'python_cpp',
-      request = 'launch',
-      name    = "(default) Debug rust/C/C++ from python",
+      type             = 'python_cpp',
+      request          = 'launch',
+      name             = "(default) Debug rust/C/C++ from python",
 
       -- Options below are for lldb
-      cwd = '${workspaceFolder}',
+      cwd              = '${workspaceFolder}',
       -- lldb will debug the `python` program and the `args` will be used to pass the name of the python program + the optional arguments.
       program          = "python",
       stopOnEntry      = false,
@@ -1194,8 +1223,8 @@ if has_dap then
   }
 
   dap.defaults.fallback.external_terminal = {
-    command = '/Applications/Alacritty.app/Contents/MacOS/alacritty';
-    args    = {'-e'};
+    command = '/Applications/Alacritty.app/Contents/MacOS/alacritty',
+    args    = { '-e' },
   }
 
   -- Allows DAP to load `.vscode/launch.json`
@@ -1209,7 +1238,7 @@ if has_dap then
   --     require('dap.ext.vscode').load_launchjs(nil, { lldb = {'c', 'cpp', 'rust'} }) -- will add to the 3
   local load_launch_json = function()
     require('dap.ext.vscode').load_launchjs(nil, {})
-    require('dap.ext.vscode').load_launchjs(nil, { lldb = {'rust', 'c', 'cpp'} })
+    require('dap.ext.vscode').load_launchjs(nil, { lldb = { 'rust', 'c', 'cpp' } })
     require('dap.ext.vscode').load_launchjs(nil, { python_cpp = { 'python' } })
     -- Add more stuff that needs to be reloaded if needed
     print("Reloaded configurations in .vscode/launch.json")
@@ -1220,38 +1249,42 @@ if has_dap then
   -- keymaps
   -- TODO: attach to running debugger
   -- Launch
-  vim.keymap.set('n', "<leader>dl", function() dap.continue() end,                         { desc = "Launch/continue", dapopts.args })
+  vim.keymap.set('n', "<leader>dl", function() dap.continue() end, { desc = "Launch/continue", dapopts.args })
   -- Quit
-  vim.keymap.set('n', "<leader>dq", function() dap.disconnect() vim.cmd("stopinsert") end, { desc = "Disconnect/quit", dapopts.args })
+  vim.keymap.set('n', "<leader>dq", function()
+    dap.disconnect()
+    vim.cmd("stopinsert")
+  end, { desc = "Disconnect/quit", dapopts.args })
   -- Restart
-  vim.keymap.set('n', "<leader>dR", function() dap.restart() end,                          { desc = "Restart", dapopts.args })
+  vim.keymap.set('n', "<leader>dR", function() dap.restart() end, { desc = "Restart", dapopts.args })
   -- Step over
-  vim.keymap.set('n', "<leader>dj", function() dap.step_over() end,                        { desc = "Step over", dapopts.args })
+  vim.keymap.set('n', "<leader>dj", function() dap.step_over() end, { desc = "Step over", dapopts.args })
   -- Step into
-  vim.keymap.set('n', "<leader>di", function() dap.step_into() end,                        { desc = "Step into", dapopts.args })
+  vim.keymap.set('n', "<leader>di", function() dap.step_into() end, { desc = "Step into", dapopts.args })
   -- Step out
-  vim.keymap.set('n', "<leader>do", function() dap.step_out() end,                         { desc = "Step out", dapopts.args })
+  vim.keymap.set('n', "<leader>do", function() dap.step_out() end, { desc = "Step out", dapopts.args })
   -- Run to cursor
-  vim.keymap.set('n', "<leader>dL", function() dap.run_to_cursor() end,                    { desc = "Run until cursor", dapopts.args })
+  vim.keymap.set('n', "<leader>dL", function() dap.run_to_cursor() end, { desc = "Run until cursor", dapopts.args })
   -- Pause
-  vim.keymap.set('n', "<leader>dP", function() dap.pause() end,                            { desc = "Pause", dapopts.args })
+  vim.keymap.set('n', "<leader>dP", function() dap.pause() end, { desc = "Pause", dapopts.args })
   -- Breakpoints
-  vim.keymap.set('n', "<leader>db", function() dap.toggle_breakpoint() end,                { desc = "Breakpoint", dapopts.args })
+  vim.keymap.set('n', "<leader>db", function() dap.toggle_breakpoint() end, { desc = "Breakpoint", dapopts.args })
   vim.keymap.set('n', "<leader>dc", function()
     dap.set_breakpoint(vim.fn.input({
-        prompt = "[Condition] > ",
-        default = "",
-        cancelreturn = ""
-      })
-    ) end, { desc = "Breakpoint set condition", dapopts.args })
+      prompt = "[Condition] > ",
+      default = "",
+      cancelreturn = ""
+    })
+    )
+  end, { desc = "Breakpoint set condition", dapopts.args })
   vim.keymap.set('n', "<leader>dD", function() dap.clear_breakpoints() end, { desc = "Clear breakpoints", dapopts.args })
   -- Repl
-  vim.keymap.set('n', "<leader>dr", function() dap.repl.toggle() end,       { desc = "REPL toggle", dapopts.args })
+  vim.keymap.set('n', "<leader>dr", function() dap.repl.toggle() end, { desc = "REPL toggle", dapopts.args })
   -- Hover
-  vim.keymap.set({'n', 'v'}, "<leader>dk", function() require('dap.ui.widgets').hover() end, { desc = "Hover" })
+  vim.keymap.set({ 'n', 'v' }, "<leader>dk", function() require('dap.ui.widgets').hover() end, { desc = "Hover" })
   -- Up/down the stack trace (without stepping)
   vim.keymap.set('n', "<leader>dn", function() dap.down() end, { desc = "Down stack trace" })
-  vim.keymap.set('n', "<leader>dp", function() dap.up() end,   { desc = "Up stack trace" })
+  vim.keymap.set('n', "<leader>dp", function() dap.up() end, { desc = "Up stack trace" })
   -- Show frames
   vim.keymap.set('n', "<leader>df", function()
     local widgets = require("dap.ui.widgets")
@@ -1263,18 +1296,24 @@ if has_dap then
     widgets.centered_float(widgets.frames)
   end, { desc = "Show scopes", dapopts.args })
   -- Widgets
-  vim.keymap.set({'n', 'v'}, '<leader>dw', function()
+  vim.keymap.set({ 'n', 'v' }, '<leader>dw', function()
     require('dap.ui.widgets').preview()
   end, { desc = "Preview" })
 
   -- Integration with Telescope
   require('telescope').load_extension("dap")
-  vim.keymap.set('n', '<leader>dtc', '<CMD>Telescope dap commands<CR>',         { desc = "Telescope dap commands", dapopts.args         })
-  vim.keymap.set('n', '<leader>dtC', '<CMD>Telescope dap configurations<CR>',   { desc = "Telescope dap configurations", dapopts.args   })
-  vim.keymap.set('n', '<leader>dtv', '<CMD>Telescope dap variables<CR>',        { desc = "Telescope dap variables", dapopts.args        })
-  vim.keymap.set('n', '<leader>dtf', '<CMD>Telescope dap frames<CR>',           { desc = "Telescope dap frames", dapopts.args           })
-  vim.keymap.set('n', '<leader>dtb', '<CMD>Telescope dap list_breakpoints<CR>', { desc = "Telescope dap list_breakpoints", dapopts.args })
-  vim.keymap.set('n', '<leader>dB',  '<CMD>Telescope dap list_breakpoints<CR>', { desc = "Telescope dap list_breakpoints", dapopts.args })
+  vim.keymap.set('n', '<leader>dtc', '<CMD>Telescope dap commands<CR>',
+    { desc = "Telescope dap commands", dapopts.args })
+  vim.keymap.set('n', '<leader>dtC', '<CMD>Telescope dap configurations<CR>',
+    { desc = "Telescope dap configurations", dapopts.args })
+  vim.keymap.set('n', '<leader>dtv', '<CMD>Telescope dap variables<CR>',
+    { desc = "Telescope dap variables", dapopts.args })
+  vim.keymap.set('n', '<leader>dtf', '<CMD>Telescope dap frames<CR>',
+    { desc = "Telescope dap frames", dapopts.args })
+  vim.keymap.set('n', '<leader>dtb', '<CMD>Telescope dap list_breakpoints<CR>',
+    { desc = "Telescope dap list_breakpoints", dapopts.args })
+  vim.keymap.set('n', '<leader>dB', '<CMD>Telescope dap list_breakpoints<CR>',
+    { desc = "Telescope dap list_breakpoints", dapopts.args })
 end
 
 --------------------------------------
@@ -1326,7 +1365,7 @@ if has_dapui and has_dap then
       -- Simple layout
       {
         elements = {
-          { id = "repl", size = 0.3 },
+          { id = "repl",    size = 0.3 },
           { id = "console", size = 0.3 },
           -- { id = "breakpoints", size = 0.2 },
           { id = "watches", size = 0.3 },
@@ -1338,8 +1377,8 @@ if has_dapui and has_dap then
       {
         elements = {
           { id = "watches", size = 0.3 }, -- Keep track of expressions
-          { id = "stacks", size = 0.3 }, -- keep track of scope variables
-          { id = "scopes", size = 0.3 }, -- Variables of the program
+          { id = "stacks",  size = 0.3 }, -- keep track of scope variables
+          { id = "scopes",  size = 0.3 }, -- Variables of the program
         },
         position = "left",
         size = 40
@@ -1375,18 +1414,18 @@ if has_dapui and has_dap then
     dapui.toggle()
   end, { desc = "Toggle DAP UI", dapopts.args })
   vim.keymap.set("n", "<leader>d1", function()
-    dapui.toggle({layout=1})
+    dapui.toggle({ layout = 1 })
   end, { desc = "Toggle bottom DAP UI", dapopts.args })
   vim.keymap.set("n", "<leader>d2", function()
-    dapui.toggle({layout=2})
+    dapui.toggle({ layout = 2 })
   end, { desc = "Toggle left DAP UI", dapopts.args })
   -- Trigger DAP ui element
   vim.keymap.set("n", "<leader>du", function()
     ---@diagnostic disable-next-line: missing-fields, param-type-mismatch
-    dapui.float_element(nil, {width = 180, height = 40, enter = true, position="center"})
+    dapui.float_element(nil, { width = 180, height = 40, enter = true, position = "center" })
   end, { desc = "Dap show...", dapopts.args })
   -- Hover
-  vim.keymap.set({"n", "v"}, "<leader>dk", function()
+  vim.keymap.set({ "n", "v" }, "<leader>dk", function()
     -- eval twice to enter the floating window
     dapui.eval()
     dapui.eval()
@@ -1394,28 +1433,28 @@ if has_dapui and has_dap then
   -- Breakpoints
   vim.keymap.set("n", "<leader>dB", function()
     ---@diagnostic disable-next-line: missing-fields
-    dapui.float_element("breakpoints", {enter = true})
+    dapui.float_element("breakpoints", { enter = true })
   end, { desc = "List breakpoints", dapopts.args })
   -- Watches
   vim.keymap.set("n", "<leader>dw", function()
     ---@diagnostic disable-next-line: missing-fields
-    dapui.float_element("watches", {enter = true})
+    dapui.float_element("watches", { enter = true })
   end, { desc = "Show watches", dapopts.args })
   -- Scopes
   vim.keymap.set("n", "<leader>ds", function()
-    dapui.float_element("scopes", {width = 180, height = 40, enter = true, position="center"})
+    dapui.float_element("scopes", { width = 180, height = 40, enter = true, position = "center" })
   end, { desc = "Show scopes", dapopts.args })
   -- Stacks frames
   vim.keymap.set("n", "<leader>df", function()
-    dapui.float_element("stacks", {width = 180, height = 40, enter = true, position="center"})
+    dapui.float_element("stacks", { width = 180, height = 40, enter = true, position = "center" })
   end, { desc = "Show frames", dapopts.args })
 
   -- Completion (if debugger supports it)
   if has_cmp then
     cmp.setup({
       enabled = function()
-        return vim.api.nvim_get_option_value("buftype", {buf = 0}) ~= "prompt"
-          or require("cmp_dap").is_dap_buffer()
+        return vim.api.nvim_get_option_value("buftype", { buf = 0 }) ~= "prompt"
+            or require("cmp_dap").is_dap_buffer()
       end
     })
 
@@ -1429,7 +1468,7 @@ if has_dapui and has_dap then
   vim.api.nvim_create_autocmd("BufEnter", {
     pattern = "*",
     callback = function()
-      if vim.api.nvim_get_option_value("buftype", {buf = 0}) == "prompt" then
+      if vim.api.nvim_get_option_value("buftype", { buf = 0 }) == "prompt" then
         vim.api.nvim_buf_set_keymap(0, 'i', "<C-w>", "<CMD>norm ciw<CR>", { silent = true, noremap = true })
       end
     end,
@@ -1445,7 +1484,7 @@ end
 -- % -> Create file
 -- d -> Create directory
 -- D -> Delete
-vim.cmd[[
+vim.cmd [[
   let g:netrw_liststyle = 1
   let g:netrw_keepdir = 0
   let g:netrw_localcopydircmd = 'cp -r'
@@ -1478,7 +1517,7 @@ if has_neorg then
             conceal = false,
           }
         }
-      }, -- Adds pretty icons to your documents
+      },                  -- Adds pretty icons to your documents
       ["core.dirman"] = { -- Manages Neorg workspaces
         config = {
           workspaces = {
@@ -1488,13 +1527,20 @@ if has_neorg then
       },
     },
   })
-  vim.keymap.set("n", "<leader>nw",  ":Neorg workspace<space>",          { noremap = true, silent = false, desc = "Set neorg workspace"  })
-  vim.keymap.set("n", "<leader>ni",  "<CMD>Neorg index<CR>",             { noremap = true, silent = true, desc = "Go to workspace index" })
-  vim.keymap.set("n", "<leader>nr",  "<CMD>Neorg return<CR>",            { noremap = true, silent = true, desc = "Return to code"        })
-  vim.keymap.set("n", "<leader>nj",  "<CMD>Neorg journal today<CR>",     { noremap = true, silent = true, desc = "Journal today"         })
-  vim.keymap.set("n", "<leader>nJj", "<CMD>Neorg journal today<CR>",     { noremap = true, silent = true, desc = "Journal today"         })
-  vim.keymap.set("n", "<leader>nJt", "<CMD>Neorg journal tomorrow<CR>",  { noremap = true, silent = true, desc = "Journal tomorrow"      })
-  vim.keymap.set("n", "<leader>nJy", "<CMD>Neorg journal yesterday<CR>", { noremap = true, silent = true, desc = "Journal yesterday"     })
+  vim.keymap.set("n", "<leader>nw", ":Neorg workspace<space>",
+    { noremap = true, silent = false, desc = "Set neorg workspace" })
+  vim.keymap.set("n", "<leader>ni", "<CMD>Neorg index<CR>",
+    { noremap = true, silent = true, desc = "Go to workspace index" })
+  vim.keymap.set("n", "<leader>nr", "<CMD>Neorg return<CR>",
+    { noremap = true, silent = true, desc = "Return to code" })
+  vim.keymap.set("n", "<leader>nj", "<CMD>Neorg journal today<CR>",
+    { noremap = true, silent = true, desc = "Journal today" })
+  vim.keymap.set("n", "<leader>nJj", "<CMD>Neorg journal today<CR>",
+    { noremap = true, silent = true, desc = "Journal today" })
+  vim.keymap.set("n", "<leader>nJt", "<CMD>Neorg journal tomorrow<CR>",
+    { noremap = true, silent = true, desc = "Journal tomorrow" })
+  vim.keymap.set("n", "<leader>nJy", "<CMD>Neorg journal yesterday<CR>",
+    { noremap = true, silent = true, desc = "Journal yesterday" })
 end
 
 -----------------------------------
@@ -1514,13 +1560,13 @@ local has_foldcycle, _ = pcall(require, "fold-cycle")
 if has_foldcycle then
   vim.keymap.set('n', '<tab>',
     function() return require('fold-cycle').open() end,
-    {silent = true, desc = 'Fold-cycle: open folds'})
+    { silent = true, desc = 'Fold-cycle: open folds' })
   vim.keymap.set('n', '<s-tab>',
     function() return require('fold-cycle').close() end,
-    {silent = true, desc = 'Fold-cycle: close folds'})
+    { silent = true, desc = 'Fold-cycle: close folds' })
   vim.keymap.set('n', 'zC',
     function() return require('fold-cycle').close_all() end,
-    {remap = true, silent = true, desc = 'Fold-cycle: close all folds'})
+    { remap = true, silent = true, desc = 'Fold-cycle: close all folds' })
 end
 
 ---------------------------------
@@ -1593,7 +1639,7 @@ end
 ---------------------------
 local has_dired, dired = pcall(require, "dired")
 if has_dired then
-  dired.setup ({
+  dired.setup({
     path_separator = "/",
     show_banner = false,
     show_hidden = true
@@ -1605,8 +1651,8 @@ end
 ---------------------------------
 local has_mc, mc = pcall(require, "multicursors")
 if has_mc then
-  mc.setup ({})
-  vim.keymap.set('n', '<leader>Mw', '<CMD>MCstart<CR>',       { desc = "Multicursors start word"   })
+  mc.setup({})
+  vim.keymap.set('n', '<leader>Mw', '<CMD>MCstart<CR>', { desc = "Multicursors start word" })
   vim.keymap.set('n', '<leader>Mc', '<CMD>MCunderCursor<CR>', { desc = "Multicursors start cursor" })
 end
 
@@ -1639,8 +1685,8 @@ end
 local has_grapple, grapple = pcall(require, "grapple")
 if has_grapple then
   grapple.setup({})
-  vim.keymap.set('n', "<leader>mt", "<CMD>GrappleToggle<CR>",     { desc = "Toggle grapple on file" })
-  vim.keymap.set('n', "<leader>mp", "<CMD>GrapplePopup tags<CR>", { desc = "Grapple popup files"    })
+  vim.keymap.set('n', "<leader>mt", "<CMD>GrappleToggle<CR>", { desc = "Toggle grapple on file" })
+  vim.keymap.set('n', "<leader>mp", "<CMD>GrapplePopup tags<CR>", { desc = "Grapple popup files" })
 end
 
 ---------------------------------
@@ -1650,10 +1696,10 @@ local has_portal, portal = pcall(require, "portal")
 if has_portal then
   portal.setup({})
   vim.keymap.set('n', "<leader>o", "<CMD>Portal jumplist backward<CR>", { desc = "Prev portal" })
-  vim.keymap.set('n', "<leader>i", "<CMD>Portal jumplist forward<CR>",  { desc = "Next portal" })
+  vim.keymap.set('n', "<leader>i", "<CMD>Portal jumplist forward<CR>", { desc = "Next portal" })
   if has_grapple then
     vim.keymap.set('n', "<leader>mo", "<CMD>Portal grapple backward<CR>", { desc = "Prev grapple" })
-    vim.keymap.set('n', "<leader>mi", "<CMD>Portal grapple forward<CR>",  { desc = "Next grapple" })
+    vim.keymap.set('n', "<leader>mi", "<CMD>Portal grapple forward<CR>", { desc = "Next grapple" })
   end
 end
 
@@ -1664,7 +1710,7 @@ local has_marks, marks = pcall(require, "marks")
 if has_marks then
   marks.setup({})
   vim.keymap.set('n', "<leader>ml", "<CMD>MarksListBuf<CR>", { desc = "List buffer marks" })
-  vim.keymap.set('n', "<leader>mL", "<CMD>MarksListAll<CR>", { desc = "List all marks"    })
+  vim.keymap.set('n', "<leader>mL", "<CMD>MarksListAll<CR>", { desc = "List all marks" })
 end
 
 ---------------------------
@@ -1674,7 +1720,7 @@ local has_noice, noice = pcall(require, "noice")
 if has_noice then
   noice.setup({
     messages = {
-      view = "notify", -- I don't need to know that I saved every time I save...
+      view = "notify",     -- I don't need to know that I saved every time I save...
       enabled = true,
       view_search = false, -- I don't need to know that I searched every time I search...
     },
@@ -1694,9 +1740,9 @@ if has_noice then
     },
     -- you can enable a preset for easier configuration
     presets = {
-      bottom_search         = true, -- use a classic bottom cmdline for search
-      command_palette       = true, -- position the cmdline and popupmenu together
-      long_message_to_split = true, -- long messages will be sent to a split
+      bottom_search         = true,  -- use a classic bottom cmdline for search
+      command_palette       = true,  -- position the cmdline and popupmenu together
+      long_message_to_split = true,  -- long messages will be sent to a split
       inc_rename            = false, -- enables an input dialog for inc-rename.nvim
       lsp_doc_border        = false, -- add a border to hover docs and signature help
     },
@@ -1726,17 +1772,17 @@ if has_lualine then
 
   local filename = {
     'filename',
-    file_status = true,      -- Displays file status (readonly status, modified status)
-    path = 1,                -- 0: Just the filename
-                             -- 1: Relative path
-                             -- 2: Absolute path
-                             -- 3: Absolute path, with tilde as the home directory
+    file_status = true, -- Displays file status (readonly status, modified status)
+    path = 1,           -- 0: Just the filename
+    -- 1: Relative path
+    -- 2: Absolute path
+    -- 3: Absolute path, with tilde as the home directory
 
-    shorting_target = 40,    -- Shortens path to leave 40 spaces in the window
-                             -- for other components. (terrible name, any suggestions?)
+    shorting_target = 40, -- Shortens path to leave 40 spaces in the window
+    -- for other components. (terrible name, any suggestions?)
     symbols = {
-      modified = '[+]',      -- Text to show when the file is modified.
-      readonly = '[-]',      -- Text to show when the file is non-modifiable or readonly.
+      modified = '[+]',       -- Text to show when the file is modified.
+      readonly = '[-]',       -- Text to show when the file is non-modifiable or readonly.
       unnamed  = '[No Name]', -- Text to show for unnamed buffers.
     }
   }
@@ -1774,7 +1820,7 @@ if has_lualine then
       -- end
       -- return ""
     end,
-    color = {fg = green},
+    color = { fg = green },
     cond = conditions.hide_in_width,
   }
 
@@ -1885,11 +1931,11 @@ if has_lualine then
 
   lualine.setup({
     options = {
-      globalstatus = true,
+      globalstatus         = true,
       icons_enabled        = true,
       theme                = 'auto',
-      component_separators = { left = '', right = ''},
-      section_separators   = { left = '', right = ''},
+      component_separators = { left = '', right = '' },
+      section_separators   = { left = '', right = '' },
       disabled_filetypes   = { "alpha", "dashboard", "NvimTree", "Outline", "startify" },
       always_divide_middle = true,
     },
@@ -1910,7 +1956,7 @@ if has_lualine then
       lualine_z = {},
     },
     tabline = {},
-    extensions = {"quickfix", "fugitive", "nvim-dap-ui", "symbols-outline", "chadtree"},
+    extensions = { "quickfix", "fugitive", "nvim-dap-ui", "symbols-outline", "chadtree" },
   })
 end
 
@@ -1925,14 +1971,16 @@ if has_toggleterm then
   -- By applying the mappings this way you can pass a count to your
   -- mapping to open a specific window.
   -- For example: 2<C-t> will open terminal 2
+  ---@format disable
   vim.keymap.set('n', "<c-t>", "<CMD>exe v:count1 . 'ToggleTerm'<CR>",      { desc = "ToggleTerm" })
   vim.keymap.set('i', "<c-t>", "<Esc><CMD>exe v:count1 . 'ToggleTerm'<CR>", { desc = "ToggleTerm" })
-  vim.cmd[[
+  ---@format enable
+  vim.cmd [[
     autocmd TermEnter term://*toggleterm#* tnoremap <silent><c-t> <Cmd>exe v:count1 . "ToggleTerm"<CR>
   ]]
   vim.api.nvim_create_autocmd("FileType", {
     callback = function()
-      if vim.api.nvim_get_option_value("filetype", {buf = 0}) == "toggleterm" then
+      if vim.api.nvim_get_option_value("filetype", { buf = 0 }) == "toggleterm" then
         vim.api.nvim_command("startinsert")
         return
       end
@@ -1971,10 +2019,12 @@ end
 ----------------------------------
 local has_smart_splits, smart_splits = pcall(require, "smart-splits")
 if has_smart_splits then
-  vim.keymap.set('n', '<C-Up>',    smart_splits.resize_up,    { desc = "Resize up"} )
-  vim.keymap.set('n', '<C-Down>',  smart_splits.resize_down,  { desc = "Resize down"} )
-  vim.keymap.set('n', '<C-Left>',  smart_splits.resize_left,  { desc = "Resize left"} )
-  vim.keymap.set('n', '<C-Right>', smart_splits.resize_right, { desc = "Resize right"} )
+  ---@format disable
+  vim.keymap.set('n', '<C-Up>'   , smart_splits.resize_up   , { desc = "Resize up"    })
+  vim.keymap.set('n', '<C-Down>' , smart_splits.resize_down , { desc = "Resize down"  })
+  vim.keymap.set('n', '<C-Left>' , smart_splits.resize_left , { desc = "Resize left"  })
+  vim.keymap.set('n', '<C-Right>', smart_splits.resize_right, { desc = "Resize right" })
+  ---@format enable
 end
 
 -----------------------------
@@ -1988,15 +2038,17 @@ vim.keymap.set('i', '<M-CR>', 'copilot#Accept("\\<CR>")', {
   replace_keycodes = false
 })
 vim.g.copilot_no_tab_map = true
-vim.keymap.set('n', '<leader>Ce', '<CMD>Copilot enable<CR>',     { desc = "Enable copilot"      })
-vim.keymap.set('n', '<leader>Cd', '<CMD>Copilot disable<CR>',    { desc = "Disable copilot "    })
-vim.keymap.set('n', '<leader>Cs', '<CMD>Copilot status<CR>',     { desc = "Copilot status"      })
-vim.keymap.set('n', '<leader>Cc', '<CMD>Copilot panel<CR>',      { desc = "Copilot panel"       })
-vim.keymap.set('i', '<M-e>',      '<Plug>(copilot-dismiss)',     { desc = "Copilot dismiss"     })
-vim.keymap.set('i', '<M-\\>',     '<Plug>(copilot-suggest)',     { desc = "Copilot suggest"     })
-vim.keymap.set('i', '<M-p>',     '<Plug>(copilot-suggest)',      { desc = "Copilot suggest"     })
-vim.keymap.set('i', '<M-l>',      '<Plug>(copilot-accept-word)', { desc = "Copilot accept word" })
-vim.keymap.set('i', '<M-j>',      '<Plug>(copilot-accept-line)', { desc = "Copilot accept line" })
+---@format disable
+vim.keymap.set('n', '<leader>Ce', '<CMD>Copilot enable<CR>'    , { desc = "Enable copilot"      })
+vim.keymap.set('n', '<leader>Cd', '<CMD>Copilot disable<CR>'   , { desc = "Disable copilot "    })
+vim.keymap.set('n', '<leader>Cs', '<CMD>Copilot status<CR>'    , { desc = "Copilot status"      })
+vim.keymap.set('n', '<leader>Cc', '<CMD>Copilot panel<CR>'     , { desc = "Copilot panel"       })
+vim.keymap.set('i', '<M-e>'     , '<Plug>(copilot-dismiss)'    , { desc = "Copilot dismiss"     })
+vim.keymap.set('i', '<M-\\>'    , '<Plug>(copilot-suggest)'    , { desc = "Copilot suggest"     })
+vim.keymap.set('i', '<M-p>'     , '<Plug>(copilot-suggest)'    , { desc = "Copilot suggest"     })
+vim.keymap.set('i', '<M-l>'     , '<Plug>(copilot-accept-word)', { desc = "Copilot accept word" })
+vim.keymap.set('i', '<M-j>'     , '<Plug>(copilot-accept-line)', { desc = "Copilot accept line" })
+---@format enable
 
 ------------------------------
 -- [[ Configure gpt.nvim ]] --
@@ -2040,28 +2092,28 @@ if has_gpt then
         },
       },
       keymaps = {
-        close = "<C-c>",
-        yank_last = "<C-y>",
-        yank_last_code = "<C-k>",
-        scroll_up = "<C-u>",
-        scroll_down = "<C-d>",
-        new_session = "<C-n>",
-        cycle_windows = "<Tab>",
-        cycle_modes = "<C-f>",
-        next_message = "<C-j>",
-        prev_message = "<C-k>",
-        select_session = "<Space>",
-        rename_session = "r",
-        delete_session = "d",
-        draft_message = "<C-r>",
-        edit_message = "e",
-        delete_message = "d",
-        toggle_settings = "<C-o>",
-        toggle_sessions = "<C-p>",
-        toggle_help = "<C-h>",
-        toggle_message_role = "<C-r>",
+        close                   = "<C-c>",
+        yank_last               = "<C-y>",
+        yank_last_code          = "<C-k>",
+        scroll_up               = "<C-u>",
+        scroll_down             = "<C-d>",
+        new_session             = "<C-n>",
+        cycle_windows           = "<Tab>",
+        cycle_modes             = "<C-f>",
+        next_message            = "<C-j>",
+        prev_message            = "<C-k>",
+        select_session          = "<Space>",
+        rename_session          = "r",
+        delete_session          = "d",
+        draft_message           = "<C-r>",
+        edit_message            = "e",
+        delete_message          = "d",
+        toggle_settings         = "<C-o>",
+        toggle_sessions         = "<C-p>",
+        toggle_help             = "<C-h>",
+        toggle_message_role     = "<C-r>",
         toggle_system_role_open = "<C-s>",
-        stop_generating = "<C-x>",
+        stop_generating         = "<C-x>",
       },
     },
     popup_layout = {
@@ -2175,20 +2227,22 @@ if has_gpt then
       help_description = "@comment",
     },
   })
-  vim.keymap.set('n', '<leader>cc', '<CMD>ChatGPT<CR>',      { desc = "Start GPT" })
-  vim.keymap.set('n', '<leader>ca', '<CMD>ChatGPTActAs<CR>', { desc = "Act as" })
-  vim.keymap.set('n', '<leader>cl', ':ChatGPTRun',           { desc = "ChatGPTRun", silent = false })
-  vim.keymap.set( { 'n', 'v' }, '<leader>ce', '<CMD>ChatGPTRun explain_code<CR>',              { desc = "Explain code" })
-  vim.keymap.set( { 'n', 'v' }, '<leader>ct', '<CMD>ChatGPTRun add_tests<CR>',                 { desc = "Add tests" })
-  vim.keymap.set( { 'n', 'v' }, '<leader>cd', '<CMD>ChatGPTRun docstring<CR>',                 { desc = "Add docstring" })
-  vim.keymap.set( { 'n', 'v' }, '<leader>cs', '<CMD>ChatGPTRun summarize<CR>',                 { desc = "Summarize" })
-  vim.keymap.set( { 'n', 'v' }, '<leader>cb', '<CMD>ChatGPTRun fix_bugs<CR>',                  { desc = "Fix bugs" })
-  vim.keymap.set( { 'n', 'v' }, '<leader>ck', '<CMD>ChatGPTRun keywords<CR>',                  { desc = "Keywords" })
-  vim.keymap.set( { 'n', 'v' }, '<leader>co', '<CMD>ChatGPTRun optimize_code<CR>',             { desc = "Optimize code" })
-  vim.keymap.set( { 'n', 'v' }, '<leader>cg', '<CMD>ChatGPTRun grammar_correction<CR>',        { desc = "Grammar correction" })
-  vim.keymap.set( { 'n', 'v' }, '<leader>cr', '<CMD>ChatGPTRun code_readability_analysis<CR>', { desc = "Code review" })
-  vim.keymap.set( { 'n', 'v' }, '<leader>cp', '<CMD>ChatGPTRun complete_code<CR>',             { desc = "Complete code" })
-  vim.keymap.set( { 'n', 'v' }, '<leader>ci', '<CMD>ChatGPTEditWithInstructions<CR>',          { desc = "Edit with instructions" })
+  ---@format disable
+  vim.keymap.set('n', '<leader>cc', '<CMD>ChatGPT<CR>'     , { desc = "Start GPT"                  })
+  vim.keymap.set('n', '<leader>ca', '<CMD>ChatGPTActAs<CR>', { desc = "Act as"                     })
+  vim.keymap.set('n', '<leader>cl', ':ChatGPTRun'          , { desc = "ChatGPTRun", silent = false })
+  vim.keymap.set({ 'n', 'v' }, '<leader>ce', '<CMD>ChatGPTRun explain_code<CR>'             , { desc = "Explain code"           })
+  vim.keymap.set({ 'n', 'v' }, '<leader>ct', '<CMD>ChatGPTRun add_tests<CR>'                , { desc = "Add tests"              })
+  vim.keymap.set({ 'n', 'v' }, '<leader>cd', '<CMD>ChatGPTRun docstring<CR>'                , { desc = "Add docstring"          })
+  vim.keymap.set({ 'n', 'v' }, '<leader>cs', '<CMD>ChatGPTRun summarize<CR>'                , { desc = "Summarize"              })
+  vim.keymap.set({ 'n', 'v' }, '<leader>cb', '<CMD>ChatGPTRun fix_bugs<CR>'                 , { desc = "Fix bugs"               })
+  vim.keymap.set({ 'n', 'v' }, '<leader>ck', '<CMD>ChatGPTRun keywords<CR>'                 , { desc = "Keywords"               })
+  vim.keymap.set({ 'n', 'v' }, '<leader>co', '<CMD>ChatGPTRun optimize_code<CR>'            , { desc = "Optimize code"          })
+  vim.keymap.set({ 'n', 'v' }, '<leader>cg', '<CMD>ChatGPTRun grammar_correction<CR>'       , { desc = "Grammar correction"     })
+  vim.keymap.set({ 'n', 'v' }, '<leader>cr', '<CMD>ChatGPTRun code_readability_analysis<CR>', { desc = "Code review"            })
+  vim.keymap.set({ 'n', 'v' }, '<leader>cp', '<CMD>ChatGPTRun complete_code<CR>'            , { desc = "Complete code"          })
+  vim.keymap.set({ 'n', 'v' }, '<leader>ci', '<CMD>ChatGPTEditWithInstructions<CR>'         , { desc = "Edit with instructions" })
+  ---@format enable
 end
 
 -------------------------------
@@ -2243,7 +2297,7 @@ if has_wk then
     v = { name = "Vim" },
     w = {
       name = "Window",
-      q = {name = "Kill a window"},
+      q = { name = "Kill a window" },
     }
-  }, { prefix = "<leader>", mode = {"n", "v"} })
+  }, { prefix = "<leader>", mode = { "n", "v" } })
 end

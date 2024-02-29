@@ -1,5 +1,5 @@
 -- Rebinds per buffertype
-vim.cmd[[
+vim.cmd [[
   autocmd FileType fugitive nnoremap <buffer> q :close<CR>
   autocmd FileType fugitive nnoremap <buffer> + <nop>
   autocmd FileType fugitive setlocal colorcolumn=0
@@ -20,7 +20,7 @@ vim.cmd[[
 ]]
 
 -- Stop from continuing comments when going to line with "o"
-vim.cmd[[
+vim.cmd [[
   autocmd BufEnter * set formatoptions-=cro
 ]]
 
@@ -34,7 +34,7 @@ vim.cmd [[
   autocmd FileType python setlocal expandtab shiftwidth=4 softtabstop=4
 ]]
 
-vim.cmd[[
+vim.cmd [[
   let g:loaded_netrwPlugin = 1
 ]]
 
@@ -61,7 +61,7 @@ vim.cmd [[
 ]]
 
 -- Saving/Loading folds
-vim.cmd[[
+vim.cmd [[
   autocmd BufWinEnter *.* silent! loadview
   autocmd BufWinLeave *.* silent! mkview
 ]]
