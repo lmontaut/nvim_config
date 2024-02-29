@@ -484,6 +484,46 @@ if has_lspsaga then
   })
 end
 
+-----------------------------
+-- [[ Configure Project ]] --
+-----------------------------
+local has_project, project = pcall(require, "project_nvim")
+if has_project then
+  project.setup({
+    -- Manual mode doesn't automatically change your root directory, so you have
+    -- the option to manually do so using `:ProjectRoot` command.
+    manual_mode = false,
+    -- Methods of detecting the root directory. **"lsp"** uses the native neovim
+    -- lsp, while **"pattern"** uses vim-rooter like glob pattern matching. Here
+    -- order matters: if one is not detected, the other is used as fallback. You
+    -- can also delete or rearangne the detection methods.
+    -- detection_methods = { "lsp", "pattern" },
+    detection_methods = { "pattern" },
+    -- All the patterns used to detect root dir, when **"pattern"** is in
+    -- detection_methods
+    -- patterns = { ".git", "_darcs", ".hg", ".bzr", ".svn", "Makefile", "package.json" },
+    patterns = { ".git", ".clangd" },
+    -- Table of lsp clients to ignore by name
+    -- eg: { "efm", ... }
+    -- ignore_lsp = {},
+    -- Don't calculate root dir on specific directories
+    -- Ex: { "~/.cargo/*", ... }
+    -- exclude_dirs = {},
+    -- Show hidden files in telescope
+    show_hidden = true,
+    -- When set to false, you will get a message when project.nvim changes your
+    -- directory.
+    silent_chdir = false,
+  })
+
+  -- Telescope integration
+  if has_telescope then
+    require('telescope').load_extension('projects')
+    vim.keymap.set('n', '<leader>sp', "<CMD>Telescope projects<CR>", { desc = 'Open project...' })
+  end
+  vim.keymap.set('n', '<leader>0', "<CMD>ProjectRoot<CR>", { desc = 'Set project root to current project' })
+end
+
 -------------------------
 -- [[ Configure LSP ]] --
 -------------------------
@@ -573,6 +613,30 @@ if has_lsp_util then
     nmap("gl"        , vim.diagnostic.open_float, 'LSP: Open diagnostic under cursor')
     nmap('<leader>f' , vim.lsp.buf.format       , 'Format'                           )
 
+    -- Create a command `:Format` local to the LSP buffer
+    vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
+      vim.lsp.buf.format()
+    end, { desc = 'Format current buffer with LSP' })
+    -- Create an autocmd to format the buffer on save
+    local format_ignored_repos = {
+      "pinocchio",
+    }
+    local root_dir, _ = require("project_nvim.project").get_project_root()
+    local formatting_is_ignored = false
+    for _, repo in ipairs(format_ignored_repos) do
+      if string.find(root_dir, repo) then
+        formatting_is_ignored = true
+      end
+    end
+    vim.api.nvim_create_autocmd("BufWritePre", {
+      pattern = { "*.lua", "*.c", "*.cpp", "*.h", "*.hpp", "*.cc", "*.hh", "*.cxx", "*.hxx", "*.rs", "*.py" },
+      callback = function()
+        if not formatting_is_ignored then
+          vim.lsp.buf.format()
+        end
+      end
+    })
+
     if use_lsp_mappings_telescope then
       nmap('gd', tb.lsp_definitions     , 'Goto definition'      )
       nmap('gI', tb.lsp_implementations , 'Goto implementation'  )
@@ -602,11 +666,6 @@ if has_lsp_util then
       nmap('<leader>I', "<CMD>Lspsaga outline<CR>", 'File outline')
     end
     ---@format enable
-
-    -- Create a command `:Format` local to the LSP buffer
-    vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
-      vim.lsp.buf.format()
-    end, { desc = 'Format current buffer with LSP' })
   end
 end
 
@@ -851,46 +910,6 @@ end
 local has_fidget, _ = pcall(require, "fidget")
 if has_fidget then
   require('fidget').setup()
-end
-
------------------------------
--- [[ Configure Project ]] --
------------------------------
-local has_project, project = pcall(require, "project_nvim")
-if has_project then
-  project.setup({
-    -- Manual mode doesn't automatically change your root directory, so you have
-    -- the option to manually do so using `:ProjectRoot` command.
-    manual_mode = false,
-    -- Methods of detecting the root directory. **"lsp"** uses the native neovim
-    -- lsp, while **"pattern"** uses vim-rooter like glob pattern matching. Here
-    -- order matters: if one is not detected, the other is used as fallback. You
-    -- can also delete or rearangne the detection methods.
-    -- detection_methods = { "lsp", "pattern" },
-    detection_methods = { "pattern" },
-    -- All the patterns used to detect root dir, when **"pattern"** is in
-    -- detection_methods
-    -- patterns = { ".git", "_darcs", ".hg", ".bzr", ".svn", "Makefile", "package.json" },
-    patterns = { ".git", ".clangd" },
-    -- Table of lsp clients to ignore by name
-    -- eg: { "efm", ... }
-    -- ignore_lsp = {},
-    -- Don't calculate root dir on specific directories
-    -- Ex: { "~/.cargo/*", ... }
-    -- exclude_dirs = {},
-    -- Show hidden files in telescope
-    show_hidden = true,
-    -- When set to false, you will get a message when project.nvim changes your
-    -- directory.
-    silent_chdir = false,
-  })
-
-  -- Telescope integration
-  if has_telescope then
-    require('telescope').load_extension('projects')
-    vim.keymap.set('n', '<leader>sp', "<CMD>Telescope projects<CR>", { desc = 'Open project...' })
-  end
-  vim.keymap.set('n', '<leader>0', "<CMD>ProjectRoot<CR>", { desc = 'Set project root to current project' })
 end
 
 --------------------------------
