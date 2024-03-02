@@ -18,6 +18,34 @@ if has_comment then
   vim.keymap.set("n", "\\", require('Comment.api').toggle.linewise.current, { desc = "Comment" })
   vim.keymap.set("v", "\\", "<ESC><CMD>lua require(\"Comment.api\").toggle.linewise(vim.fn.visualmode())<CR>",
     { desc = "Comment" })
+
+  -- Fill line with commented character until column 80
+  local fill_line = function(str)
+    if str == nil then
+      str = "="
+    end
+    vim.cmd("normal _")    -- go to the first non-blank character on current line
+    local max_col = 80 - 3 -- 80 - 3 for the 3 characters of the comment
+    local reps = (max_col - vim.fn.col(".")) / string.len(str)
+    if reps > 0 then
+      vim.cmd("normal O")
+      vim.cmd("s/$/ " .. string.rep(str, reps))
+      vim.cmd("normal \\") -- comment
+      vim.cmd("normal ==") -- align
+    end
+  end
+  local fill_line_block = function()
+    fill_line()
+    vim.cmd("normal _")
+    vim.cmd("normal O")
+    vim.cmd("normal \\")
+    vim.cmd("normal ==")
+    vim.cmd("normal $a ")
+    fill_line()
+    vim.cmd("normal j$")
+  end
+  vim.keymap.set("n", "<leader>=", function() fill_line_block() end,
+    { desc = "Fill block with =", noremap = true, silent = true })
 end
 
 --------------------------------------
