@@ -623,9 +623,13 @@ if has_lsp_util then
     }
     local root_dir, _ = require("project_nvim.project").get_project_root()
     local formatting_is_ignored = false
-    for _, repo in ipairs(format_ignored_repos) do
-      if string.find(root_dir, repo) then
-        formatting_is_ignored = true
+    if root_dir == nil then
+      formatting_is_ignored = true
+    else
+      for _, repo in ipairs(format_ignored_repos) do
+        if string.find(root_dir, repo) then
+          formatting_is_ignored = true
+        end
       end
     end
     vim.api.nvim_create_autocmd("BufWritePre", {
