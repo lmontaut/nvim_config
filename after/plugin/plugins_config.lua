@@ -44,8 +44,10 @@ if has_comment then
     fill_line()
     vim.cmd("normal j$")
   end
-  vim.keymap.set("n", "<leader>=", function() fill_line_block() end,
-    { desc = "Fill block with =", noremap = true, silent = true })
+  vim.keymap.set("n", "<leader>=", function() fill_line() end,
+    { desc = "Fill line above with =", noremap = true, silent = true })
+  vim.keymap.set("n", "<leader>+", function() fill_line_block() end,
+    { desc = "Fill block above with =", noremap = true, silent = true })
 end
 
 --------------------------------------
@@ -648,6 +650,7 @@ if has_lsp_util then
     -- Create an autocmd to format the buffer on save
     local format_ignored_repos = {
       "pinocchio",
+      "collision_detection/fcl", -- to not mistake with the hpp-fcl repo
     }
     local root_dir, _ = require("project_nvim.project").get_project_root()
     local formatting_is_ignored = false
