@@ -1121,6 +1121,47 @@ if has_pap then
     { noremap = true, silent = true, desc = "Pap set vertical mode" })
   vim.keymap.set("n", "<leader>ph", "<CMD>PapSetHorizontal<CR>",
     { noremap = true, silent = true, desc = "Pap set horizontal mode" })
+
+  local get_default_file_cmd = function(args)
+    -- clang++ -std=c++11 -o ./build/%:t:r %:~:. && ./build/%:t:r
+    local file = vim.fn.expand("%:~:.")
+    local exe = "./build/" .. vim.fn.expand("%:t:r")
+    local ext = vim.fn.expand("%:e")
+    local cmd = nil
+    if ext == "cpp" then
+      cmd = "clang++ -std=c++11 -o " .. exe .. " " .. file
+      if args ~= nil then
+        cmd = cmd .. " " .. args .. " && " .. exe
+      end
+    elseif ext == "c" then
+      cmd = "clang++ -std=c99 -o " .. exe .. " " .. file .. " && " .. exe
+      if args ~= nil then
+        cmd = cmd .. " " .. args .. " && " .. exe
+      end
+    elseif ext == "py" then
+      cmd = "python " .. file
+    else
+      print("Pap: Unsupported file type")
+    end
+    return cmd
+  end
+
+  local compile_and_run_file = function(args)
+    local cmd = get_default_file_cmd(args)
+    if cmd ~= nil then
+      pap.run_custom_cmd(cmd, false)
+    end
+  end
+  vim.api.nvim_create_user_command('PaprunFile',
+    function()
+      local cmd = get_default_file_cmd(nil)
+      vim.ui.input({ prompt = "Compilation command: " .. cmd .. "\n[Arguments] > " }, function(input)
+        compile_and_run_file(input)
+      end)
+    end, { nargs = "*" })
+
+  vim.keymap.set("n", "<leader>pl", "<CMD>PaprunFile<CR>",
+    { noremap = true, silent = true, desc = "Compile file and run" })
 end
 
 -------------------------
