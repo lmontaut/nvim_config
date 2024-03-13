@@ -38,6 +38,15 @@ vim.o.linebreak = true -- so that wrapping does not occur in middle of word
 -- vim.o.breakat = " ^I!@*-+;:,./?" -- default
 vim.o.breakat = "=(!@;,? "
 -- Check when files are changed on disk
+vim.api.nvim_create_autocmd("BufEnter", {
+  pattern = "*",
+  callback = function()
+    if vim.api.nvim_get_option_value("filetype", { buf = 0 }) == "vim" then
+      return
+    end
+    vim.cmd [[checktime]]
+  end,
+})
 vim.cmd [[
   set autoread
   autocmd CursorHold * checktime
