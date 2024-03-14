@@ -617,9 +617,9 @@ if has_lsp_util then
       vim.keymap.set('i', keys, func, { buffer = bufnr, desc = desc, silent = true })
     end
 
-    -- The following comment is to turn off the formatting of the following code block:
     -- Mappings using the vim.lsp.buf functions:
     local tb = require('telescope.builtin')
+    -- The following comment is to turn off the formatting of the following code block:
     ---@format disable
     nmap('gd'        , vim.lsp.buf.definition             , 'Goto definition'             )
     nmap('gD'        , vim.lsp.buf.declaration            , 'Goto declatation'            )
@@ -664,7 +664,7 @@ if has_lsp_util then
       end
     end
     vim.api.nvim_create_autocmd("BufWritePre", {
-      pattern = { "*.lua", "*.c", "*.cpp", "*.h", "*.hpp", "*.cc", "*.hh", "*.cxx", "*.hxx", "*.rs", "*.py" },
+      pattern = { "*.lua", "*.c", "*.cpp", "*.h", "*.hpp", "*.cc", "*.hh", "*.cxx", "*.hxx", "*.rs" },
       callback = function()
         if not formatting_is_ignored then
           vim.lsp.buf.format()
