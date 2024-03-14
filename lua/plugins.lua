@@ -70,7 +70,14 @@ return {
   -- { "Decodetalkers/csharpls-extended-lsp.nvim" },
 
   -- Any jump -- **
-  { "pechorin/any-jump.vim" }, -- For when LSP is unavailable
+  {
+    "pechorin/any-jump.vim",
+    config = function()
+      vim.cmd([[let g:any_jump_disable_default_keybindings = 1]])
+      vim.keymap.set("n", "<leader>Ab", ":AnyJumpBack<CR>", { desc = "AnyJumpBack" })
+      vim.keymap.set("n", "<leader>Al", ":AnyJumpLastResults<CR>", { desc = "AnyJumpLastResults" })
+    end,
+  }, -- For when LSP is unavailable
 
   ------------------------------------------------------------------------------------------------------------
   ---------- DEBUG
@@ -128,6 +135,13 @@ return {
       { 'nvim-lua/plenary.nvim' },
       { 'nvim-telescope/telescope-live-grep-args.nvim', version = "^1.0.0" },
     },
+  },
+
+  -- harpoon: go to project files quickly
+  {
+    "ThePrimeagen/harpoon",
+    branch = "harpoon2",
+    dependencies = { "nvim-lua/plenary.nvim" }
   },
 
   -- fzf

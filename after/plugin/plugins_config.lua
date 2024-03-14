@@ -2340,6 +2340,16 @@ if has_gpt then
   ---@format enable
 end
 
+-----------------------------
+-- [[ Configure harpoon ]] --
+-----------------------------
+
+local has_harpoon, harpoon = pcall(require, "harpoon")
+if has_harpoon then
+  vim.keymap.set("n", "<leader>a", function() harpoon:list():append() end, { desc = "Harpoon: append to list" })
+  vim.keymap.set("n", "<leader>.", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end)
+end
+
 -------------------------------
 -- [[ Configure Which-key ]] --
 -------------------------------
@@ -2355,7 +2365,7 @@ if has_wk then
   })
 
   wk.register({
-    a = { name = "AnyJump" },
+    A = { name = "AnyJump" },
     b = { name = "Buffers" },
     c = { name = "ChatGPT" },
     C = { name = "Copilot" },
