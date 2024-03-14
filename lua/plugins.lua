@@ -65,6 +65,9 @@ return {
   -- LSP saga: fancier lsp display, outline etc -- **
   { 'nvimdev/lspsaga.nvim' },
 
+  -- File outline
+  { "hedyhli/outline.nvim" },
+
   -- C# dev
   -- { 'OmniSharp/omnisharp-vim' },
   -- { "Decodetalkers/csharpls-extended-lsp.nvim" },

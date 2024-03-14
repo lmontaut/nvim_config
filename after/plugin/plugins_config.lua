@@ -2369,6 +2369,15 @@ if has_harpoon then
   -- vim.keymap.set("n", "<leader>.", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end)
 end
 
+-----------------------------
+-- [[ Configure outline ]] --
+-----------------------------
+local has_outline, outline = pcall(require, "outline")
+if has_outline then
+    outline.setup({
+      -- Your setup opts here (leave empty to use defaults)
+    })
+  vim.keymap.set("n", "<leader>o", "<cmd>Outline<CR>", { desc = "Toggle Outline" })
 end
 
 -------------------------------
