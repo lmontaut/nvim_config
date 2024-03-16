@@ -182,8 +182,10 @@ vim.keymap.set("n", "<leader>sb", "<CMD>ClearQuickfixList<CR>:bufdo vimgrepadd <
 
 -- Tab navigation
 vim.keymap.set("n", "<leader>vo", "mz<CMD>tabnew %<CR>`z", { desc = "Tab new", opts.args })
-vim.keymap.set("n", "<leader>]", "<CMD>tabnext<CR>", { desc = "Tab next", opts.args })
-vim.keymap.set("n", "<leader>[", "<CMD>tabprevious<CR>", { desc = "Tab previous", opts.args })
+vim.keymap.set("n", "L", "<CMD>tabnext<CR>", { desc = "Tab next", opts.args })
+vim.keymap.set("n", "H", "<CMD>tabprevious<CR>", { desc = "Tab previous", opts.args })
+vim.keymap.set("n", "<leader>]", "<CMD>+tabmove<CR>", { desc = "Tab move +", opts.args })
+vim.keymap.set("n", "<leader>[", "<CMD>-tabmove<CR>", { desc = "Tab move -", opts.args })
 vim.keymap.set("n", "<leader>}", "<CMD>+tabmove<CR>", { desc = "Move tab right", opts.args })
 vim.keymap.set("n", "<leader>{", "<CMD>-tabmove<CR>", { desc = "Move tab left", opts.args })
 
@@ -192,7 +194,7 @@ vim.keymap.set("n", "<leader>qj", "<CMD>lnext<CR>", { desc = "Location next", op
 vim.keymap.set("n", "<leader>qk", "<CMD>lprevious<CR>", { desc = "Location previous", opts.args })
 
 -- Center window around cursor
-vim.keymap.set("n", "L", "zz", { desc = "Center window around cursor", opts.args })
+-- vim.keymap.set("n", "L", "zz", { desc = "Center window around cursor", opts.args })
 
 -----------------------
 -- -- INSERT MODE -- --
