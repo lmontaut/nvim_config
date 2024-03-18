@@ -643,7 +643,7 @@ if has_lsp_util then
     nmap("gl"        , vim.diagnostic.open_float, 'LSP: Open diagnostic under cursor')
     local format_buffer = function()
       if vim.api.nvim_get_option_value("filetype", { buf = 0 }) == "python" then
-        vim.cmd("silent !black %")
+        vim.cmd("!black %")
       else
         vim.lsp.buf.format()
       end
