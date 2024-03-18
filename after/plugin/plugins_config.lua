@@ -641,11 +641,18 @@ if has_lsp_util then
     nmap("<leader>lk", vim.diagnostic.goto_prev , 'Previous diagnostic'              )
     nmap("<leader>lj", vim.diagnostic.goto_next , 'LSP: Next diagnostic'             )
     nmap("gl"        , vim.diagnostic.open_float, 'LSP: Open diagnostic under cursor')
-    nmap('<leader>f' , vim.lsp.buf.format       , 'Format'                           )
+    local format_buffer = function()
+      if vim.api.nvim_get_option_value("filetype", { buf = 0 }) == "python" then
+        vim.cmd("silent !black %")
+      else
+        vim.lsp.buf.format()
+      end
+    end
+    nmap('<leader>f' , format_buffer, 'Format')
 
     -- Create a command `:Format` local to the LSP buffer
     vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
-      vim.lsp.buf.format()
+      format_buffer()
     end, { desc = 'Format current buffer with LSP' })
     -- Create an autocmd to format the buffer on save
     local format_ignored_repos = {
@@ -653,7 +660,7 @@ if has_lsp_util then
       "collision_detection/fcl", -- to not mistake with the hpp-fcl repo
     }
     vim.api.nvim_create_autocmd("BufWritePre", {
-      pattern = { "*.lua", "*.c", "*.cpp", "*.h", "*.hpp", "*.cc", "*.hh", "*.cxx", "*.hxx", "*.rs" },
+      pattern = { "*.lua", "*.c", "*.cpp", "*.h", "*.hpp", "*.cc", "*.hh", "*.cxx", "*.hxx", "*.rs", "*.py" },
       callback = function()
         local root_dir, _ = require("project_nvim.project").get_project_root()
         local formatting_is_ignored = false
@@ -667,7 +674,7 @@ if has_lsp_util then
           end
         end
         if not formatting_is_ignored then
-          vim.lsp.buf.format()
+          format_buffer()
         end
       end
     })
