@@ -660,7 +660,7 @@ if has_lsp_util then
       "collision_detection/fcl", -- to not mistake with the hpp-fcl repo
     }
     vim.api.nvim_create_autocmd("BufWritePre", {
-      pattern = { "*.lua", "*.c", "*.cpp", "*.h", "*.hpp", "*.cc", "*.hh", "*.cxx", "*.hxx", "*.rs", "*.py" },
+      pattern = { "*.lua", "*.c", "*.cpp", "*.h", "*.hpp", "*.cc", "*.hh", "*.cxx", "*.hxx", "*.rs" },
       callback = function()
         local root_dir, _ = require("project_nvim.project").get_project_root()
         local formatting_is_ignored = false
