@@ -38,19 +38,22 @@ vim.o.linebreak = true -- so that wrapping does not occur in middle of word
 -- vim.o.breakat = " ^I!@*-+;:,./?" -- default
 vim.o.breakat = "=(!@;,? "
 -- Check when files are changed on disk
-vim.api.nvim_create_autocmd("BufEnter", {
-  pattern = "*",
-  callback = function()
-    if vim.api.nvim_get_option_value("filetype", { buf = 0 }) == "vim" then
-      return
-    end
-    vim.cmd [[checktime]]
-  end,
-})
 vim.cmd [[
   set autoread
-  autocmd CursorHold * checktime
+  " autocmd CursorHold * checktime
 ]]
+vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold" }, {
+  pattern = { "*.c", ".cpp", "*.h", "*.hpp", "*.cc", "*.hh", "*.c++", "*.txx",
+    "*.h++", "*.cxx", "*.hxx", "*.go", "*.rs", "*.py", "*.lua", "*.sh", "*.zsh", "*.bash",
+    "*.fish", "*.js", "*.ts", "*.html", "*.css", "*.yaml", "*.yml", "*.json", "*.toml", "*.xml",
+    "*.rb", "*.r", "*.cs", ".txt", ".cmake" },
+  callback = function()
+    local filetype = vim.api.nvim_get_option_value("filetype", { buf = 0 })
+    if filetype ~= "vim" and filetype ~= "oil" then
+      vim.cmd [[checktime]]
+    end
+  end,
+})
 vim.cmd [[
  " cino = how vim should indent
   set cino+=(0
