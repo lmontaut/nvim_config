@@ -2133,7 +2133,8 @@ end
 -- [[ Configure copilot ]] --
 -----------------------------
 vim.cmd [[
-  " autocmd VimEnter * Copilot disable
+  " Don't activate Copilot by default.
+  autocmd VimEnter * Copilot disable
 ]]
 vim.keymap.set('i', '<M-CR>', 'copilot#Accept("\\<CR>")', {
   expr = true,
