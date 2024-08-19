@@ -157,10 +157,13 @@ if has_telescope then
     vimgrep_arguments = vimgrep_arguments,
     pickers = {
       lsp_references = {
-        fname_width = 150,
+        fname_width = 120,
       },
       lsp_definitions = {
-        fname_width = 150,
+        fname_width = 120,
+      },
+      lsp_document_symbols = {
+        symbol_width = 120,
       },
       git_files = {
         file_ignore_patterns = { "%.png", "%.jpg", "%.jpeg" },
@@ -629,17 +632,17 @@ if has_lsp_util then
     nmap('<C-x>'     , vim.lsp.buf.signature_help         , 'Signature Documentation'     )
     imap('<C-x>'     , vim.lsp.buf.signature_help         , 'Signature Documentation'     )
     nmap('K'         , vim.lsp.buf.hover                  , 'Hover Documentation'         )
-    nmap('<leader>lr', vim.lsp.buf.rename                 , 'Rename'                      )
-    nmap('<leader>lc', vim.lsp.buf.code_action            , 'Code action'                 )
-    nmap('<leader>ls', tb.lsp_document_symbols            , 'Document symbols'            )
-    nmap('<leader>lS', tb.lsp_dynamic_workspace_symbols   , 'Workspace symbols'           )
+    nmap('<leader>cr', vim.lsp.buf.rename                 , 'Rename'                      )
+    nmap('<leader>cc', vim.lsp.buf.code_action            , 'Code action'                 )
+    nmap('<leader>cs', tb.lsp_document_symbols            , 'Document symbols'            )
+    nmap('<leader>cS', tb.lsp_dynamic_workspace_symbols   , 'Workspace symbols'           )
     nmap('gh'        , "<CMD>ClangdSwitchSourceHeader<CR>", 'Switch from source to header')
-    nmap("<leader>lo", vim.lsp.buf.outgoing_calls         , 'Outgoing calls'              )
-    nmap("<leader>li", vim.lsp.buf.incoming_calls         , 'Incoming calls'              )
+    nmap("<leader>co", vim.lsp.buf.outgoing_calls         , 'Outgoing calls'              )
+    nmap("<leader>ci", vim.lsp.buf.incoming_calls         , 'Incoming calls'              )
     -- Diagnostic keymaps
-    nmap('<leader>lD', tb.diagnostics           , 'Diagnostics'                      )
-    nmap("<leader>lk", vim.diagnostic.goto_prev , 'Previous diagnostic'              )
-    nmap("<leader>lj", vim.diagnostic.goto_next , 'LSP: Next diagnostic'             )
+    nmap('<leader>cD', tb.diagnostics           , 'Diagnostics'                      )
+    nmap("<leader>ck", vim.diagnostic.goto_prev , 'Previous diagnostic'              )
+    nmap("<leader>cj", vim.diagnostic.goto_next , 'LSP: Next diagnostic'             )
     nmap("gl"        , vim.diagnostic.open_float, 'LSP: Open diagnostic under cursor')
     local format_buffer = function()
       if vim.api.nvim_get_option_value("filetype", { buf = 0 }) == "python" then
@@ -657,6 +660,7 @@ if has_lsp_util then
     -- Create an autocmd to format the buffer on save
     local format_ignored_repos = {
       "pinocchio",
+      "contact%-optimization",
       "collision_detection/fcl", -- to not mistake with the hpp-fcl repo
     }
     vim.api.nvim_create_autocmd("BufWritePre", {
@@ -689,21 +693,21 @@ if has_lsp_util then
     -- Documentation: https://nvimdev.github.io/lspsaga/
     if use_lsp_mappings_lspsaga and has_lspsaga then
       nmap('K'         , "<CMD>Lspsaga hover_doc<CR>"                 , 'Hover Documentation'  )
-      nmap('<leader>lr', "<CMD>Lspsaga rename<CR>"                    , 'Rename'               )
+      nmap('<leader>cr', "<CMD>Lspsaga rename<CR>"                    , 'Rename'               )
       nmap('gp'        , "<CMD>Lspsaga peek_definition<CR>"           , 'Peek definition'      )
       nmap('gl'        , "<CMD>Lspsaga show_line_diagnostics<CR>"     , 'Buffer diagnostics'   )
-      nmap("<leader>lo", "<CMD>Lspsaga outgoing_calls<CR>"            , 'Outgoing calls'       )
-      nmap("<leader>li", "<CMD>Lspsaga incoming_calls<CR>"            , 'Incoming calls'       )
-      nmap('<leader>ld', "<CMD>Lspsaga show_buf_diagnostics<CR>"      , 'Buffer diagnostics'   )
-      nmap('<leader>lD', "<CMD>Lspsaga show_workspace_diagnostics<CR>", 'Workspace diagnostics')
+      nmap("<leader>co", "<CMD>Lspsaga outgoing_calls<CR>"            , 'Outgoing calls'       )
+      nmap("<leader>ci", "<CMD>Lspsaga incoming_calls<CR>"            , 'Incoming calls'       )
+      nmap('<leader>cd', "<CMD>Lspsaga show_buf_diagnostics<CR>"      , 'Buffer diagnostics'   )
+      nmap('<leader>cD', "<CMD>Lspsaga show_workspace_diagnostics<CR>", 'Workspace diagnostics')
       -- Finder
       nmap('gr'         , "<CMD>Lspsaga finder tyd+def+ref+imp<CR>", 'Goto references'      )
       nmap('gI'         , "<CMD>Lspsaga finder imp<CR>"            , 'Goto implementation'  )
       nmap('gt'         , "<CMD>Lspsaga finder tyd<CR>"            , 'Goto type definitions')
-      nmap('<leader>lfd', "<CMD>Lspsaga finder def<CR>"            , 'Find definitions'     )
-      nmap('<leader>lfi', "<CMD>Lspsaga finder imp<CR>"            , 'Find implementations' )
-      nmap('<leader>lfr', "<CMD>Lspsaga finder ref<CR>"            , 'Find references'      )
-      nmap('<leader>lft', "<CMD>Lspsaga finder tyd<CR>"            , 'Find type definitions')
+      nmap('<leader>cfd', "<CMD>Lspsaga finder def<CR>"            , 'Find definitions'     )
+      nmap('<leader>cfi', "<CMD>Lspsaga finder imp<CR>"            , 'Find implementations' )
+      nmap('<leader>cfr', "<CMD>Lspsaga finder ref<CR>"            , 'Find references'      )
+      nmap('<leader>cft', "<CMD>Lspsaga finder tyd<CR>"            , 'Find type definitions')
       -- Outline
       nmap('<leader>I', "<CMD>Lspsaga outline<CR>", 'File outline')
     end
@@ -2132,25 +2136,25 @@ end
 -----------------------------
 -- [[ Configure copilot ]] --
 -----------------------------
-vim.cmd [[
-  " Don't activate Copilot by default.
-  autocmd VimEnter * Copilot disable
-]]
-vim.keymap.set('i', '<M-CR>', 'copilot#Accept("\\<CR>")', {
-  expr = true,
-  replace_keycodes = false
-})
-vim.g.copilot_no_tab_map = true
+-- vim.cmd [[
+--   " Don't activate Copilot by default.
+--   " autocmd VimEnter * Copilot disable
+-- ]]
+-- vim.keymap.set('i', '<M-CR>', 'copilot#Accept("\\<CR>")', {
+--   expr = true,
+--   replace_keycodes = false
+-- })
+-- vim.g.copilot_no_tab_map = true
 ---@format disable
-vim.keymap.set('n', '<leader>Ce', '<CMD>Copilot enable<CR>'    , { desc = "Enable copilot"      })
-vim.keymap.set('n', '<leader>Cd', '<CMD>Copilot disable<CR>'   , { desc = "Disable copilot "    })
-vim.keymap.set('n', '<leader>Cs', '<CMD>Copilot status<CR>'    , { desc = "Copilot status"      })
-vim.keymap.set('n', '<leader>Cc', '<CMD>Copilot panel<CR>'     , { desc = "Copilot panel"       })
-vim.keymap.set('i', '<M-e>'     , '<Plug>(copilot-dismiss)'    , { desc = "Copilot dismiss"     })
-vim.keymap.set('i', '<M-\\>'    , '<Plug>(copilot-suggest)'    , { desc = "Copilot suggest"     })
-vim.keymap.set('i', '<M-p>'     , '<Plug>(copilot-suggest)'    , { desc = "Copilot suggest"     })
-vim.keymap.set('i', '<M-l>'     , '<Plug>(copilot-accept-word)', { desc = "Copilot accept word" })
-vim.keymap.set('i', '<M-j>'     , '<Plug>(copilot-accept-line)', { desc = "Copilot accept line" })
+-- vim.keymap.set('n', '<leader>Ce', '<CMD>Copilot enable<CR>'    , { desc = "Enable copilot"      })
+-- vim.keymap.set('n', '<leader>Cd', '<CMD>Copilot disable<CR>'   , { desc = "Disable copilot "    })
+-- vim.keymap.set('n', '<leader>Cs', '<CMD>Copilot status<CR>'    , { desc = "Copilot status"      })
+-- vim.keymap.set('n', '<leader>Cc', '<CMD>Copilot panel<CR>'     , { desc = "Copilot panel"       })
+-- vim.keymap.set('i', '<M-e>'     , '<Plug>(copilot-dismiss)'    , { desc = "Copilot dismiss"     })
+-- vim.keymap.set('i', '<M-\\>'    , '<Plug>(copilot-suggest)'    , { desc = "Copilot suggest"     })
+-- vim.keymap.set('i', '<M-p>'     , '<Plug>(copilot-suggest)'    , { desc = "Copilot suggest"     })
+-- vim.keymap.set('i', '<M-l>'     , '<Plug>(copilot-accept-word)', { desc = "Copilot accept word" })
+-- vim.keymap.set('i', '<M-j>'     , '<Plug>(copilot-accept-line)', { desc = "Copilot accept line" })
 ---@format enable
 
 ------------------------------
@@ -2374,7 +2378,7 @@ if has_harpoon then
 
   vim.keymap.set("n", "<leader>a", function() harpoon:list():append() end, { desc = "Harpoon: append to list" })
   vim.keymap.set("n", "<leader>.", function() toggle_telescope(harpoon:list()) end, { desc = "Open harpoon window" })
-  -- vim.keymap.set("n", "<leader>.", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end)
+  vim.keymap.set("n", "<leader>>", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end, {desc = "Open harpoon (editable)"})
 end
 
 -----------------------------
@@ -2405,7 +2409,7 @@ if has_wk then
   wk.register({
     A = { name = "AnyJump" },
     b = { name = "Buffers" },
-    c = { name = "ChatGPT" },
+    -- c = { name = "ChatGPT" },
     C = { name = "Copilot" },
     M = { name = "Multicursor" },
     d = {
@@ -2419,7 +2423,7 @@ if has_wk then
       p = { name = "Decrement node" },
     },
     --
-    l = { name = "LSP" },
+    c = { name = "Code LSP" },
     L = { name = "Loclist" },
     --
     m = { name = "Grapple/marks" },

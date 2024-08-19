@@ -246,6 +246,21 @@ return {
     }
   },
 
+  -- Latex
+  {
+    "lervag/vimtex",
+    lazy = false, -- we don't want to lazy load VimTeX
+    -- tag = "v2.15", -- uncomment to pin to a specific release
+    init = function()
+      -- VimTeX configuration goes here, e.g.
+      vim.g.vimtex_view_method = "skim"
+      vim.g.vimtex_compiler_method = 'latexmk'
+      vim.g.vimtex_view_skim_sync = 1     -- Value 1 allows forward search after every successful compilation
+      vim.g.vimtex_view_skim_activate = 1 -- Value 1 allows change focus to skim after command `:VimtexView` is given
+      vim.g.vimtex_compiler_silent = 1    -- makes the compiler silent, prevents buffer to popup
+    end
+  },
+
   -- Find and replace (a wrapper around sad terminal utility) -- **
   {
     "ray-x/sad.nvim",
@@ -259,7 +274,7 @@ return {
   -- To set up:
   -- :Copilot setup
   -- :Copilot enable
-  { "github/copilot.vim" },
+  -- { "github/copilot.vim" },
   -- use({ -- buggy and useless tbh
   --   "jackMort/ChatGPT.nvim",
   --   requires = {
