@@ -19,13 +19,13 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 require("lazy").setup("plugins", {
-    -- Where personal plugins live
-    dev = {
-      -- directory where you store your local plugin projects
-      path = "~/software/misc/nvim",
-      fallback = false,
-    },
-  })
+  -- Where personal plugins live
+  dev = {
+    -- directory where you store your local plugin projects
+    path = "~/workspace/misc/nvim",
+    fallback = false,
+  },
+})
 
 -- Misc
 require "misc"
