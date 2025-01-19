@@ -162,7 +162,16 @@ if has_telescope then
       lsp_definitions = {
         fname_width = 120,
       },
+      lsp_dynamic_workspace_symbols = {
+        fname_width = 80,
+        symbol_width = 120,
+      },
+      lsp_workspace_symbols = {
+        fname_width = 80,
+        symbol_width = 120,
+      },
       lsp_document_symbols = {
+        fname_width = 80,
         symbol_width = 120,
       },
       git_files = {
