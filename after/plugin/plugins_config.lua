@@ -334,6 +334,7 @@ if has_treesitter then
   vim.cmd [[
     autocmd FileType cpp TSDisable indent
     " autocmd FileType help TSDisable highlight
+    autocmd BufEnter *.txx set filetype=cpp
   ]]
 end
 
@@ -668,7 +669,7 @@ if has_lsp_util then
     end, { desc = 'Format current buffer with LSP' })
     -- Create an autocmd to format the buffer on save
     local format_ignored_repos = {
-      "pinocchio",
+      -- "pinocchio",
       "contact%-optimization",
       "collision_detection/fcl", -- to not mistake with the hpp-fcl repo
     }
@@ -1253,11 +1254,11 @@ if has_dap then
   ------------------------------------
   -- C/C++/Rust configurations
   ------------------------------------
-  local lldb_path = "/opt/homebrew/opt/llvm/bin/lldb-vscode" -- Adjust depdending on llvm version
+  local lldb_path = "/opt/homebrew/opt/llvm/bin/lldb-dap" -- Adjust depdending on llvm version
   local os_name = vim.loop.os_uname().sysname
   if os_name == "Linux" then
     -- On arch-based linux, simply do `sudo pacman -S lldb`
-    lldb_path = "/usr/bin/lldb-vscode"
+    lldb_path = "/usr/bin/lldb-dap"
   end
   dap.adapters.lldb       = {
     type    = "executable",
