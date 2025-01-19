@@ -58,6 +58,8 @@ vim.cmd [[
   autocmd BufEnter *.cpp compiler clang
   autocmd BufEnter *.rs compiler rust
   autocmd BufEnter *.py compiler python
+
+  autocmd! BufNewFile,BufRead *.vs,*.fs set ft=glsl
 ]]
 
 -- Saving/Loading folds

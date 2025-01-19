@@ -796,6 +796,14 @@ if has_mason and has_mason_lsp_config and has_lspconfig then
     },
   }
 
+  -- Mason glsl_analyzer does not work
+  -- Install it manually with zig: https://github.com/nolanderc/glsl_analyzer
+  require 'lspconfig'.glsl_analyzer.setup({
+    capabilities = capabilities,
+    on_attach = on_attach,
+    settings = {},
+  })
+
   -- Mason ensures the servers in `servers` are installed.
   -- Go checkout the `servers` variable to see the options for each server.
   mason_lspconfig.setup {

@@ -72,6 +72,13 @@ return {
   -- { 'OmniSharp/omnisharp-vim' },
   -- { "Decodetalkers/csharpls-extended-lsp.nvim" },
 
+  -- Rust tools
+  -- {
+  --   'mrcjkb/rustaceanvim',
+  --   version = '^5', -- Recommended
+  --   lazy = false,   -- This plugin is already lazy
+  -- },
+
   -- Any jump -- **
   {
     "pechorin/any-jump.vim",
@@ -81,6 +88,9 @@ return {
       vim.keymap.set("n", "<leader>Al", ":AnyJumpLastResults<CR>", { desc = "AnyJumpLastResults" })
     end,
   }, -- For when LSP is unavailable
+
+  -- GLSL support
+  { "tikhomirov/vim-glsl" },
 
   ------------------------------------------------------------------------------------------------------------
   ---------- DEBUG
