@@ -224,6 +224,7 @@ if has_telescope then
   vim.keymap.set('n', '<leader>sk', tb.keymaps           , { desc = 'Search keymaps'            })
   vim.keymap.set('n', '<leader>sw', tb.grep_string       , { desc = 'Search current word'       })
   vim.keymap.set('n', '<leader>sg', tb.live_grep         , { desc = 'Grep in directory'         })
+  vim.keymap.set('n', '<leader>sb', '<cmd>lua require("telescope.builtin").live_grep({grep_open_files=true})<CR>', { noremap = true, silent = true, desc = 'Grep in buffers' })
   vim.keymap.set('n', '<leader>sd', tb.diagnostics       , { desc = 'Search diagnostics'        })
   vim.keymap.set('n', '<leader>sc', tb.git_commits       , { desc = 'Search git commits'        })
   vim.keymap.set('n', '<leader>sm', tb.man_pages         , { desc = 'Search man pages'          })

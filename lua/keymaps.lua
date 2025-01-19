@@ -170,16 +170,6 @@ vim.keymap.set('n', "<C-j>", "<Esc>mzo<Esc>`z", { desc = "Insert line below", no
 -- vim.keymap.set("n", "<C-k>", "ddkP==", { desc = "Move line up", opts.args })
 -- vim.keymap.set("n", "<C-j>", "ddp==", { desc = "Move line down", opts.args })
 
--- Vimgrep in current buffers
-vim.cmd [[
-  function ClearQuickfixList()
-    call setqflist([])
-  endfunction
-  command! ClearQuickfixList call ClearQuickfixList()
-]]
-vim.keymap.set("n", "<leader>sb", "<CMD>ClearQuickfixList<CR>:bufdo vimgrepadd <C-r><C-w> %<Left><Left>",
-  { noremap = true, silent = false, desc = "Grep in buffers" })
-
 -- Tab navigation
 vim.keymap.set("n", "<leader>vo", "mz<CMD>tabnew %<CR>`z", { desc = "Tab new", opts.args })
 vim.keymap.set("n", "L", "<CMD>tabnext<CR>", { desc = "Tab next", opts.args })
