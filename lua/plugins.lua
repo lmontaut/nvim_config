@@ -19,6 +19,7 @@ return {
 
   -- Helper to know what each binding does -- **
   { "folke/which-key.nvim" },
+  { 'echasnovski/mini.icons',          version = '*' },
 
   -- Additional text objects via treesitter
   {

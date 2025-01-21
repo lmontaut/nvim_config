@@ -2395,7 +2395,7 @@ if has_harpoon then
     }):find()
   end
 
-  vim.keymap.set("n", "<leader>a", function() harpoon:list():append() end, { desc = "Harpoon: append to list" })
+  vim.keymap.set("n", "<leader>a", function() harpoon:list():add() end, { desc = "Harpoon: append to list" })
   vim.keymap.set("n", "<leader>.", function() toggle_telescope(harpoon:list()) end, { desc = "Open harpoon window" })
   vim.keymap.set("n", "<leader>>", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end, {desc = "Open harpoon (editable)"})
 end
@@ -2416,54 +2416,31 @@ end
 -------------------------------
 local has_wk, wk = pcall(require, "which-key")
 if has_wk then
-  wk.setup({
-    triggers_blacklist = {
-      -- list of mode / prefixes that should never be hooked by WhichKey
-      -- this is mostly relevant for keymaps that start with a native binding
-      i = { 'j', 'k', 'g', 'gjk' },
-      v = { 'j', 'k' },
-    }
+  wk.add({
+    {
+      mode = { "n", "v" },
+      { "<leader>C", group = "Copilot" },
+      { "<leader>L", group = "Loclist" },
+      { "<leader>M", group = "Multicursor" },
+      { "<leader>P", group = "Packer" },
+      { "<leader>b", group = "Buffers" },
+      { "<leader>c", group = "Code LSP" },
+      { "<leader>d", group = "Debbuger" },
+      { "<leader>dt", group = "Dap-telescope" },
+      { "<leader>e", group = "Treesitter select" },
+      { "<leader>ee", group = "Start selection" },
+      { "<leader>en", group = "Increment node" },
+      { "<leader>ep", group = "Decrement node" },
+      { "<leader>g", group = "Git" },
+      { "<leader>m", group = "Grapple/marks" },
+      { "<leader>n", group = "Neorg" },
+      { "<leader>nj", group = "Journal" },
+      { "<leader>p", group = "Pap" },
+      { "<leader>q", group = "Quicklist" },
+      { "<leader>s", group = "Search" },
+      { "<leader>v", group = "Vim" },
+      { "<leader>w", group = "Window" },
+      { "<leader>wq", group = "Kill a window" },
+    },
   })
-
-  wk.register({
-    A = { name = "AnyJump" },
-    b = { name = "Buffers" },
-    -- c = { name = "ChatGPT" },
-    C = { name = "Copilot" },
-    M = { name = "Multicursor" },
-    d = {
-      name = "Debbuger",
-      t = { name = "Dap-telescope" },
-    },
-    e = {
-      name = "Treesitter select",
-      e = { name = "Start selection" },
-      n = { name = "Increment node" },
-      p = { name = "Decrement node" },
-    },
-    --
-    c = { name = "Code LSP" },
-    L = { name = "Loclist" },
-    --
-    m = { name = "Grapple/marks" },
-    n = {
-      name = "Neorg",
-      j = { name = "Journal" }
-    },
-    --
-    g = { name = "Git" },
-    --
-    P = { name = "Packer" },
-    --
-    p = { name = "Pap" },
-    --
-    q = { name = "Quicklist" },
-    --
-    s = { name = "Search" },
-    v = { name = "Vim" },
-    w = {
-      name = "Window",
-      q = { name = "Kill a window" },
-    }
-  }, { prefix = "<leader>", mode = { "n", "v" } })
 end
