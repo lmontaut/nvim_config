@@ -80,16 +80,6 @@ return {
   --   lazy = false,   -- This plugin is already lazy
   -- },
 
-  -- Any jump -- **
-  {
-    "pechorin/any-jump.vim",
-    config = function()
-      vim.cmd([[let g:any_jump_disable_default_keybindings = 1]])
-      vim.keymap.set("n", "<leader>Ab", ":AnyJumpBack<CR>", { desc = "AnyJumpBack" })
-      vim.keymap.set("n", "<leader>Al", ":AnyJumpLastResults<CR>", { desc = "AnyJumpLastResults" })
-    end,
-  }, -- For when LSP is unavailable
-
   -- GLSL support
   { "tikhomirov/vim-glsl" },
 
