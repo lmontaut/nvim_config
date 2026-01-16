@@ -1147,6 +1147,7 @@ if has_pap then
     function() pap.run_custom_cmd("_last", false) end, { nargs = "*" })
   vim.api.nvim_create_user_command('Papa',
     function(command) pap.run_custom_cmd(command.args, false) end, { nargs = "*" })
+
   vim.keymap.set("n", "<leader>qe", "<CMD>cg<Space>~/.cache/nvim/pap_output.txt<CR><CMD>cc<CR>",
     { noremap = true, silent = true, desc = "Load error file into quickfix" })
   vim.keymap.set("n", "<leader>psh", "<CMD>Paphsize<CR>",
@@ -2438,6 +2439,16 @@ end
 --     autopush = false,
 --   })
 -- end
+
+-----------------
+-- [[ Other ]] --
+-----------------
+vim.keymap.set("n", "<leader>2", function()
+  vim.system(
+    { "clang-format", "-i", vim.api.nvim_buf_get_name(0) },
+    { stdout = false, stderr = false }
+  )
+end)
 
 -------------------------------
 -- [[ Configure Which-key ]] --
