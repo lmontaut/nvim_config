@@ -93,7 +93,7 @@ return {
   },
   {
     "rcarriga/nvim-dap-ui",
-    dependencies = { "mfussenegger/nvim-dap", "rcarriga/cmp-dap" }
+    dependencies = { "mfussenegger/nvim-dap", "rcarriga/cmp-dap", "nvim-neotest/nvim-nio" }
   },
   -- { "theHamsta/nvim-dap-virtual-text" },
 
@@ -146,6 +146,10 @@ return {
     "ThePrimeagen/harpoon",
     branch = "harpoon2",
     dependencies = { "nvim-lua/plenary.nvim" }
+  },
+
+  {
+    "ThePrimeagen/git-worktree.nvim"
   },
 
   -- fzf

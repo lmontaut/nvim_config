@@ -85,6 +85,7 @@ if has_telescope then
   -- Extensions actions
   local has_live_grep_args, _ = pcall(telescope.load_extension, "live_grep_args")
   local lga_actions           = require("telescope-live-grep-args.actions")
+  local has_gitwt, _          = pcall(telescope.load_extension, "git_worktree")
 
   -- Clone the default Telescope configuration
   local vimgrep_arguments     = { unpack(telescopeConfig.values.vimgrep_arguments) }
@@ -106,9 +107,9 @@ if has_telescope then
         },
       },
       theme = "dropdown",
-      path_display = {
-        "truncate"
-      },
+      -- path_display = {
+      --   "truncate"
+      -- },
       dynamic_preview_title = true,
       layout_strategy = "vertical",
       mappings = {
@@ -248,6 +249,9 @@ if has_telescope then
   if has_live_grep_args then
     vim.keymap.set('n', '<leader>sg', function() telescope.extensions.live_grep_args.live_grep_args() end,
       { desc = 'Grep in directory' })
+  end
+  if has_gitwt then
+    vim.keymap.set('n', '<leader>gw', function() telescope.extensions.git_worktree.git_worktrees() end, { desc = 'Git worktrees'} )
   end
 end
 
@@ -651,10 +655,13 @@ if has_lsp_util then
     nmap("<leader>co", vim.lsp.buf.outgoing_calls         , 'Outgoing calls'              )
     nmap("<leader>ci", vim.lsp.buf.incoming_calls         , 'Incoming calls'              )
     -- Diagnostic keymaps
-    nmap('<leader>cD', tb.diagnostics           , 'Diagnostics'                      )
-    nmap("<leader>ck", vim.diagnostic.goto_prev , 'Previous diagnostic'              )
-    nmap("<leader>cj", vim.diagnostic.goto_next , 'LSP: Next diagnostic'             )
-    nmap("gl"        , vim.diagnostic.open_float, 'LSP: Open diagnostic under cursor')
+    nmap('<leader>cD', tb.diagnostics                           , 'Diagnostics'                      )
+    nmap("<leader>ck", vim.diagnostic.goto_prev                 , 'Previous diagnostic'              )
+    nmap("<leader>cj", vim.diagnostic.goto_next                 , 'LSP: Next diagnostic'             )
+    nmap("gl"        , vim.diagnostic.open_float                , 'LSP: Open diagnostic under cursor')
+    nmap("<leader>cq", "<CMD>LspStop<CR>"                       , 'LSP: Stop'                        )
+    nmap("<leader>cl", "<CMD>LspStart<CR>"                      , 'LSP: Start'                       )
+    nmap("<leader>cR", "<CMD>LspStop<CR><CMD>LspStart<CR>"      , 'LSP: Restart'                     )
     local format_buffer = function()
       if vim.api.nvim_get_option_value("filetype", { buf = 0 }) == "python" then
         vim.cmd("!black %")
@@ -670,9 +677,11 @@ if has_lsp_util then
     end, { desc = 'Format current buffer with LSP' })
     -- Create an autocmd to format the buffer on save
     local format_ignored_repos = {
-      -- "pinocchio",
+      "pinocchio",
       "contact%-optimization",
       "collision_detection/fcl", -- to not mistake with the hpp-fcl repo
+      "SDL_gpu_examples",
+      "raylib",
     }
     vim.api.nvim_create_autocmd("BufWritePre", {
       pattern = { "*.lua", "*.c", "*.cpp", "*.h", "*.hpp", "*.cc", "*.hh", "*.cxx", "*.hxx", "*.rs" },
@@ -720,7 +729,10 @@ if has_lsp_util then
       nmap('<leader>cfr', "<CMD>Lspsaga finder ref<CR>"            , 'Find references'      )
       nmap('<leader>cft', "<CMD>Lspsaga finder tyd<CR>"            , 'Find type definitions')
       -- Outline
-      nmap('<leader>I', "<CMD>Lspsaga outline<CR>", 'File outline')
+      local has_outline, _ = pcall(require, "outline")
+      if not has_outline then
+        nmap('<leader>I', "<CMD>Lspsaga outline<CR>", 'File outline')
+      end
     end
     ---@format enable
   end
@@ -831,7 +843,9 @@ if has_mason and has_mason_lsp_config and has_lspconfig then
           capabilities = capabilities,
           on_attach = on_attach,
           -- Each server can have its own command to start it.
-          cmd = { "clangd", "--background-index", "--header-insertion=never", "--offset-encoding=utf-16" },
+          -- cmd = { "/Users/louis/.local/share/nvim/mason/bin/clangd", "--header-insertion=never", "--offset-encoding=utf-16", "--background-index" },
+          -- cmd = { "/opt/homebrew/opt/llvm/bin/clangd", "--background-index=false", "--header-insertion=never", "--offset-encoding=utf-16" },
+          -- cmd = { "--header-insertion=never", "--offset-encoding=utf-16" },
           -- cmd = { "clangd", "--header-insertion=never", "--offset-encoding=utf-16" },
           settings = servers.clangd,
         })
@@ -2408,8 +2422,22 @@ if has_outline then
     outline.setup({
       -- Your setup opts here (leave empty to use defaults)
     })
-  vim.keymap.set("n", "<leader>o", "<cmd>Outline<CR>", { desc = "Toggle Outline" })
+  vim.keymap.set("n", "<leader>I", "<cmd>Outline<CR>", { desc = "Toggle Outline" })
 end
+
+----------------------------------
+-- [[ Configure git-worktree ]] --
+----------------------------------
+-- local has_gitwt, gitwt = pcall(require, "git-worktree")
+-- if has_gitwt then
+--   gitwt.setup({
+--     change_directory_command = "gw",
+--     update_on_change = true,
+--     update_on_change_command = "ge",
+--     clearjumps_on_change = true,
+--     autopush = false,
+--   })
+-- end
 
 -------------------------------
 -- [[ Configure Which-key ]] --
@@ -2426,6 +2454,7 @@ if has_wk then
       { "<leader>b", group = "Buffers" },
       { "<leader>c", group = "Code LSP" },
       { "<leader>d", group = "Debbuger" },
+      { "<leader>k", group = "Strudel" },
       { "<leader>dt", group = "Dap-telescope" },
       { "<leader>e", group = "Treesitter select" },
       { "<leader>ee", group = "Start selection" },

@@ -5,6 +5,9 @@ vim.o.encoding = "utf-8"
 -- Set highlight on search
 vim.o.hlsearch = true
 
+-- visualize search/replace in split window
+vim.o.inccommand = "split"
+
 -- Make line numbers default
 vim.wo.number = true
 
@@ -61,9 +64,9 @@ vim.cmd [[
 
 -- Modify jumplist behavior -> much better
 vim.cmd [[
+  autocmd BufWrite * normal! m'
   autocmd InsertLeave * normal! m'
   autocmd TextYankPost * normal! m'
-  autocmd BufWrite * normal! m'
 ]]
 vim.o.jumpoptions = ""
 
