@@ -583,62 +583,57 @@ end
 local on_attach                  = nil
 local use_lsp_mappings_telescope = true
 local use_lsp_mappings_lspsaga   = true -- has precedence over telescope
-local has_lsp_util, _            = pcall(require, "lspconfig.util")
 --
--- This bit of code sets up the LSP servers used and their related keybindings.
--- I don't do it here but in theory you can have different keybindings for each server.
-if has_lsp_util then
+-- This function gets run when an LSP connects to a particular buffer.
+on_attach                        = function(client, bufnr)
+  -- NOTE: Remember that lua is a real programming language, and as such it is possible
+  -- to define small helper and utility functions so you don't have to repeat yourself
+  -- many times.
+  if client.server_capabilities.signatureHelpProvider then
+    local has_lspoverloads, lspoverloads = pcall(require, "lsp-overloads")
+    if has_lspoverloads then
+      lspoverloads.setup(client, {
+        ui = {
+          max_height = 40,
+          max_width = 120,
+        },
+        -- Don't show the overload by default
+        display_automatically = false,
+        keymaps = {
+          next_signature     = "<C-j>",
+          previous_signature = "<C-k>",
+          next_parameter     = "<C-l>",
+          previous_parameter = "<C-h>",
+          close_signature    = "<C-s>"
+        },
+      })
+    end
+    vim.api.nvim_set_keymap("n", "<C-s>", "<CMD>LspOverloadsSignature<CR>", { noremap = true, silent = true })
+    vim.api.nvim_set_keymap("i", "<C-s>", "<CMD>LspOverloadsSignature<CR>", { noremap = true, silent = true })
+  end
   --
-  --  This function gets run when an LSP connects to a particular buffer.
-  on_attach = function(client, bufnr)
-    -- NOTE: Remember that lua is a real programming language, and as such it is possible
-    -- to define small helper and utility functions so you don't have to repeat yourself
-    -- many times.
-    if client.server_capabilities.signatureHelpProvider then
-      local has_lspoverloads, lspoverloads = pcall(require, "lsp-overloads")
-      if has_lspoverloads then
-        lspoverloads.setup(client, {
-          ui = {
-            max_height = 40,
-            max_width = 120,
-          },
-          -- Don't show the overload by default
-          display_automatically = false,
-          keymaps = {
-            next_signature     = "<C-j>",
-            previous_signature = "<C-k>",
-            next_parameter     = "<C-l>",
-            previous_parameter = "<C-h>",
-            close_signature    = "<C-s>"
-          },
-        })
-      end
-      vim.api.nvim_set_keymap("n", "<C-s>", "<CMD>LspOverloadsSignature<CR>", { noremap = true, silent = true })
-      vim.api.nvim_set_keymap("i", "<C-s>", "<CMD>LspOverloadsSignature<CR>", { noremap = true, silent = true })
-    end
-    --
-    -- In this case, we create a func that lets us more easily define mappings specific
-    -- for LSP related items. It sets the mode, buffer and description for us each time.
-    local nmap = function(keys, func, desc)
-      if desc then
-        desc = 'LSP: ' .. desc
-      end
-
-      vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc, silent = true })
+  -- In this case, we create a func that lets us more easily define mappings specific
+  -- for LSP related items. It sets the mode, buffer and description for us each time.
+  local nmap = function(keys, func, desc)
+    if desc then
+      desc = 'LSP: ' .. desc
     end
 
-    local imap = function(keys, func, desc)
-      if desc then
-        desc = 'LSP: ' .. desc
-      end
+    vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc, silent = true })
+  end
 
-      vim.keymap.set('i', keys, func, { buffer = bufnr, desc = desc, silent = true })
+  local imap = function(keys, func, desc)
+    if desc then
+      desc = 'LSP: ' .. desc
     end
 
-    -- Mappings using the vim.lsp.buf functions:
-    local tb = require('telescope.builtin')
-    -- The following comment is to turn off the formatting of the following code block:
-    ---@format disable
+    vim.keymap.set('i', keys, func, { buffer = bufnr, desc = desc, silent = true })
+  end
+
+  -- Mappings using the vim.lsp.buf functions:
+  local tb = require('telescope.builtin')
+  -- The following comment is to turn off the formatting of the following code block:
+  ---@format disable
     nmap('gd'        , vim.lsp.buf.definition             , 'Goto definition'             )
     nmap('gD'        , vim.lsp.buf.declaration            , 'Goto declatation'            )
     nmap('gI'        , vim.lsp.buf.implementation         , 'Goto implementation'         )
@@ -652,8 +647,12 @@ if has_lsp_util then
     nmap('<leader>cs', tb.lsp_document_symbols            , 'Document symbols'            )
     nmap('<leader>cS', tb.lsp_dynamic_workspace_symbols   , 'Workspace symbols'           )
     nmap('gh'        , "<CMD>ClangdSwitchSourceHeader<CR>", 'Switch from source to header')
-    nmap("<leader>co", vim.lsp.buf.outgoing_calls         , 'Outgoing calls'              )
-    nmap("<leader>ci", vim.lsp.buf.incoming_calls         , 'Incoming calls'              )
+    if vim.lsp.buf.outgoing_calls then
+      nmap("<leader>co", vim.lsp.buf.outgoing_calls       , 'Outgoing calls'              )
+    end
+    if vim.lsp.buf.incoming_calls then
+      nmap("<leader>ci", vim.lsp.buf.incoming_calls       , 'Incoming calls'              )
+    end
     -- Diagnostic keymaps
     nmap('<leader>cD', tb.diagnostics                           , 'Diagnostics'                      )
     nmap("<leader>ck", vim.diagnostic.goto_prev                 , 'Previous diagnostic'              )
@@ -731,15 +730,14 @@ if has_lsp_util then
       -- Outline
       local has_outline, _ = pcall(require, "outline")
       if not has_outline then
-        nmap('<leader>I', "<CMD>Lspsaga outline<CR>", 'File outline')
+        nmap('<leader>i', "<CMD>Lspsaga outline<CR>", 'File outline')
       end
     end
     ---@format enable
-  end
 end
 
 -- Neodev: better support for the signature, docs and completion.
-local has_neodev, neodev = pcall(require, "neodev")
+local has_neodev, neodev         = pcall(require, "neodev")
 if has_neodev then
   neodev.setup({
     library = { plugins = { "nvim-dap-ui" }, types = true }, -- To have type checking in dap-ui
@@ -796,112 +794,59 @@ vim.lsp.diagnostics_config = diagnostics_config
 -- [[ Configure Mason ]] --
 ---------------------------
 -- Mason allows to easily install and manage LSPs, debuggers, linters etc.
+-- Using the Neovim 0.11+ vim.lsp.config API (lspconfig framework deprecated on 0.11)
+
+-- Set global capabilities for all LSP servers
+vim.lsp.config('*', {
+  capabilities = capabilities,
+})
+
+-- Use LspAttach autocmd to reliably apply on_attach keybindings per buffer
+-- (more reliable than passing on_attach through vim.lsp.config in Neovim 0.11)
+vim.api.nvim_create_autocmd('LspAttach', {
+  callback = function(args)
+    local client = vim.lsp.get_client_by_id(args.data.client_id)
+    if client then
+      on_attach(client, args.buf)
+    end
+  end,
+})
+
+-- Server-specific configs (on top of the global '*' config above)
+vim.lsp.config('pyright', {
+  settings = {
+    python = {
+      pythonPath = lsp_pythonpath,
+      analysis = { typeCheckingMode = "off" },
+    }
+  }
+})
+
+vim.lsp.config('lua_ls', {
+  settings = {
+    Lua = {
+      runtime = { version = 'LuaJIT' },
+      diagnostics = { globals = { 'vim', 'require' } },
+      workspace = {
+        checkThirdParty = false,
+        library = { vim.env.VIMRUNTIME },
+      },
+      telemetry = { enable = false },
+    }
+  }
+})
+
+-- Mason glsl_analyzer does not work
+-- Install it manually with zig: https://github.com/nolanderc/glsl_analyzer
+
 local has_mason, mason = pcall(require, "mason")
 local has_mason_lsp_config, mason_lspconfig = pcall(require, "mason-lspconfig")
-local has_lspconfig, lspconfig = pcall(require, "lspconfig")
-if has_mason and has_mason_lsp_config and has_lspconfig then
+if has_mason and has_mason_lsp_config then
   mason.setup()
-  mason_lspconfig.setup()
-
-  -- Have the following language servers enabled by default, with these options.
-  local servers = {
-    clangd = {},
-    lua_ls = {},
-    neocmake = {},
-    rust_analyzer = {},
-    pyright = {
-      python = {
-        pythonPath = lsp_pythonpath,
-        analysis = {
-          typeCheckingMode = "off",
-        }
-      }
-    },
-  }
-
-  -- Mason glsl_analyzer does not work
-  -- Install it manually with zig: https://github.com/nolanderc/glsl_analyzer
-  require 'lspconfig'.glsl_analyzer.setup({
-    capabilities = capabilities,
-    on_attach = on_attach,
-    settings = {},
-  })
-
-  -- Mason ensures the servers in `servers` are installed.
-  -- Go checkout the `servers` variable to see the options for each server.
-  mason_lspconfig.setup {
-    ensure_installed = vim.tbl_keys(servers),
-  }
-
-  mason_lspconfig.setup_handlers({
-    function(server_name)
-      -- Put server specific things if needed.
-      -- For example, for clangd, we want to use the background-index and
-      -- disable header-insertion.
-      if server_name == "clangd" then
-        lspconfig.clangd.setup({
-          capabilities = capabilities,
-          on_attach = on_attach,
-          -- Each server can have its own command to start it.
-          -- cmd = { "/Users/louis/.local/share/nvim/mason/bin/clangd", "--header-insertion=never", "--offset-encoding=utf-16", "--background-index" },
-          -- cmd = { "/opt/homebrew/opt/llvm/bin/clangd", "--background-index=false", "--header-insertion=never", "--offset-encoding=utf-16" },
-          -- cmd = { "--header-insertion=never", "--offset-encoding=utf-16" },
-          -- cmd = { "clangd", "--header-insertion=never", "--offset-encoding=utf-16" },
-          settings = servers.clangd,
-        })
-      elseif server_name == "lua_ls" then
-        lspconfig[server_name].setup({
-          capabilities = capabilities,
-          on_attach = on_attach,
-          on_init = function(client)
-            local path = client.workspace_folders[1].name
-            if not vim.loop.fs_stat(path .. '/.luarc.json') and not vim.loop.fs_stat(path .. '/.luarc.jsonc') then
-              client.config.settings = vim.tbl_deep_extend('force', client.config.settings, {
-                Lua = {
-                  runtime = {
-                    -- Tell the language server which version of Lua you're using
-                    -- (most likely LuaJIT in the case of Neovim)
-                    version = 'LuaJIT'
-                  },
-                  diagnostics = {
-                    -- Get the language server to recognize the `vim` global
-                    globals = {
-                      'vim',
-                      'require'
-                    },
-                  },
-                  -- Make the server aware of Neovim runtime files
-                  workspace = {
-                    checkThirdParty = false,
-                    library = {
-                      vim.env.VIMRUNTIME
-                      -- "${3rd}/luv/library"
-                      -- "${3rd}/busted/library",
-                    }
-                    -- or pull in all of 'runtimepath'. NOTE: this is a lot slower
-                    -- library = vim.api.nvim_get_runtime_file("", true)
-                  },
-                  telemetry = {
-                    enable = false,
-                  },
-                },
-              })
-
-              client.notify("workspace/didChangeConfiguration", { settings = client.config.settings })
-            end
-            return true
-          end
-        })
-      else
-        lspconfig[server_name].setup({
-          capabilities = capabilities,     -- This is needed for nvim-cmp to work
-          on_attach = on_attach,           -- This is needed for the keybindings to work
-          settings = servers[server_name], -- Specific settings for the server
-          -- There are other options you can set for each server, like cmd, filetypes, etc.
-          -- Visit the lspconfig documentation for more information.
-        })
-      end
-    end,
+  -- mason-lspconfig v2: automatic_enable (default true) calls vim.lsp.enable() for each
+  -- installed server, picking up the global '*' config and server-specific configs above.
+  mason_lspconfig.setup({
+    ensure_installed = { 'clangd', 'lua_ls', 'neocmake', 'rust_analyzer', 'pyright' },
   })
 else
   if not has_mason then
@@ -910,77 +855,38 @@ else
   if not has_mason_lsp_config then
     print("Warning: missing mason-lspconfig.")
   end
-  if not has_lspconfig then
-    print("Warning: missing lsp-config.")
-  end
 end
 
--- This bit of code is for C# only
-if has_lspconfig then
-  local pid = vim.fn.getpid()
-  local omnisharp_bin = "$HOME/software/misc/omnisharp-osx/run"
+-- C# / OmniSharp support (disabled by default; enable by uncommenting)
+-- To use: install omnisharp manually and uncomment below
+-- local pid = vim.fn.getpid()
+-- local omnisharp_bin = "$HOME/software/misc/omnisharp-osx/run"
+-- vim.lsp.config('omnisharp', {
+--   cmd = { omnisharp_bin, "--languageserver", "--hostPID", tostring(pid) },
+--   filetypes = { 'cs', 'vb' },
+-- })
+-- vim.lsp.enable('omnisharp')
 
-  lspconfig.omnisharp.setup({
-    cmd = { omnisharp_bin, "--languageserver", "--hostPID", tostring(pid) },
-    on_attach = on_attach,
-    capabilities = capabilities,
+-- Fix for omnisharp semantic token naming (activate only when omnisharp is enabled)
+vim.api.nvim_create_autocmd("LspAttach", {
+  callback = function(ev)
+    local client = vim.lsp.get_client_by_id(ev.data.client_id)
+    local function toSnakeCase(str)
+      return string.gsub(str, "%s*[- ]%s*", "_")
+    end
 
-    -- Enables support for reading code style, naming convention and analyzer
-    -- settings from .editorconfig.
-    enable_editorconfig_support = true,
-
-    -- If true, MSBuild project system will only load projects for files that
-    -- were opened in the editor. This setting is useful for big C# codebases
-    -- and allows for faster initialization of code navigation features only
-    -- for projects that are relevant to code that is being edited. With this
-    -- setting enabled OmniSharp may load fewer projects and may thus display
-    -- incomplete reference lists for symbols.
-    enable_ms_build_load_projects_on_demand = false,
-
-    -- Enables support for roslyn analyzers, code fixes and rulesets.
-    enable_roslyn_analyzers = false,
-
-    -- Specifies whether 'using' directives should be grouped and sorted during
-    -- document formatting.
-    organize_imports_on_format = false,
-
-    -- Enables support for showing unimported types and unimported extension
-    -- methods in completion lists. When committed, the appropriate using
-    -- directive will be added at the top of the current file. This option can
-    -- have a negative impact on initial completion responsiveness,
-    -- particularly for the first few completion sessions after opening a
-    -- solution.
-    enable_import_completion = false,
-
-    -- Specifies whether to include preview versions of the .NET SDK when
-    -- determining which version to use for project loading.
-    sdk_include_prereleases = true,
-
-    -- Only run analyzers against open files when 'enableRoslynAnalyzers' is
-    -- true
-    analyze_open_documents_only = false,
-  })
-
-  vim.api.nvim_create_autocmd("LspAttach", {
-    callback = function(ev)
-      local client = vim.lsp.get_client_by_id(ev.data.client_id)
-      local function toSnakeCase(str)
-        return string.gsub(str, "%s*[- ]%s*", "_")
+    if client ~= nil and client.name == 'omnisharp' then
+      local tokenModifiers = client.server_capabilities.semanticTokensProvider.legend.tokenModifiers
+      for i, v in ipairs(tokenModifiers) do
+        tokenModifiers[i] = toSnakeCase(v)
       end
-
-      if client ~= nil and client.name == 'omnisharp' then
-        local tokenModifiers = client.server_capabilities.semanticTokensProvider.legend.tokenModifiers
-        for i, v in ipairs(tokenModifiers) do
-          tokenModifiers[i] = toSnakeCase(v)
-        end
-        local tokenTypes = client.server_capabilities.semanticTokensProvider.legend.tokenTypes
-        for i, v in ipairs(tokenTypes) do
-          tokenTypes[i] = toSnakeCase(v)
-        end
+      local tokenTypes = client.server_capabilities.semanticTokensProvider.legend.tokenTypes
+      for i, v in ipairs(tokenTypes) do
+        tokenTypes[i] = toSnakeCase(v)
       end
-    end,
-  })
-end
+    end
+  end,
+})
 
 ----------------------------
 -- [[ Configure fidget ]] --
@@ -1060,7 +966,7 @@ if has_symbols_outline then
       Fragment      = { icon = "Ґ"   , hl = "@constant"    },
     },
   })
-  vim.keymap.set('n', '<leader>I', "<CMD>SymbolsOutline<CR>", { desc = 'Symbols outline' })
+  vim.keymap.set('n', '<leader>i', "<CMD>SymbolsOutline<CR>", { desc = 'Symbols outline' })
 end
 ---@format enable
 
@@ -1271,7 +1177,7 @@ if has_dap then
   -- C/C++/Rust configurations
   ------------------------------------
   local lldb_path = "/opt/homebrew/opt/llvm/bin/lldb-dap" -- Adjust depdending on llvm version
-  local os_name = vim.loop.os_uname().sysname
+  local os_name = vim.uv.os_uname().sysname
   if os_name == "Linux" then
     -- On arch-based linux, simply do `sudo pacman -S lldb`
     lldb_path = "/usr/bin/lldb-dap"
@@ -1367,24 +1273,11 @@ if has_dap then
     args    = { '-e' },
   }
 
-  -- Allows DAP to load `.vscode/launch.json`
-  -- I you want to add something that has the 'python_cpp' adapter to the 'python' configurations,
-  -- you would do something like:
-  --     require('dap.ext.vscode').load_launchjs(nil, { python_cpp = {'python'} })
-  -- I you want to add something that has the 'lldb' adapter to the 'c', cpp or rust configurations,
-  -- you would do something like:
-  --     require('dap.ext.vscode').load_launchjs(nil, { lldb = {'c'} }) -- will add only to c config
-  -- or:
-  --     require('dap.ext.vscode').load_launchjs(nil, { lldb = {'c', 'cpp', 'rust'} }) -- will add to the 3
-  local load_launch_json = function()
-    require('dap.ext.vscode').load_launchjs(nil, {})
-    require('dap.ext.vscode').load_launchjs(nil, { lldb = { 'rust', 'c', 'cpp' } })
-    require('dap.ext.vscode').load_launchjs(nil, { python_cpp = { 'python' } })
-    -- Add more stuff that needs to be reloaded if needed
-    print("Reloaded configurations in .vscode/launch.json")
-  end
-  load_launch_json()
-  vim.keymap.set("n", "<leader>dJ", load_launch_json, { noremap = true, silent = true, desc = "(Re)-load launch.json" })
+  -- .vscode/launch.json is now read automatically by nvim-dap (no manual load_launchjs call needed).
+  -- Use <leader>dJ to manually re-trigger if needed (e.g., after editing launch.json).
+  vim.keymap.set("n", "<leader>dJ", function()
+    vim.notify("launch.json is loaded automatically by nvim-dap on demand", vim.log.levels.INFO)
+  end, { noremap = true, silent = true, desc = "DAP: launch.json is auto-loaded" })
 
   -- keymaps
   -- TODO: attach to running debugger
@@ -1789,11 +1682,18 @@ end
 ---------------------------------
 -- [[ Configure Multicursor ]] --
 ---------------------------------
+-- NOTE: multicursors.nvim depends on hydra.nvim which has a Neovim 0.11 incompatibility
+-- (tbl_deep_extend + getfenv() crash). Wrapped in pcall to prevent crashing the rest of config.
 local has_mc, mc = pcall(require, "multicursors")
 if has_mc then
-  mc.setup({})
-  vim.keymap.set('n', '<leader>Mw', '<CMD>MCstart<CR>', { desc = "Multicursors start word" })
-  vim.keymap.set('n', '<leader>Mc', '<CMD>MCunderCursor<CR>', { desc = "Multicursors start cursor" })
+  local ok, err = pcall(function()
+    mc.setup({})
+    vim.keymap.set('n', '<leader>Mw', '<CMD>MCstart<CR>', { desc = "Multicursors start word" })
+    vim.keymap.set('n', '<leader>Mc', '<CMD>MCunderCursor<CR>', { desc = "Multicursors start cursor" })
+  end)
+  if not ok then
+    vim.notify("multicursors.nvim: setup failed (hydra.nvim incompatibility): " .. tostring(err), vim.log.levels.WARN)
+  end
 end
 
 ------------------------------
@@ -1835,8 +1735,8 @@ end
 local has_portal, portal = pcall(require, "portal")
 if has_portal then
   portal.setup({})
-  vim.keymap.set('n', "<leader>o", "<CMD>Portal jumplist backward<CR>", { desc = "Prev portal" })
-  vim.keymap.set('n', "<leader>i", "<CMD>Portal jumplist forward<CR>", { desc = "Next portal" })
+  vim.keymap.set('n', "<leader>O", "<CMD>Portal jumplist backward<CR>", { desc = "Prev portal" })
+  vim.keymap.set('n', "<leader>I", "<CMD>Portal jumplist forward<CR>", { desc = "Next portal" })
   if has_grapple then
     vim.keymap.set('n', "<leader>mo", "<CMD>Portal grapple backward<CR>", { desc = "Prev grapple" })
     vim.keymap.set('n', "<leader>mi", "<CMD>Portal grapple forward<CR>", { desc = "Next grapple" })
@@ -2423,7 +2323,7 @@ if has_outline then
     outline.setup({
       -- Your setup opts here (leave empty to use defaults)
     })
-  vim.keymap.set("n", "<leader>I", "<cmd>Outline<CR>", { desc = "Toggle Outline" })
+  vim.keymap.set("n", "<leader>i", "<cmd>Outline<CR>", { desc = "Toggle Outline" })
 end
 
 ----------------------------------
