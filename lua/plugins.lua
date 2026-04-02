@@ -97,7 +97,7 @@ return {
       local Providers = require("99.providers")
       _99.setup({
         provider = Providers.ClaudeCodeProvider,
-        model = "claude-opus-4-5",
+        model = "claude-sonnet-4-6",
         logger = {
           level = _99.DEBUG,
           -- path = "~/.local/tmp/" .. basename .. ".99.debug",
@@ -150,36 +150,48 @@ return {
         },
       })
 
-      -- Create your own short cuts for the different types of actions
-      vim.keymap.set("n", "<leader>9f", function()
-        _99.fill_in_function()
-      end)
+      -- Rewrite visual selection (prompts for instructions)
       -- take extra note that i have visual selection only in v mode
       -- technically whatever your last visual selection is, will be used
       -- so i have this set to visual mode so i dont screw up and use an
       -- old visual selection
-      --
-      -- likely ill add a mode check and assert on required visual mode
-      -- so just prepare for it now
       vim.keymap.set("v", "<leader>9v", function()
         _99.visual()
       end)
 
-      vim.keymap.set("v", "<leader>99", function()
-        _99.visual_prompt()
+      -- Agentic session: ask a question / give a task, results go to quickfix
+      vim.keymap.set("n", "<leader>9b", function()
+        _99.vibe()
       end)
 
-      --- if you have a request you dont want to make any changes, just cancel it
-      vim.keymap.set("v", "<leader>9s", function()
+      -- Search across project with a prompt, results go to quickfix
+      vim.keymap.set("n", "<leader>9s", function()
+        _99.search()
+      end)
+
+      --- Stop all in-flight requests
+      vim.keymap.set("n", "<leader>9x", function()
         _99.stop_all_requests()
       end)
 
-      --- Example: Using rules + actions for custom behaviors
-      --- Create a rule file like ~/.rules/debug.md that defines custom behavior.
-      --- For instance, a "debug" rule could automatically add printf statements
-      --- throughout a function to help debug its execution flow.
-      vim.keymap.set("n", "<leader>9fd", function()
-        _99.fill_in_function()
+      -- Select model interactively
+      vim.keymap.set("n", "<leader>9m", function()
+        local Providers = require("99.providers")
+        Providers.ClaudeCodeProvider.fetch_models(function(models, err)
+          if err or not models then
+            vim.notify("99: failed to fetch models: " .. (err or "unknown error"), vim.log.levels.ERROR)
+            return
+          end
+          local current = _99.get_model()
+          vim.ui.select(models, {
+            prompt = "99 model (current: " .. current .. "):",
+          }, function(choice)
+            if choice then
+              _99.set_model(choice)
+              vim.notify("99: model set to " .. choice)
+            end
+          end)
+        end)
       end)
     end,
   },
