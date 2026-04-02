@@ -812,6 +812,22 @@ vim.api.nvim_create_autocmd('LspAttach', {
   end,
 })
 
+-- Resolve symlinks: when LSP navigates to a file through a symlink (e.g. a conda env
+-- include symlinked back to a source repo via `make install_links`), redirect the buffer
+-- name to the real path so that go-to-definition lands in the source repo.
+vim.api.nvim_create_autocmd("BufEnter", {
+  callback = function()
+    local path = vim.api.nvim_buf_get_name(0)
+    if path == "" then return end
+    -- Skip special URI-scheme buffers (oil://, fugitive://, term://, etc.)
+    if path:find("://") then return end
+    local real = vim.fn.resolve(path)
+    if real ~= path then
+      vim.cmd("keepalt file " .. vim.fn.fnameescape(real))
+    end
+  end,
+})
+
 -- Server-specific configs (on top of the global '*' config above)
 vim.lsp.config('pyright', {
   settings = {
