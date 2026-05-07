@@ -392,7 +392,7 @@ return {
   -- To set up:
   -- :Copilot setup
   -- :Copilot enable
-  -- { "github/copilot.vim" },
+  { "github/copilot.vim" },
   -- use({ -- buggy and useless tbh
   --   "jackMort/ChatGPT.nvim",
   --   requires = {

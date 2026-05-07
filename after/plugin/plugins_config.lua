@@ -676,7 +676,7 @@ on_attach                        = function(client, bufnr)
     end, { desc = 'Format current buffer with LSP' })
     -- Create an autocmd to format the buffer on save
     local format_ignored_repos = {
-      "pinocchio",
+      -- "pinocchio",
       "contact%-optimization",
       "collision_detection/fcl", -- to not mistake with the hpp-fcl repo
       "SDL_gpu_examples",
@@ -1096,7 +1096,7 @@ if has_pap then
     local ext = vim.fn.expand("%:e")
     local cmd = nil
     if ext == "cpp" then
-      cmd = "clang++ -std=c++11 -o " .. exe .. " " .. file
+      cmd = "clang++ -std=c++17 -o " .. exe .. " " .. file
       if args ~= nil then
         cmd = cmd .. " " .. args .. " && " .. exe
       end
@@ -2086,26 +2086,26 @@ end
 -----------------------------
 -- [[ Configure copilot ]] --
 -----------------------------
--- vim.cmd [[
---   " Don't activate Copilot by default.
---   " autocmd VimEnter * Copilot disable
--- ]]
--- vim.keymap.set('i', '<M-CR>', 'copilot#Accept("\\<CR>")', {
---   expr = true,
---   replace_keycodes = false
--- })
--- vim.g.copilot_no_tab_map = true
----@format disable
--- vim.keymap.set('n', '<leader>Ce', '<CMD>Copilot enable<CR>'    , { desc = "Enable copilot"      })
--- vim.keymap.set('n', '<leader>Cd', '<CMD>Copilot disable<CR>'   , { desc = "Disable copilot "    })
--- vim.keymap.set('n', '<leader>Cs', '<CMD>Copilot status<CR>'    , { desc = "Copilot status"      })
--- vim.keymap.set('n', '<leader>Cc', '<CMD>Copilot panel<CR>'     , { desc = "Copilot panel"       })
--- vim.keymap.set('i', '<M-e>'     , '<Plug>(copilot-dismiss)'    , { desc = "Copilot dismiss"     })
--- vim.keymap.set('i', '<M-\\>'    , '<Plug>(copilot-suggest)'    , { desc = "Copilot suggest"     })
--- vim.keymap.set('i', '<M-p>'     , '<Plug>(copilot-suggest)'    , { desc = "Copilot suggest"     })
--- vim.keymap.set('i', '<M-l>'     , '<Plug>(copilot-accept-word)', { desc = "Copilot accept word" })
--- vim.keymap.set('i', '<M-j>'     , '<Plug>(copilot-accept-line)', { desc = "Copilot accept line" })
----@format enable
+vim.cmd [[
+  " Don't activate Copilot by default.
+  " autocmd VimEnter * Copilot disable
+]]
+vim.keymap.set('i', '<M-CR>', 'copilot#Accept("\\<CR>")', {
+  expr = true,
+  replace_keycodes = false
+})
+vim.g.copilot_no_tab_map = true
+-- -@format disable
+vim.keymap.set('n', '<leader>Ce', '<CMD>Copilot enable<CR>'    , { desc = "Enable copilot"      })
+vim.keymap.set('n', '<leader>Cd', '<CMD>Copilot disable<CR>'   , { desc = "Disable copilot "    })
+vim.keymap.set('n', '<leader>Cs', '<CMD>Copilot status<CR>'    , { desc = "Copilot status"      })
+vim.keymap.set('n', '<leader>Cc', '<CMD>Copilot panel<CR>'     , { desc = "Copilot panel"       })
+vim.keymap.set('i', '<M-e>'     , '<Plug>(copilot-dismiss)'    , { desc = "Copilot dismiss"     })
+vim.keymap.set('i', '<M-\\>'    , '<Plug>(copilot-suggest)'    , { desc = "Copilot suggest"     })
+vim.keymap.set('i', '<M-p>'     , '<Plug>(copilot-suggest)'    , { desc = "Copilot suggest"     })
+vim.keymap.set('i', '<M-l>'     , '<Plug>(copilot-accept-word)', { desc = "Copilot accept word" })
+vim.keymap.set('i', '<M-j>'     , '<Plug>(copilot-accept-line)', { desc = "Copilot accept line" })
+-- -@format enable
 
 ------------------------------
 -- [[ Configure gpt.nvim ]] --
