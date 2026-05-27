@@ -1132,8 +1132,20 @@ if has_pap then
   vim.api.nvim_create_user_command('Papa',
     function(command) pap.run_custom_cmd(command.args, false) end, { nargs = "*" })
 
-  vim.keymap.set("n", "<leader>qe", "<CMD>cg<Space>~/.cache/nvim/pap_output.txt<CR><CMD>cc<CR>",
-    { noremap = true, silent = true, desc = "Load error file into quickfix" })
+  vim.keymap.set("n", "<leader>qe", function()
+    local src = vim.fn.expand("~/.cache/nvim/pap_output.txt")
+    local lines = vim.fn.readfile(src)
+    local clean = {}
+    for _, line in ipairs(lines) do
+      line = line:gsub("\27%[[%d;]*[A-Za-z]", "")
+      line = line:gsub("\r", "")
+      table.insert(clean, line)
+    end
+    local tmp = vim.fn.tempname()
+    vim.fn.writefile(clean, tmp)
+    vim.cmd("cg " .. tmp)
+    vim.cmd("cc")
+  end, { noremap = true, silent = true, desc = "Load error file into quickfix" })
   vim.keymap.set("n", "<leader>psh", "<CMD>Paphsize<CR>",
     { noremap = true, silent = true, desc = "Set pap horizontal window size" })
   vim.keymap.set("n", "<leader>psv", "<CMD>Papvsize<CR>",
