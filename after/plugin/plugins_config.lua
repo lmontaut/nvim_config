@@ -207,7 +207,61 @@ if has_telescope then
   ---@format disable
   vim.keymap.set('n', '<leader>?'      , tb.oldfiles                , { desc = 'Find recently opened files' })
   vim.keymap.set('n', '<leader>,'      , tb.buffers                 , { desc = 'Find buffer'                })
-  vim.keymap.set('n', '<leader><space>', tb.git_files               , { desc = 'Find git file'              })
+  local find_workspace_root = function(start_dir)
+    local dir = start_dir
+    while dir and dir ~= "/" do
+      if vim.fn.filereadable(dir .. "/.workspace") == 1 then
+        return dir
+      end
+      local parent = vim.fn.fnamemodify(dir, ":h")
+      if parent == dir then break end
+      dir = parent
+    end
+    return nil
+  end
+
+  local workspace_git_files = function()
+    local start
+    local has_project_module, project_module = pcall(require, "project_nvim.project")
+    if has_project_module then
+      start = project_module.get_project_root()
+    end
+    start = start or vim.fn.getcwd()
+
+    local root = find_workspace_root(start)
+    if root == nil then
+      tb.git_files()
+      return
+    end
+
+    local files = {}
+
+    local root_files = vim.fn.systemlist("git -C " .. vim.fn.shellescape(root) .. " ls-files")
+    for _, f in ipairs(root_files) do
+      if f ~= "" then table.insert(files, f) end
+    end
+
+    for _, line in ipairs(vim.fn.readfile(root .. "/.workspace")) do
+      line = vim.trim(line)
+      if line ~= "" and not vim.startswith(line, "#") then
+        local submod_files = vim.fn.systemlist("git -C " .. vim.fn.shellescape(root .. "/" .. line) .. " ls-files")
+        for _, f in ipairs(submod_files) do
+          if f ~= "" then table.insert(files, line .. "/" .. f) end
+        end
+      end
+    end
+
+    require("telescope.pickers").new({ cwd = root }, {
+      prompt_title = "Workspace Files",
+      finder       = require("telescope.finders").new_table({
+        results      = files,
+        entry_maker  = require("telescope.make_entry").gen_from_file({ cwd = root }),
+      }),
+      sorter       = require("telescope.config").values.file_sorter({}),
+      previewer    = require("telescope.config").values.file_previewer({}),
+    }):find()
+  end
+  vim.keymap.set('n', '<leader><space>', workspace_git_files        , { desc = 'Find git file'              })
   vim.keymap.set('n', '<leader>s:'     , tb.command_history         , { desc = 'Search command history'     })
   vim.keymap.set('n', '<leader>sC'     , tb.commands                , { desc = 'Search all vim commands'    })
   vim.keymap.set('n', '<leader>sq'     , tb.quickfix                , { desc = 'Search in quickfix'         })
@@ -540,7 +594,7 @@ if has_project then
   project.setup({
     -- Manual mode doesn't automatically change your root directory, so you have
     -- the option to manually do so using `:ProjectRoot` command.
-    manual_mode = false,
+    manual_mode = true,
     -- Methods of detecting the root directory. **"lsp"** uses the native neovim
     -- lsp, while **"pattern"** uses vim-rooter like glob pattern matching. Here
     -- order matters: if one is not detected, the other is used as fallback. You
@@ -550,7 +604,7 @@ if has_project then
     -- All the patterns used to detect root dir, when **"pattern"** is in
     -- detection_methods
     -- patterns = { ".git", "_darcs", ".hg", ".bzr", ".svn", "Makefile", "package.json" },
-    patterns = { ".git", ".clangd" },
+    patterns = { ".workspace", ".git", ".clangd" },
     -- Table of lsp clients to ignore by name
     -- eg: { "efm", ... }
     -- ignore_lsp = {},
@@ -836,6 +890,14 @@ vim.lsp.config('pyright', {
       analysis = { typeCheckingMode = "off" },
     }
   }
+})
+
+-- Force utf-16 to match copilot.vim's encoding; avoids the
+-- "multiple different client offset_encodings detected" warning.
+vim.lsp.config('clangd', {
+  capabilities = vim.tbl_deep_extend('force', capabilities, {
+    offsetEncoding = { 'utf-16' },
+  }),
 })
 
 vim.lsp.config('lua_ls', {

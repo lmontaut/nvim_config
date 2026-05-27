@@ -357,12 +357,12 @@ return {
   { "godlygeek/tabular" },
 
   -- Multicursors
-  {
-    "smoka7/multicursors.nvim",
-    dependencies = {
-      "smoka7/hydra.nvim"
-    }
-  },
+  -- {
+  --   "smoka7/multicursors.nvim",
+  --   dependencies = {
+  --     "smoka7/hydra.nvim"
+  --   }
+  -- },
 
   -- Latex
   {
