@@ -23,6 +23,9 @@ vim.o.breakindent = true
 -- Save undo history
 vim.o.undofile = true
 
+-- No save swap files
+vim.o.swapfile = false
+
 -- Case insensitive searching UNLESS /C or capital in search
 vim.o.ignorecase = true
 vim.o.smartcase = true
@@ -78,8 +81,8 @@ vim.o.splitright = false
 -- Set colorscheme (actually it's in plugin_config.lua)
 vim.o.termguicolors = true
 -- vim.o.colorcolumn = "0"
-vim.keymap.set("n", "<leader>vc", ":set colorcolumn=100",
-  { noremap = true, silent = false, desc = "Set colorcolumn" })
+-- vim.keymap.set("n", "<leader>vc", ":set colorcolumn=100",
+--   { noremap = true, silent = false, desc = "Set colorcolumn" })
 
 -- Do wrap please
 vim.o.wrap = true
@@ -96,11 +99,19 @@ vim.o.clipboard = "unnamedplus"
 -- Maximum height of the completion window
 vim.o.pumheight = 15
 
--- vim.o.conceallevel = 1
+vim.o.conceallevel = 0
 
 -- Indent default
 vim.o.expandtab = true
 vim.o.tabstop = 2
 vim.o.shiftwidth = 2
 
-vim.opt.foldmethod = "manual"
+-- Folding: use treesitter
+-- vim.opt.foldmethod = "manual"
+vim.opt.foldmethod = "expr"
+vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+vim.opt.foldcolumn = "0"
+vim.opt.foldtext = ""
+vim.opt.foldlevel = 99
+vim.opt.foldlevelstart = 99
+vim.opt.foldnestmax = 5

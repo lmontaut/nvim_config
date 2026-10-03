@@ -373,6 +373,7 @@ return {
       -- VimTeX configuration goes here, e.g.
       vim.g.vimtex_view_method = "skim"
       vim.g.vimtex_compiler_method = 'latexmk'
+      vim.g.vimtex_quickfix_mode = 0
       vim.g.vimtex_view_skim_sync = 1     -- Value 1 allows forward search after every successful compilation
       vim.g.vimtex_view_skim_activate = 1 -- Value 1 allows change focus to skim after command `:VimtexView` is given
       vim.g.vimtex_compiler_silent = 1    -- makes the compiler silent, prevents buffer to popup
@@ -414,7 +415,33 @@ return {
 
   -- Obsidian
   -- { "epwalsh/obsidian.nvim" },
+  {
+    "obsidian-nvim/obsidian.nvim",
+    version = "*", -- use latest release, remove to use latest commit
+    ---@module 'obsidian'
+    ---@type obsidian.config
+    opts = {
+      legacy_commands = false, -- this will be removed in 4.0.0
+      workspaces = {
+        {
+          name = "notes",
+          path = "~/notes",
+        },
+      },
+      ui = {
+        ignore_conceal_warn = true,
+      }
+    },
+  },
 
   -- Mardown preview
-  -- { "iamcco/markdown-preview.nvim", build = "cd app && npm install", setup = function() vim.g.mkdp_filetypes = { "markdown" } end, ft = { "markdown" }, }
+  {
+    "iamcco/markdown-preview.nvim",
+    cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
+    build = "cd app && npm install",
+    init = function()
+      vim.g.mkdp_filetypes = { "markdown" }
+    end,
+    ft = { "markdown" },
+  }
 }

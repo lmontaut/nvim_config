@@ -327,7 +327,7 @@ if has_treesitter then
     sync_install = false,
     -- Add languages to be installed here that you want installed for treesitter
     -- ensure_installed = { 'c', 'cpp', 'cmake', 'lua', 'python', 'rust', 'help', 'vim' },
-    ensure_installed = { 'c', 'cpp', 'cmake', 'lua', 'python', 'rust', 'vim' },
+    ensure_installed = { 'c', 'cpp', 'cmake', 'lua', 'python', 'rust', 'vim', 'markdown' },
 
     highlight = { enable = true },
     indent = { enable = true },
@@ -914,6 +914,16 @@ vim.lsp.config('lua_ls', {
   }
 })
 
+vim.lsp.config('texlab',
+  {
+    settings = {
+      texlab = {
+        build = { onSave = false },
+        chktex = { onOpenAndSave = true },
+      },
+    },
+  })
+
 -- Mason glsl_analyzer does not work
 -- Install it manually with zig: https://github.com/nolanderc/glsl_analyzer
 
@@ -924,7 +934,7 @@ if has_mason and has_mason_lsp_config then
   -- mason-lspconfig v2: automatic_enable (default true) calls vim.lsp.enable() for each
   -- installed server, picking up the global '*' config and server-specific configs above.
   mason_lspconfig.setup({
-    ensure_installed = { 'clangd', 'lua_ls', 'neocmake', 'rust_analyzer', 'pyright' },
+    ensure_installed = { 'clangd', 'lua_ls', 'neocmake', 'rust_analyzer', 'pyright', 'texlab' },
   })
 else
   if not has_mason then
@@ -1667,16 +1677,6 @@ if has_neorg then
 end
 
 -----------------------------------
--- [[ Configure obsidian.nvim ]] --
------------------------------------
-local has_obsidian, obsidian = pcall(require, "obsidian")
-if has_obsidian then
-  obsidian.setup({
-    dir = "~/notes",
-  })
-end
-
------------------------------------
 -- [[ Configure fold-cycle ]] --
 -----------------------------------
 local has_foldcycle, _ = pcall(require, "fold-cycle")
@@ -1996,7 +1996,7 @@ if has_lualine then
 
       -- add client
       for _, client in pairs(buf_clients) do
-        if client.name ~= "null-ls" then
+        if client.name ~= "null-ls" and not vim.tbl_contains(buf_client_names, client.name) then
           table.insert(buf_client_names, client.name)
         end
       end
@@ -2430,6 +2430,21 @@ end
 --   })
 -- end
 
+-----------------------------
+-- [[ Configure vimtex ]] --
+-----------------------------
+vim.keymap.set("n", "<leader>vc", "<CMD>VimtexCompile<CR>", { desc = "Vimtex compile"} )
+vim.keymap.set("n", "<leader>vv", "<CMD>VimtexView<CR>", { desc = "Vimtex view"} )
+vim.keymap.set("n", "<leader>vl", "<CMD>VimtexLog<CR>", { desc = "Vimtex log"} )
+vim.keymap.set("n", "<leader>ve", "<CMD>VimtexErrors<CR>", { desc = "Vimtex errors"} )
+vim.keymap.set("n", "<leader>vs", "<CMD>VimtexStatus<CR>", { desc = "Vimtex status"} )
+vim.api.nvim_create_autocmd("User", {
+  pattern = "VimtexEventViewReverse",
+  callback = function()
+    vim.fn.system("open -a Alacritty")
+  end,
+})
+
 -----------------
 -- [[ Other ]] --
 -----------------
@@ -2439,6 +2454,8 @@ vim.keymap.set("n", "<leader>2", function()
     { stdout = false, stderr = false }
   )
 end)
+
+vim.keymap.set("n", "<leader>mm", "<CMD>MarkdownPreviewToggle<CR>", { desc = "Markdown preview" })
 
 -------------------------------
 -- [[ Configure Which-key ]] --
@@ -2468,7 +2485,7 @@ if has_wk then
       { "<leader>p", group = "Pap" },
       { "<leader>q", group = "Quicklist" },
       { "<leader>s", group = "Search" },
-      { "<leader>v", group = "Vim" },
+      { "<leader>v", group = "Vim/Vimtex" },
       { "<leader>w", group = "Window" },
       { "<leader>wq", group = "Kill a window" },
     },

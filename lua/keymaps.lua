@@ -126,9 +126,9 @@ vim.keymap.set("n", "<leader>Lq", "<CMD>lclose<CR>", { desc = "Location list clo
 vim.keymap.set("n", "<leader>vw", "<CMD>setlocal wrap<CR>", { desc = "Wrap text", opts.args })
 vim.keymap.set("n", "<leader>vW", "<CMD>setlocal nowrap<CR>", { desc = "Unwrap text", opts.args })
 
--- hl/nohl search
-vim.keymap.set("n", "<leader>vh", "<CMD>setlocal hlsearch<CR>", { desc = "Highligth search", opts.args })
-vim.keymap.set("n", "<leader>vH", "<CMD>setlocal nohlsearch<CR>", { desc = "No highligth search", opts.args })
+-- hl/nohl search -- useless
+-- vim.keymap.set("n", "<leader>vh", "<CMD>setlocal hlsearch<CR>", { desc = "Highligth search", opts.args })
+-- vim.keymap.set("n", "<leader>vH", "<CMD>setlocal nohlsearch<CR>", { desc = "No highligth search", opts.args })
 
 -- Launch terminal command
 vim.keymap.set("n", "<leader>t", ":below split | terminal<Space>",
@@ -171,7 +171,7 @@ vim.keymap.set('n', "<C-j>", "<Esc>mzo<Esc>`z", { desc = "Insert line below", no
 -- vim.keymap.set("n", "<C-j>", "ddp==", { desc = "Move line down", opts.args })
 
 -- Tab navigation
-vim.keymap.set("n", "<leader>vo", "mz<CMD>tabnew %<CR>`z", { desc = "Tab new", opts.args })
+-- vim.keymap.set("n", "<leader>vo", "mz<CMD>tabnew %<CR>`z", { desc = "Tab new", opts.args })
 vim.keymap.set("n", "L", "<CMD>tabnext<CR>", { desc = "Tab next", opts.args })
 vim.keymap.set("n", "H", "<CMD>tabprevious<CR>", { desc = "Tab previous", opts.args })
 vim.keymap.set("n", "<leader>]", "<CMD>+tabmove<CR>", { desc = "Tab move +", opts.args })
