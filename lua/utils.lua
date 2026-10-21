@@ -22,4 +22,16 @@ function M.env_cleanup(venv)
   return venv
 end
 
+-- Foldtext: first line on a solid bar + a badge with the folded line count
+function M.foldtext()
+  local start, finish = vim.v.foldstart, vim.v.foldend
+  local line = vim.fn.getline(start):gsub("\t", string.rep(" ", vim.bo.tabstop))
+  return {
+    { line, "Folded" },
+    { "  ", "Folded" },
+    { " 󰁂 " .. (finish - start + 1) .. " lines ", "FoldBadge" },
+    { " ", "Folded" },
+  }
+end
+
 return M

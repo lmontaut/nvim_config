@@ -1700,6 +1700,7 @@ end
 local catppuccin_name = "catppuccin"
 local has_catppuccin, catppuccin = pcall(require, catppuccin_name)
 if has_catppuccin then
+  local blend = require("catppuccin.utils.colors").blend
   local latte_clrs = {
     base     = "#f7f1ed",
     -- mantle   = "#f9ebaf",
@@ -1729,14 +1730,19 @@ if has_catppuccin then
       }
     },
     highlight_overrides = {
+      -- Folds: softened solid yellow bar (distinct from Search) + inverted line-count badge
       latte = function(latte)
         return {
-          Comment = { fg = latte.green, style = { "italic" } }
+          Comment = { fg = latte.green, style = { "italic" } },
+          Folded = { fg = latte.text, bg = blend(latte.yellow, latte.base, 0.75), style = { "bold" } },
+          FoldBadge = { fg = blend(latte.yellow, latte.base, 0.75), bg = latte.text, style = { "bold" } },
         }
       end,
-      frappe = function() --frappe)
+      frappe = function(frappe)
         return {
-          Comment = { fg = "#3b9c7b", style = { "bold" } }
+          Comment = { fg = "#3b9c7b", style = { "bold" } },
+          Folded = { fg = frappe.crust, bg = blend(frappe.yellow, frappe.base, 0.75), style = { "bold" } },
+          FoldBadge = { fg = blend(frappe.yellow, frappe.base, 0.75), bg = frappe.crust, style = { "bold" } },
         }
       end,
     },
