@@ -186,6 +186,17 @@ vim.keymap.set("n", "<leader>qk", "<CMD>lprevious<CR>", { desc = "Location previ
 -- Center window around cursor
 -- vim.keymap.set("n", "L", "zz", { desc = "Center window around cursor", opts.args })
 
+-- Yank file path / line number to clipboard
+local function yank(text)
+  vim.fn.setreg('+', text)
+  vim.fn.setreg('"', text)
+  vim.notify("Yanked: " .. text)
+end
+vim.keymap.set("n", "<leader>yp", function() yank(vim.fn.expand("%:.")) end, { desc = "Yank relative file path", opts.args })
+vim.keymap.set("n", "<leader>yP", function() yank(vim.fn.expand("%:p")) end, { desc = "Yank absolute file path", opts.args })
+vim.keymap.set("n", "<leader>yl", function() yank(tostring(vim.fn.line("."))) end, { desc = "Yank line number", opts.args })
+vim.keymap.set("n", "<leader>ya", function() yank(vim.fn.expand("%:.") .. ":" .. vim.fn.line(".")) end, { desc = "Yank path:line", opts.args })
+
 -----------------------
 -- -- INSERT MODE -- --
 -----------------------
