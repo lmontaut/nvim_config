@@ -177,6 +177,8 @@ if has_telescope then
       },
       git_files = {
         file_ignore_patterns = { "%.png", "%.jpg", "%.jpeg" },
+        -- List files inside submodules too (incompatible with `show_untracked`).
+        recurse_submodules = true,
       },
       find_files = { -- Search ALL files, even if not tracked by git
         -- find_command = { "rg", "--files", "--hidden", },
@@ -1755,6 +1757,40 @@ if has_neogit then
   neogit.setup({})
   vim.keymap.set('n', '<leader>gg', '<CMD>Neogit<CR>', { desc = 'Neogit' })
   vim.keymap.set('n', '<leader>gh', '<CMD>DiffviewFileHistory %<CR>', { desc = 'File history' })
+end
+
+--------------------------
+-- [[ Configure Octo ]] --
+--------------------------
+local has_octo, octo = pcall(require, "octo")
+if has_octo then
+  octo.setup({
+    -- First remote found wins: `upstream` (forks), else `origin`.
+    default_remote = { "upstream", "origin", "lou" },
+    picker = "telescope",
+    enable_builtin = true, -- `:Octo` with no args opens a picker of all actions
+    -- <C-n>/<C-p> to move between changed files (instead of ]q/[q) in reviews.
+    mappings = {
+      review_diff = {
+        select_next_entry = { lhs = "<C-n>", desc = "move to next changed file" },
+        select_prev_entry = { lhs = "<C-p>", desc = "move to previous changed file" },
+      },
+      review_thread = {
+        select_next_entry = { lhs = "<C-n>", desc = "move to next changed file" },
+        select_prev_entry = { lhs = "<C-p>", desc = "move to previous changed file" },
+      },
+      file_panel = {
+        select_next_entry = { lhs = "<C-n>", desc = "move to next changed file" },
+        select_prev_entry = { lhs = "<C-p>", desc = "move to previous changed file" },
+      },
+    },
+  })
+  vim.keymap.set('n', '<leader>oo', '<CMD>Octo<CR>', { desc = 'Octo actions' })
+  vim.keymap.set('n', '<leader>op', '<CMD>Octo pr list<CR>', { desc = 'Octo PR list' })
+  vim.keymap.set('n', '<leader>oi', '<CMD>Octo issue list<CR>', { desc = 'Octo issue list' })
+  vim.keymap.set('n', '<leader>os', ':Octo search ', { desc = 'Octo search', silent = false })
+  vim.keymap.set('n', '<leader>or', '<CMD>Octo review<CR>', { desc = 'Octo review current PR' })
+  vim.keymap.set('n', '<leader>oc', '<CMD>Octo pr checkout<CR>', { desc = 'Octo checkout PR' })
 end
 
 ---------------------------

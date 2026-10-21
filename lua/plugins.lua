@@ -321,6 +321,16 @@ return {
     }
   },
 
+  -- Octo: GitHub issues/PRs/reviews inside nvim (needs `gh` CLI authenticated)
+  {
+    "pwntester/octo.nvim",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-telescope/telescope.nvim",
+      "nvim-tree/nvim-web-devicons",
+    },
+  },
+
   -- Git related plugins -- **
   { 'lewis6991/gitsigns.nvim' },
   -- { 'tpope/vim-fugitive' }, -- replaced by neogit
