@@ -192,10 +192,14 @@ local function yank(text)
   vim.fn.setreg('"', text)
   vim.notify("Yanked: " .. text)
 end
-vim.keymap.set("n", "<leader>yp", function() yank(vim.fn.expand("%:.")) end, { desc = "Yank relative file path", opts.args })
-vim.keymap.set("n", "<leader>yP", function() yank(vim.fn.expand("%:p")) end, { desc = "Yank absolute file path", opts.args })
-vim.keymap.set("n", "<leader>yl", function() yank(tostring(vim.fn.line("."))) end, { desc = "Yank line number", opts.args })
-vim.keymap.set("n", "<leader>ya", function() yank(vim.fn.expand("%:.") .. ":" .. vim.fn.line(".")) end, { desc = "Yank path:line", opts.args })
+vim.keymap.set("n", "<leader>yf", function() yank(vim.fn.expand("%:.")) end,
+  { desc = "Yank relative file path", opts.args })
+vim.keymap.set("n", "<leader>yF", function() yank(vim.fn.expand("%:p")) end,
+  { desc = "Yank absolute file path", opts.args })
+vim.keymap.set("n", "<leader>yl", function() yank(tostring(vim.fn.line("."))) end,
+  { desc = "Yank line number", opts.args })
+vim.keymap.set("n", "<leader>ya", function() yank(vim.fn.expand("%:.") .. ":" .. vim.fn.line(".")) end,
+  { desc = "Yank path:line", opts.args })
 
 -----------------------
 -- -- INSERT MODE -- --
