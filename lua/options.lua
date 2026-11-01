@@ -96,6 +96,21 @@ vim.o.completeopt = 'menu,menuone,noselect'
 -- Allow vim to access the system clipboard
 vim.o.clipboard = "unnamedplus"
 
+-- Over ssh: copy to the local clipboard with OSC 52, but paste from nvim's
+-- own register (most terminals, alacritty included, don't answer OSC 52 paste
+-- requests, which would make `p` hang). Paste from the system with Cmd-V.
+if os.getenv("SSH_TTY") then
+  local osc52 = require("vim.ui.clipboard.osc52")
+  local function paste()
+    return { vim.fn.split(vim.fn.getreg(""), "\n"), vim.fn.getregtype("") }
+  end
+  vim.g.clipboard = {
+    name = "OSC 52 (copy only)",
+    copy = { ["+"] = osc52.copy("+"), ["*"] = osc52.copy("*") },
+    paste = { ["+"] = paste, ["*"] = paste },
+  }
+end
+
 -- Maximum height of the completion window
 vim.o.pumheight = 15
 
