@@ -1768,8 +1768,9 @@ end
 --------------------------
 -- [[ Configure Octo ]] --
 --------------------------
+-- Setup calls the `gh` CLI: skip on machines without it (e.g. clusters)
 local has_octo, octo = pcall(require, "octo")
-if has_octo then
+if has_octo and vim.fn.executable("gh") == 1 then
   octo.setup({
     -- First remote found wins: `upstream` (forks), else `origin`.
     default_remote = { "upstream", "origin", "lou" },

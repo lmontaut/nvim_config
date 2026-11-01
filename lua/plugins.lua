@@ -268,9 +268,8 @@ return {
   -- fzf
   {
     'junegunn/fzf',
-    build = function()
-      vim.fn['fzf#install']()
-    end
+    -- Shell install script: fzf#install isn't loaded yet when lazy runs the build
+    build = "./install --bin",
   },
 
   -- Project manager -- **
