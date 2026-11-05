@@ -48,14 +48,12 @@ vim.cmd [[
   set autoread
   " autocmd CursorHold * checktime
 ]]
-vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold" }, {
-  pattern = { "*.c", ".cpp", "*.h", "*.hpp", "*.cc", "*.hh", "*.c++", "*.txx",
-    "*.h++", "*.cxx", "*.hxx", "*.go", "*.rs", "*.py", "*.lua", "*.sh", "*.zsh", "*.bash",
-    "*.fish", "*.js", "*.ts", "*.html", "*.css", "*.yaml", "*.yml", "*.json", "*.toml", "*.xml",
-    "*.rb", "*.r", "*.cs", ".txt", ".cmake" },
+-- `checktime` (no arg) re-checks every buffer, so firing it when leaving a terminal
+-- (e.g. Claude's float) picks up edits made by external tools.
+vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "WinEnter", "CursorHold", "TermLeave", "TermClose" }, {
   callback = function()
     local filetype = vim.api.nvim_get_option_value("filetype", { buf = 0 })
-    if filetype ~= "vim" and filetype ~= "oil" then
+    if filetype ~= "vim" and filetype ~= "oil" and vim.fn.getcmdwintype() == "" then
       vim.cmd [[checktime]]
     end
   end,

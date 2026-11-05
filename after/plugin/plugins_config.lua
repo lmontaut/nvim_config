@@ -625,7 +625,6 @@ if has_project then
     require('telescope').load_extension('projects')
     vim.keymap.set('n', '<leader>sp', "<CMD>Telescope projects<CR>", { desc = 'Open project...' })
   end
-  vim.keymap.set('n', '<leader>0', "<CMD>ProjectRoot<CR>", { desc = 'Set project root to current project' })
 end
 
 -------------------------
@@ -1774,6 +1773,7 @@ if has_octo and vim.fn.executable("gh") == 1 then
   octo.setup({
     -- First remote found wins: `upstream` (forks), else `origin`.
     default_remote = { "upstream", "origin", "lou" },
+    use_local_fs = true,
     picker = "telescope",
     enable_builtin = true, -- `:Octo` with no args opens a picker of all actions
     -- <C-n>/<C-p> to move between changed files (instead of ]q/[q) in reviews.
@@ -1792,11 +1792,40 @@ if has_octo and vim.fn.executable("gh") == 1 then
       },
     },
   })
-  vim.keymap.set('n', '<leader>oo', '<CMD>Octo<CR>', { desc = 'Octo actions' })
-  vim.keymap.set('n', '<leader>op', '<CMD>Octo pr list<CR>', { desc = 'Octo PR list' })
-  vim.keymap.set('n', '<leader>oi', '<CMD>Octo issue list<CR>', { desc = 'Octo issue list' })
+  -- Octo runs git in the cwd and opens review files (`use_local_fs`) by path relative to it, so it only
+  -- works when the cwd is the PR's repo. From a workspace of submodules, run Octo in a new tab whose window
+  -- has `:lcd <repo root>`: the review's `tab split` and its splits inherit that window-local cwd.
+  -- The repo is the current file's (submodules included), else picked among the submodules.
+  local function octo_in_repo(args)
+    local run = function(root)
+      if root and vim.fs.normalize(root) ~= vim.fs.normalize(vim.fn.getcwd()) then
+        vim.cmd.tabnew()
+        vim.cmd.lcd(vim.fn.fnameescape(root))
+      end
+      vim.cmd("Octo " .. args)
+    end
+    local bufname = vim.api.nvim_buf_get_name(0)
+    -- Octo buffers: the window already has the right cwd.
+    if bufname:match("^octo://") then return run(nil) end
+    local file_root = bufname ~= "" and vim.fs.root(0, ".git") or nil
+    local cwd_root = vim.fs.root(vim.fn.getcwd(), ".git")
+    if file_root and file_root ~= cwd_root then return run(file_root) end
+    -- Current file is in the cwd's repo (or none): offer its submodules, if any.
+    local submodules = vim.fn.systemlist({ "git", "-C", cwd_root or ".", "submodule", "--quiet", "foreach", "echo $sm_path" })
+    if vim.v.shell_error ~= 0 or #submodules == 0 then return run(nil) end
+    table.insert(submodules, 1, ".")
+    vim.ui.select(submodules, { prompt = "Octo in repo:" }, function(choice)
+      if choice then run(choice == "." and nil or vim.fs.joinpath(cwd_root, choice)) end
+    end)
+  end
+  vim.api.nvim_create_user_command("OctoIn", function(o) octo_in_repo(o.args) end,
+    { nargs = "*", desc = "Run Octo in the current file's repo (or a picked submodule)" })
+
+  vim.keymap.set('n', '<leader>oo', function() octo_in_repo("") end, { desc = 'Octo actions' })
+  vim.keymap.set('n', '<leader>op', function() octo_in_repo("pr list") end, { desc = 'Octo PR list' })
+  vim.keymap.set('n', '<leader>oi', function() octo_in_repo("issue list") end, { desc = 'Octo issue list' })
   vim.keymap.set('n', '<leader>os', ':Octo search ', { desc = 'Octo search', silent = false })
-  vim.keymap.set('n', '<leader>or', '<CMD>Octo review<CR>', { desc = 'Octo review current PR' })
+  vim.keymap.set('n', '<leader>or', function() octo_in_repo("review") end, { desc = 'Octo review current PR' })
   vim.keymap.set('n', '<leader>oc', '<CMD>Octo pr checkout<CR>', { desc = 'Octo checkout PR' })
 end
 
@@ -2443,7 +2472,7 @@ if has_harpoon then
     }):find()
   end
 
-  vim.keymap.set("n", "<leader>a", function() harpoon:list():add() end, { desc = "Harpoon: append to list" })
+  vim.keymap.set("n", "<leader>A", function() harpoon:list():add() end, { desc = "Harpoon: append to list" })
   vim.keymap.set("n", "<leader>.", function() toggle_telescope(harpoon:list()) end, { desc = "Open harpoon window" })
   vim.keymap.set("n", "<leader>>", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end, {desc = "Open harpoon (editable)"})
 end
@@ -2498,6 +2527,8 @@ vim.keymap.set("n", "<leader>2", function()
   )
 end)
 
+vim.keymap.set("n", "<leader>0", "zR", { desc = "Open all folds" })
+
 vim.keymap.set("n", "<leader>mm", "<CMD>MarkdownPreviewToggle<CR>", { desc = "Markdown preview" })
 
 -------------------------------
@@ -2508,6 +2539,7 @@ if has_wk then
   wk.add({
     {
       mode = { "n", "v" },
+      { "<leader>a", group = "Claude Code" },
       { "<leader>C", group = "Copilot" },
       { "<leader>L", group = "Loclist" },
       { "<leader>M", group = "Multicursor" },
@@ -2525,6 +2557,7 @@ if has_wk then
       { "<leader>m", group = "Grapple/marks" },
       { "<leader>n", group = "Neorg" },
       { "<leader>nj", group = "Journal" },
+      { "<leader>o", group = "Octo" },
       { "<leader>p", group = "Pap" },
       { "<leader>q", group = "Quicklist" },
       { "<leader>s", group = "Search" },

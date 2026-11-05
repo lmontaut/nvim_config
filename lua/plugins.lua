@@ -1,3 +1,25 @@
+-- Claude's float belongs to the tab it was opened in, and claudecode.nvim focuses it
+-- there (switching tabs). Close it in other tabs first so it reopens in this one.
+-- The terminal buffer (and the Claude session) stays alive.
+local function claude_here()
+  local ok, term = pcall(require, "claudecode.terminal")
+  local buf = ok and term.get_active_terminal_bufnr()
+  if not buf then return end
+  local tab = vim.api.nvim_get_current_tabpage()
+  for _, win in ipairs(vim.fn.win_findbuf(buf)) do
+    if vim.api.nvim_win_get_tabpage(win) ~= tab then
+      vim.api.nvim_win_hide(win)
+    end
+  end
+end
+
+local function claude_cmd(cmd)
+  return function()
+    claude_here()
+    vim.cmd(cmd)
+  end
+end
+
 return {
   -- Main plugins: Telescope, cmp, treesitter, lsp-config, neodev, fugitive, comment, which-key, DAP and Pap
   -- Optional: packer, plenary, sneak, project, lualine, indent-blankline
@@ -84,8 +106,118 @@ return {
   -- { "tikhomirov/vim-glsl" },
 
   -- Agent
+  -- snacks: Claude's floating terminal + notification popups (replaces vim.notify)
+  {
+    "folke/snacks.nvim",
+    priority = 1000,
+    lazy = false,
+    opts = { notifier = { enabled = true } },
+  },
+  -- Claude Code IDE integration (same protocol as the VS Code extension)
+  {
+    "coder/claudecode.nvim",
+    cmd = {
+      "ClaudeCode", "ClaudeCodeFocus", "ClaudeCodeSelectModel", "ClaudeCodeAdd",
+      "ClaudeCodeSend", "ClaudeCodeTreeAdd", "ClaudeCodeStatus", "ClaudeCodeStart",
+      "ClaudeCodeStop", "ClaudeCodeOpen", "ClaudeCodeClose", "ClaudeCodeDiffAccept",
+      "ClaudeCodeDiffDeny", "ClaudeCodeCloseAllDiffs",
+    },
+    dependencies = { "folke/snacks.nvim" }, -- needed for the floating window
+    opts = {
+      -- Extra settings only for this Claude: hooks that notify back into Neovim (claude/notify.sh)
+      terminal_cmd = "claude --settings " .. vim.fn.stdpath("config") .. "/claude/settings.json",
+      terminal = {
+        -- Start Claude in Neovim's global cwd (where it was launched), not the window's: Octo tabs
+        -- `:lcd` into a submodule (see octo_in_repo in after/plugin/plugins_config.lua).
+        cwd_provider = function() return vim.fn.getcwd(-1, -1) end,
+        provider = "snacks",
+        snacks_win_opts = {
+          position = "float",
+          width = 0.85,
+          height = 0.85,
+          border = "rounded",
+          -- Snacks' default <Esc> handling (double-Esc -> normal mode) would eat
+          -- Claude's own double-Esc (rewind). Plain pass-through is set below.
+          keys = { term_normal = false },
+        },
+      },
+    },
+    init = function()
+      -- Global terminal <Esc> drops to normal mode; Claude needs <Esc> (interrupt/cancel).
+      -- Pass it through in Claude's terminal only. `jk` still leaves terminal mode.
+      vim.api.nvim_create_autocmd("TermOpen", {
+        pattern = "*claude*",
+        callback = function(ev)
+          vim.keymap.set("t", "<Esc>", "<Esc>", { buffer = ev.buf, nowait = true, desc = "Claude: send Esc" })
+        end,
+      })
+
+      -- Called over RPC by claude/notify.sh (Claude Code Stop/Notification hooks).
+      -- Silent while you are in Claude's window: you already see it.
+      _G.ClaudeNotify = function(event, msg)
+        vim.schedule(function()
+          local ok, term = pcall(require, "claudecode.terminal")
+          if ok and term.get_active_terminal_bufnr() == vim.api.nvim_get_current_buf() then
+            return
+          end
+          if event == "Stop" then
+            vim.notify("Finished — <M-l> to view", vim.log.levels.INFO, { title = "Claude Code" })
+          else
+            vim.notify(msg ~= "" and msg or "Needs your input", vim.log.levels.WARN, { title = "Claude Code" })
+          end
+        end)
+        return ""
+      end
+    end,
+    keys = {
+      { "<M-l>",      claude_cmd("ClaudeCodeFocus"), mode = { "n", "t", "v" }, desc = "Claude: focus/toggle" },
+      { "<leader>ac", claude_cmd("ClaudeCode"),      desc = "Claude: toggle" },
+      { "<leader>af", claude_cmd("ClaudeCodeFocus"), desc = "Claude: focus" },
+      -- One Claude terminal per Neovim: `--resume` only applies when none is running,
+      -- so if one is, switch conversation in place with Claude's /resume picker.
+      {
+        "<leader>ar",
+        function()
+          local term = require("claudecode.terminal")
+          if term.get_active_terminal_bufnr() then
+            claude_here()
+            term.ensure_visible()
+            term.send_to_terminal("/resume", { focus = true })
+          else
+            vim.cmd("ClaudeCode --resume")
+          end
+        end,
+        desc = "Claude: switch/resume session"
+      },
+      {
+        "<leader>an",
+        function()
+          local term = require("claudecode.terminal")
+          if term.get_active_terminal_bufnr() then
+            claude_here()
+            term.ensure_visible()
+            term.send_to_terminal("/clear", { focus = true })
+          else
+            vim.cmd("ClaudeCode")
+          end
+        end,
+        desc = "Claude: new session"
+      },
+      { "<leader>aq", "<cmd>ClaudeCodeClose<cr>",         desc = "Claude: quit" },
+      { "<leader>aC", "<cmd>ClaudeCode --continue<cr>",   desc = "Claude: continue last session" },
+      { "<leader>am", "<cmd>ClaudeCodeSelectModel<cr>",   desc = "Claude: select model" },
+      { "<leader>ab", "<cmd>ClaudeCodeAdd %<cr>",         desc = "Claude: add buffer" },
+      { "<leader>as", "<cmd>ClaudeCodeSend<cr>",          mode = "v",                            desc = "Claude: send selection" },
+      { "<leader>aa", "<cmd>ClaudeCodeDiffAccept<cr>",    desc = "Claude: accept diff" },
+      { "<leader>ad", "<cmd>ClaudeCodeDiffDeny<cr>",      desc = "Claude: deny diff" },
+      { "<leader>aD", "<cmd>ClaudeCodeCloseAllDiffs<cr>", desc = "Claude: close all diffs" },
+      { "<leader>aS", "<cmd>ClaudeCodeStatus<cr>",        desc = "Claude: status" },
+    },
+  },
+
   {
     "ThePrimeagen/99",
+    enabled = false, -- unused; its <leader>9* mappings would conflict with <leader>9 (open all folds)
     config = function()
       local _99 = require("99")
 
