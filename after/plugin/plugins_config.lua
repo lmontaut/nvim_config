@@ -1772,7 +1772,7 @@ local has_octo, octo = pcall(require, "octo")
 if has_octo and vim.fn.executable("gh") == 1 then
   octo.setup({
     -- First remote found wins: `upstream` (forks), else `origin`.
-    default_remote = { "upstream", "origin", "lou" },
+    default_remote = { "origin", "upstream" },
     use_local_fs = true,
     picker = "telescope",
     enable_builtin = true, -- `:Octo` with no args opens a picker of all actions
