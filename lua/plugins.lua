@@ -144,18 +144,48 @@ return {
     },
     init = function()
       -- Global terminal <Esc> drops to normal mode; Claude needs <Esc> (interrupt/cancel).
-      -- Pass it through in Claude's terminal only. `jk` still leaves terminal mode.
+      -- Pass it through in Claude's terminal only. <C-q> leaves terminal mode there.
       vim.api.nvim_create_autocmd("TermOpen", {
         pattern = "*claude*",
         callback = function(ev)
           vim.keymap.set("t", "<Esc>", "<Esc>", { buffer = ev.buf, nowait = true, desc = "Claude: send Esc" })
+
+          -- No `jk` escape here: Ctrl-G opens the prompt in a nested $EDITOR inside this terminal,
+          -- and `jk` must reach it (else a `:q` meant for the editor closes Claude's window).
+          -- A buffer-local nowait `j` shadows the global `jk`, so `j` is sent without the
+          -- timeoutlen wait. Leave terminal mode with <C-q> instead.
+          vim.keymap.set("t", "j", "j", { buffer = ev.buf, nowait = true, desc = "Claude: send j" })
+          vim.keymap.set("t", "<C-q>", "<C-\\><C-n>", { buffer = ev.buf, desc = "Claude: leave terminal mode" })
         end,
       })
+
+      -- Track whether this Neovim has focus (tmux focus-events on): when it does not,
+      -- also ring the terminal bell like Claude does in a plain terminal, so tmux flags
+      -- the window (monitor-bell) and Alacritty gets the urgency hint.
+      local focused = true
+      vim.api.nvim_create_autocmd("FocusGained", { callback = function() focused = true end })
+      vim.api.nvim_create_autocmd("FocusLost", { callback = function() focused = false end })
+
+      -- Claude's own BEL is swallowed by Neovim's :terminal: write it to the outer terminal.
+      local function ring_bell()
+        local pane = vim.env.TMUX_PANE
+        if pane then
+          local tty = vim.fn.system({ "tmux", "display-message", "-p", "-t", pane, "#{pane_tty}" }):gsub("%s+$", "")
+          local f = vim.v.shell_error == 0 and io.open(tty, "w")
+          if f then
+            f:write("\a")
+            f:close()
+            return
+          end
+        end
+        vim.api.nvim_chan_send(vim.v.stderr, "\a")
+      end
 
       -- Called over RPC by claude/notify.sh (Claude Code Stop/Notification hooks).
       -- Silent while you are in Claude's window: you already see it.
       _G.ClaudeNotify = function(event, msg)
         vim.schedule(function()
+          if not focused then ring_bell() end
           local ok, term = pcall(require, "claudecode.terminal")
           if ok and term.get_active_terminal_bufnr() == vim.api.nvim_get_current_buf() then
             return
