@@ -84,6 +84,8 @@ vim.o.termguicolors = true
 
 -- Do wrap please
 vim.o.wrap = true
+-- Entering diff mode (`:diffthis`, used by octo reviews, gitsigns, ...) keeps 'wrap' instead of forcing nowrap
+vim.opt.diffopt:append("followwrap")
 
 -- Relative line numbers
 vim.o.relativenumber = true

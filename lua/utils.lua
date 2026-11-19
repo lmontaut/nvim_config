@@ -22,15 +22,21 @@ function M.env_cleanup(venv)
   return venv
 end
 
--- Foldtext: first line on a solid bar + a badge with the folded line count
+-- Foldtext: first line on a solid bar + a badge with the folded line count.
+-- In diff windows (foldtext is evaluated with the drawn window as current), use the flashier DiffFolded /
+-- DiffFoldBadge so folded context between hunks stands out. The bar is padded to the window width: the fill
+-- after the text uses `Folded`, which can't be remapped per window here ('winhighlight' is overridden by the
+-- highlight namespace octo sets on its review windows).
 function M.foldtext()
   local start, finish = vim.v.foldstart, vim.v.foldend
   local line = vim.fn.getline(start):gsub("\t", string.rep(" ", vim.bo.tabstop))
+  local diff = vim.wo.diff
+  local bar, badge = diff and "DiffFolded" or "Folded", diff and "DiffFoldBadge" or "FoldBadge"
   return {
-    { line, "Folded" },
-    { "  ", "Folded" },
-    { " 󰁂 " .. (finish - start + 1) .. " lines ", "FoldBadge" },
-    { " ", "Folded" },
+    { line, bar },
+    { "  ", bar },
+    { " 󰁂 " .. (finish - start + 1) .. " lines ", badge },
+    { diff and string.rep(" ", vim.api.nvim_win_get_width(0)) or " ", bar },
   }
 end
 

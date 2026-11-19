@@ -1735,6 +1735,14 @@ if has_catppuccin then
           Comment = { fg = latte.green, style = { "italic" } },
           Folded = { fg = latte.text, bg = blend(latte.yellow, latte.base, 0.75), style = { "bold" } },
           FoldBadge = { fg = blend(latte.yellow, latte.base, 0.75), bg = latte.text, style = { "bold" } },
+          -- Folds in diff windows: flashy yellow, to mark "separate regions of code" (see utils.foldtext)
+          DiffFolded = { fg = latte.text, bg = "#ffcc00", style = { "bold" } },
+          DiffFoldBadge = { fg = "#ffcc00", bg = latte.text, style = { "bold" } },
+          -- Octo reviews: changed text within a changed line. Octo's default is white fg on dark green/red,
+          -- which hides syntax colors: keep them, with a brighter bg than whole changed/added lines.
+          -- (Octo defines its groups with `default = true`, so these win.)
+          OctoReviewDiffAddText = { bg = blend(latte.green, latte.base, 0.30) },
+          OctoReviewDiffDeleteText = { bg = blend(latte.red, latte.base, 0.30) },
         }
       end,
       frappe = function(frappe)
@@ -1742,6 +1750,10 @@ if has_catppuccin then
           Comment = { fg = "#3b9c7b", style = { "bold" } },
           Folded = { fg = frappe.crust, bg = blend(frappe.yellow, frappe.base, 0.75), style = { "bold" } },
           FoldBadge = { fg = blend(frappe.yellow, frappe.base, 0.75), bg = frappe.crust, style = { "bold" } },
+          DiffFolded = { fg = frappe.crust, bg = "#ffcc00", style = { "bold" } },
+          DiffFoldBadge = { fg = "#ffcc00", bg = frappe.crust, style = { "bold" } },
+          OctoReviewDiffAddText = { bg = blend(frappe.green, frappe.base, 0.40) },
+          OctoReviewDiffDeleteText = { bg = blend(frappe.red, frappe.base, 0.40) },
         }
       end,
     },
@@ -1792,6 +1804,40 @@ if has_octo and vim.fn.executable("gh") == 1 then
       },
     },
   })
+  -- Remember folds and cursor per file in reviews. On every file switch octo reuses the same two diff
+  -- windows and resets them (`foldlevel=0` from FileEntry.winopts, then `:diffthis`), so a `zR` on a file
+  -- is lost when coming back to it. Wrap set_current_file (internal API: re-check on octo updates) to save
+  -- each side's foldlevel and view before the switch and restore them after.
+  local has_layout, layout_mod = pcall(require, "octo.reviews.layout")
+  local Layout = has_layout and layout_mod.Layout
+  if Layout and type(Layout.set_current_file) == "function" then
+    local set_current_file = Layout.set_current_file
+    local function sides(layout) return { left = layout.left_winid, right = layout.right_winid } end
+    Layout.set_current_file = function(self, file, ...)
+      self._octo_win_state = self._octo_win_state or {}
+      local cur = self:get_current_file()
+      if cur then
+        for side, win in pairs(sides(self)) do
+          if win and vim.api.nvim_win_is_valid(win) then
+            self._octo_win_state[cur.path .. ":" .. side] = vim.api.nvim_win_call(win, function()
+              return { foldlevel = vim.wo.foldlevel, view = vim.fn.winsaveview() }
+            end)
+          end
+        end
+      end
+      set_current_file(self, file, ...)
+      if not file then return end
+      for side, win in pairs(sides(self)) do
+        local state = self._octo_win_state[file.path .. ":" .. side]
+        if state and win and vim.api.nvim_win_is_valid(win) then
+          vim.api.nvim_win_call(win, function()
+            vim.wo.foldlevel = state.foldlevel
+            vim.fn.winrestview(state.view)
+          end)
+        end
+      end
+    end
+  end
   -- Octo runs git in the cwd and opens review files (`use_local_fs`) by path relative to it, so it only
   -- works when the cwd is the PR's repo. From a workspace of submodules, run Octo in a new tab whose window
   -- has `:lcd <repo root>`: the review's `tab split` and its splits inherit that window-local cwd.
